@@ -1,0 +1,35 @@
+package handlers
+
+import (
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+	"github.com/s0h1s2/slack-clone/internal/dto"
+	"github.com/s0h1s2/slack-clone/internal/services"
+	"github.com/s0h1s2/slack-clone/internal/util"
+)
+
+type userHandler struct {
+	us *services.UserService
+}
+
+func NewUserHandler(us *services.UserService) *userHandler {
+	return &userHandler{
+		us: us,
+	}
+}
+func (u *userHandler) RegisterUserRoutes(e *echo.Echo) {
+	e.POST("/users", u.createUser)
+}
+func (u *userHandler) createUser(ctx echo.Context) error {
+	var data dto.CreateUserRequest
+	if err := ctx.Bind(&data); err != nil {
+		return ctx.String(http.StatusBadRequest, "Bad Request")
+	}
+
+	if err := u.us.CreateUserByEmail(data); err != nil {
+		err := util.ConvertServiceErrorToHttpError(err)
+		return ctx.JSON(err.Status, err.Body)
+	}
+	return ctx.JSON(http.StatusCreated, util.ApiResponse{Status: http.StatusCreated, Body: "User created successfully"})
+}
