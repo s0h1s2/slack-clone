@@ -24,12 +24,15 @@ func (u *userHandler) RegisterUserRoutes(e *echo.Echo) {
 func (u *userHandler) createUser(ctx echo.Context) error {
 	var data dto.CreateUserRequest
 	if err := ctx.Bind(&data); err != nil {
-		return ctx.String(http.StatusBadRequest, "Bad Request")
+		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")
+	}
+	if err := ctx.Validate(data); err != nil {
+		return err
 	}
 
-	if err := u.us.CreateUserByEmail(data); err != nil {
-		err := util.ConvertServiceErrorToHttpError(err)
-		return ctx.JSON(err.Status, err.Body)
-	}
+	// if err := u.us.CreateUserByEmail(); err != nil {
+	// 	err := util.ConvertServiceErrorToHttpError(err)
+	// 	return ctx.JSON(err.Status, err.Body)
+	// }
 	return ctx.JSON(http.StatusCreated, util.ApiResponse{Status: http.StatusCreated, Body: "User created successfully"})
 }
