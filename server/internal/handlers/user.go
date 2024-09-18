@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/s0h1s2/slack-clone/internal/dto"
+	"github.com/s0h1s2/slack-clone/internal/entities"
 	"github.com/s0h1s2/slack-clone/internal/services"
 	"github.com/s0h1s2/slack-clone/internal/util"
 )
@@ -29,10 +30,12 @@ func (u *userHandler) createUser(ctx echo.Context) error {
 	if err := ctx.Validate(data); err != nil {
 		return err
 	}
-
-	// if err := u.us.CreateUserByEmail(); err != nil {
-	// 	err := util.ConvertServiceErrorToHttpError(err)
-	// 	return ctx.JSON(err.Status, err.Body)
-	// }
+	user := &entities.User{
+		Email:    data.Email,
+		Password: data.Password,
+	}
+	if err := u.us.CreateUserByEmail(user); err != nil {
+		return ctx.JSON(http.StatusUnprocessableEntity, echo.Map{"email": err.Error()})
+	}
 	return ctx.JSON(http.StatusCreated, util.ApiResponse{Status: http.StatusCreated, Body: "User created successfully"})
 }

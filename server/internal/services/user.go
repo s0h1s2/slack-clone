@@ -17,7 +17,6 @@ func NewUserService(ur repositories.UserRepo) *UserService {
 	}
 }
 func (s *UserService) CreateUserByEmail(user *entities.User) error {
-
 	// find user and check if username is exist
 	if isUserExist, _ := s.ur.IsUserEmailExists(context.Background(), user.Email); isUserExist {
 		return errors.New("Email already taken.")

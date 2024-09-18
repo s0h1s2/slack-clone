@@ -20,9 +20,9 @@ func NewPostgresUserRepo(db *pgxpool.Pool) *userPostgresRepo {
 
 func (u *userPostgresRepo) IsUserEmailExists(ctx context.Context, email string) (bool, error) {
 	exists := false
-	err := u.db.QueryRow(ctx, "SELECT 1 FROM users WHERE email=$1", email).Scan(&exists)
+	err := u.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM users WHERE email=$1)", email).Scan(&exists)
 	if err != nil {
-		return false, fmt.Errorf("Unable to query user by email %w", err)
+		return false, fmt.Errorf("Unable to query check if user exists by email: %w", err)
 	}
 	return exists, nil
 }
