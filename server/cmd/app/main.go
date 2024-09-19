@@ -10,6 +10,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/s0h1s2/slack-clone/internal/handlers"
+	"github.com/s0h1s2/slack-clone/internal/infrastructure"
 	"github.com/s0h1s2/slack-clone/internal/infrastructure/postgres"
 	"github.com/s0h1s2/slack-clone/internal/services"
 )
@@ -40,8 +41,9 @@ func main() {
 	if err := conn.Ping(context.Background()); err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to ping:%v\n", err)
 	}
+	bcryptService := infrastructure.NewBcryptHahser()
 	userRepo := postgres.NewPostgresUserRepo(conn)
-	userService := services.NewUserService(userRepo)
+	userService := services.NewUserService(userRepo, bcryptService)
 	userHanlder := handlers.NewUserHandler(userService)
 	e := echo.New()
 	e.Validator = &customValidator{validator: validator.New()}

@@ -28,7 +28,7 @@ func (u *userPostgresRepo) IsUserEmailExists(ctx context.Context, email string) 
 }
 
 func (u *userPostgresRepo) CreateUser(ctx context.Context, user *entities.User) error {
-	_, err := u.db.Exec(ctx, "INSERT INTO users (email,password) VALUES ($1,$2)", user.Email, user.Password)
+	_, err := u.db.Exec(ctx, "INSERT INTO users (email,password) VALUES ($1,$2)", user.Email, user.HashedPassword)
 	if err != nil {
 		return fmt.Errorf("Unable to insert user:%w", err)
 	}
