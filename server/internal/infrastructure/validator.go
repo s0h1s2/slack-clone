@@ -2,6 +2,8 @@ package infrastructure
 
 import (
 	"net/http"
+	"reflect"
+	"strings"
 
 	"github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
@@ -21,6 +23,13 @@ func NewCustomValidator() *customValidator {
 	validator := validator.New()
 	trans, _ := uni.GetTranslator("en")
 	en_translations.RegisterDefaultTranslations(validator, trans)
+	validator.RegisterTagNameFunc(func(fld reflect.StructField) string {
+		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
+		if name == "-" {
+			return ""
+		}
+		return name
+	})
 	return &customValidator{
 		valiator: validator,
 		uni:      trans,
