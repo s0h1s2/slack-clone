@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/s0h1s2/slack-clone/internal/apperr"
 	"github.com/s0h1s2/slack-clone/internal/dto"
 	"github.com/s0h1s2/slack-clone/internal/entities"
 	"github.com/s0h1s2/slack-clone/internal/repositories"
@@ -21,9 +22,10 @@ func NewUserService(ur repositories.UserRepo, hashing Hashing) *UserService {
 	}
 }
 func (s *UserService) CreateUserByEmail(userData dto.CreateUserRequest) error {
-	// find user and check if username is exist
 	if isUserExist, _ := s.ur.IsUserEmailExists(context.Background(), userData.Email); isUserExist {
-		return errors.New("Email already taken.")
+		fieldErr := apperr.NewFieldErrors()
+		fieldErr.AddFieldError("email", "Email already taken.")
+		return apperr.NewServiceError(ErrBadRequest, fieldErr)
 	}
 	hashedPassword, err := s.hashing.HashPassword(userData.Password)
 	if err != nil {
