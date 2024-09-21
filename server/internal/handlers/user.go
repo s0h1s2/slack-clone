@@ -22,6 +22,16 @@ func NewUserHandler(us *services.UserService) *userHandler {
 func (u *userHandler) RegisterUserRoutes(e *echo.Echo) {
 	e.POST("/users", u.createUser)
 }
+
+// createUser godoc
+//
+//	@Summary	Create user by email address
+//	@Accept		json
+//	@Produce	json
+//	@Success	200
+//	@Failure	422	{object}	httperror.ErrorApiResponse
+//
+// @Router /users [post]
 func (u *userHandler) createUser(ctx echo.Context) error {
 	var data dto.CreateUserRequest
 	if err := ctx.Bind(&data); err != nil {

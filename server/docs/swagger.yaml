@@ -1,0 +1,25 @@
+definitions:
+  httperror.ErrorApiResponse:
+    properties:
+      errors: {}
+      status:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /users:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/httperror.ErrorApiResponse'
+      summary: Create user by email address
+swagger: "2.0"

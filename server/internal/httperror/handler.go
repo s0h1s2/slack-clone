@@ -8,18 +8,18 @@ import (
 	"github.com/s0h1s2/slack-clone/internal/services"
 )
 
-type apiResponse struct {
+type ErrorApiResponse struct {
 	Status int         `json:"status"`
 	Errors interface{} `json:"errors"`
 }
 
-func ConvertErrorToHttpError(err error) *apiResponse {
+func ConvertErrorToHttpError(err error) *ErrorApiResponse {
 	var svcErr *apperr.ServiceError
 	if errors.As(err, &svcErr) {
 		switch svcErr.Code {
 		case services.ErrNotFound:
 			{
-				return &apiResponse{
+				return &ErrorApiResponse{
 					Status: http.StatusNotFound,
 					Errors: svcErr.Err,
 				}
@@ -27,19 +27,19 @@ func ConvertErrorToHttpError(err error) *apiResponse {
 		case services.ErrBadRequest:
 			{
 				if fieldErrors, ok := svcErr.Err.(*apperr.FieldErrors); ok {
-					return &apiResponse{
+					return &ErrorApiResponse{
 						Status: http.StatusUnprocessableEntity,
 						Errors: fieldErrors.GetFieldErrors(),
 					}
 				}
-				return &apiResponse{
+				return &ErrorApiResponse{
 					Status: http.StatusUnprocessableEntity,
 					Errors: svcErr.Err,
 				}
 			}
 		}
 	}
-	return &apiResponse{
+	return &ErrorApiResponse{
 		Status: http.StatusInternalServerError,
 		Errors: "Internal server error",
 	}
