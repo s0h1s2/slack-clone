@@ -12,6 +12,10 @@ type ErrorApiResponse struct {
 	Status int         `json:"status"`
 	Errors interface{} `json:"errors"`
 }
+type UnprocessableEntityApiResponse struct {
+	Status int               `json:"status"`
+	Errors map[string]string `json:"errors"`
+}
 
 func ConvertErrorToHttpError(err error) *ErrorApiResponse {
 	var svcErr *apperr.ServiceError

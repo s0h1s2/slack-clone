@@ -31,8 +31,8 @@ import (
 //	@host		localhost:8000
 //	@BasePath	/api/v1
 
-//	@externalDocs.description	OpenAPI
-//	@externalDocs.url			https://swagger.io/resources/open-api/
+// @externalDocs.description	OpenAPI
+// @externalDocs.url			https://swagger.io/resources/open-api/
 func main() {
 	conn, err := pgxpool.New(context.Background(), "postgresql://buffer:7xiOfdht7DuCtFEhgDK19A@royal-kudu-9809.7tc.aws-eu-central-1.cockroachlabs.cloud:26257/slack-clone?sslmode=verify-full")
 	if err != nil {
@@ -52,8 +52,10 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
-
-	userHanlder.RegisterUserRoutes(e)
+	v1 := e.Group("/api/v1")
+	{
+		userHanlder.RegisterUserRoutes(v1)
+	}
 	e.Validator = infrastructure.NewCustomValidator()
 	e.Logger.Fatal(e.Start(":8000"))
 }

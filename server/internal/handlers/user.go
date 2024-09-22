@@ -19,17 +19,20 @@ func NewUserHandler(us *services.UserService) *userHandler {
 		us: us,
 	}
 }
-func (u *userHandler) RegisterUserRoutes(e *echo.Echo) {
+func (u *userHandler) RegisterUserRoutes(e *echo.Group) {
 	e.POST("/users", u.createUser)
 }
 
-// createUser godoc
+//		createUser godoc
 //
-//	@Summary	Create user by email address
-//	@Accept		json
-//	@Produce	json
-//	@Success	200
-//	@Failure	422	{object}	httperror.ErrorApiResponse
+//		@Summary	Create user by email address
+//		@Accept		json
+//		@Produce	json
+//
+//	 @Param data body dto.CreateUserRequest true "body"
+//
+//		@Success	200
+//		@Failure	422	{object}	httperror.UnprocessableEntityApiResponse
 //
 // @Router /users [post]
 func (u *userHandler) createUser(ctx echo.Context) error {

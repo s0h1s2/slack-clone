@@ -1,7 +1,21 @@
 definitions:
-  httperror.ErrorApiResponse:
+  dto.CreateUserRequest:
     properties:
-      errors: {}
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  httperror.UnprocessableEntityApiResponse:
+    properties:
+      errors:
+        additionalProperties:
+          type: string
+        type: object
       status:
         type: integer
     type: object
@@ -12,6 +26,13 @@ paths:
     post:
       consumes:
       - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
       produces:
       - application/json
       responses:
@@ -20,6 +41,6 @@ paths:
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/httperror.ErrorApiResponse'
+            $ref: '#/definitions/httperror.UnprocessableEntityApiResponse'
       summary: Create user by email address
 swagger: "2.0"

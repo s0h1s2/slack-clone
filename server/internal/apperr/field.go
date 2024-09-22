@@ -1,19 +1,19 @@
 package apperr
 
 type FieldErrors struct {
-	errors map[string]string
+	Errors map[string]string
 }
 
 func NewFieldErrors() *FieldErrors {
 	return &FieldErrors{
-		errors: make(map[string]string),
+		Errors: make(map[string]string),
 	}
 }
 func (f *FieldErrors) GetFieldErrors() map[string]string {
-	return f.errors
+	return f.Errors
 }
 func (f *FieldErrors) AddFieldError(field, err string) {
-	f.errors[field] = err
+	f.Errors[field] = err
 }
 func (f *FieldErrors) Error() string {
 	return "field-error"

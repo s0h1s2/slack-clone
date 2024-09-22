@@ -24,6 +24,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "Create user by email address",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateUserRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -31,7 +42,7 @@ const docTemplate = `{
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/httperror.ErrorApiResponse"
+                            "$ref": "#/definitions/httperror.UnprocessableEntityApiResponse"
                         }
                     }
                 }
@@ -39,10 +50,31 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "httperror.ErrorApiResponse": {
+        "dto.CreateUserRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                }
+            }
+        },
+        "httperror.UnprocessableEntityApiResponse": {
             "type": "object",
             "properties": {
-                "errors": {},
+                "errors": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
                 "status": {
                     "type": "integer"
                 }
