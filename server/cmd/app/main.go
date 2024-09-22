@@ -52,8 +52,8 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
-	v1 := e.Group("/api/v1")
 	{
+		v1 := e.Group("/api/v1")
 		userHanlder.RegisterUserRoutes(v1)
 	}
 	e.Validator = infrastructure.NewCustomValidator()

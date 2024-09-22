@@ -12,7 +12,10 @@ const SignUpCard = (props: AuthFlowProps) => {
     resolver: yupResolver(SignupValidationSchema),
   })
   const onSubmit: SubmitHandler<SignupFormT> = (data) => {
-    console.log(data);
+    pipe(
+      createUser(data.email, data.password),
+      match((e) => console.log(e), (r) => console.error(r))
+    )
   }
 
 

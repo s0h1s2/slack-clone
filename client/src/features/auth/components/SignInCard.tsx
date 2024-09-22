@@ -5,14 +5,19 @@ import { LoginFormT, LoginValidationSchema } from '../validation'
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { AuthFlowProps } from '../types'
-
+import { createUser } from '../service'
+import { pipe } from 'fp-ts/pipeable'
+import { match } from 'fp-ts/Either'
 
 const SignInCard = (props: AuthFlowProps) => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormT>({
     resolver: yupResolver(LoginValidationSchema),
   })
   const onSubmit: SubmitHandler<LoginFormT> = (data) => {
-    console.log(data);
+    pipe(
+      createUser(data.email, data.password),
+      match((e) => console.log(e), (r) => console.error(r))
+    )
   }
 
   return (
