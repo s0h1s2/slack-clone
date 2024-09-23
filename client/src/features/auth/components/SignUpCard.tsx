@@ -6,15 +6,31 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SignupFormT, SignupValidationSchema } from '../validation'
 import { Button } from '@/components/ui/button'
-
+import { createUser } from '../service'
+import * as E from "fp-ts/Either"
+import { matchError } from '@/lib/adt'
+import { pipe } from 'fp-ts/lib/function'
+import { toast } from 'react-toastify'
 const SignUpCard = (props: AuthFlowProps) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupFormT>({
+  const { register, handleSubmit, formState: { errors }, setError } = useForm<SignupFormT>({
     resolver: yupResolver(SignupValidationSchema),
   })
-  const onSubmit: SubmitHandler<SignupFormT> = (data) => {
+  const onSubmit: SubmitHandler<SignupFormT> = async (data) => {
     pipe(
-      createUser(data.email, data.password),
-      match((e) => console.log(e), (r) => console.error(r))
+      await createUser(data.email, data.password),
+      E.match(
+        matchError({
+          HttpError: () => { },
+          ApiValidationErrors: (e) => {
+            if (e.errors.email) {
+              setError("email", { message: e.errors.email })
+            }
+          }
+        }),
+        (s) => {
+          toast(s)
+        }
+      )
     )
   }
 

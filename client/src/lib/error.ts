@@ -1,7 +1,9 @@
-
-export class ApiValidationError {
-  readonly errors: Record<string, string>
-  constructor(errors: Record<string, string>) {
-    this.errors = errors
-  }
+export type ApiValidationErrors = {
+  _type: "ApiValidationErrors",
+  errors: Record<string, string>
 }
+export type HttpError = {
+  _type: "HttpError",
+  errors: any
+}
+

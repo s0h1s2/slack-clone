@@ -14,10 +14,7 @@ const SignInCard = (props: AuthFlowProps) => {
     resolver: yupResolver(LoginValidationSchema),
   })
   const onSubmit: SubmitHandler<LoginFormT> = (data) => {
-    pipe(
-      createUser(data.email, data.password),
-      match((e) => console.log(e), (r) => console.error(r))
-    )
+
   }
 
   return (
