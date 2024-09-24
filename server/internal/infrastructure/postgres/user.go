@@ -2,10 +2,13 @@ package postgres
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/s0h1s2/slack-clone/internal/entities"
+	"github.com/s0h1s2/slack-clone/internal/repositories"
 )
 
 type userPostgresRepo struct {
@@ -18,6 +21,17 @@ func NewPostgresUserRepo(db *pgxpool.Pool) *userPostgresRepo {
 	}
 }
 
+func (u *userPostgresRepo) FindUserByEmail(ctx context.Context, email string) (*entities.User, error) {
+	user := &entities.User{}
+	err := u.db.QueryRow(ctx, "SELECT * FROM users WHERE email=$1", email).Scan(user)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, repositories.ErrRecordNotFound
+		}
+		return nil, fmt.Errorf("unable to find user by email in query:%w", err)
+	}
+	return user, nil
+}
 func (u *userPostgresRepo) IsUserEmailExists(ctx context.Context, email string) (bool, error) {
 	exists := false
 	err := u.db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM users WHERE email=$1)", email).Scan(&exists)

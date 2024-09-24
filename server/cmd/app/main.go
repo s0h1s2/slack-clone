@@ -44,8 +44,9 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Unable to ping:%v\n", err)
 	}
 	bcryptService := infrastructure.NewBcryptHahser()
+	jwtService := infrastructure.NewJwtGenerator()
 	userRepo := postgres.NewPostgresUserRepo(conn)
-	userService := services.NewUserService(userRepo, bcryptService)
+	userService := services.NewUserService(userRepo, bcryptService, jwtService)
 	userHanlder := handlers.NewUserHandler(userService)
 	e := echo.New()
 	e.GET("/docs/*", echoSwagger.WrapHandler)

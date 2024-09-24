@@ -6,7 +6,7 @@ import (
 )
 
 type UserRepo interface {
-	// FindUserByEmail(ctx context.Context, email string) (*entities.User, error)
+	FindUserByEmail(ctx context.Context, email string) (*entities.User, error)
 	IsUserEmailExists(ctx context.Context, email string) (bool, error)
 	CreateUser(ctx context.Context, user *entities.User) error
 }

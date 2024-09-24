@@ -13,12 +13,14 @@ import (
 type UserService struct {
 	ur      repositories.UserRepo
 	hashing Hashing
+	auth    Auth
 }
 
-func NewUserService(ur repositories.UserRepo, hashing Hashing) *UserService {
+func NewUserService(ur repositories.UserRepo, hashing Hashing, auth Auth) *UserService {
 	return &UserService{
 		ur:      ur,
 		hashing: hashing,
+		auth:    auth,
 	}
 }
 func (s *UserService) CreateUserByEmail(userData dto.CreateUserRequest) error {
@@ -38,5 +40,24 @@ func (s *UserService) CreateUserByEmail(userData dto.CreateUserRequest) error {
 	if err := s.ur.CreateUser(context.Background(), user); err != nil {
 		return errors.New("Unable to create user.")
 	}
+	return nil
+}
+func (s *UserService) LoginUser(data dto.LoginUserRequest) error {
+	// find user by email
+	_, err := s.ur.FindUserByEmail(context.Background(), data.Email)
+	if err != nil {
+		if errors.Is(err, repositories.ErrRecordNotFound) {
+			return errors.New("Invalid credentials")
+		}
+		return err
+	}
+
+	// compare password and hahsed password
+	// if password match then generate token
+	token, err := s.auth.GenerateAccessToken()
+	if err != nil {
+		return err
+	}
+	println(token)
 	return nil
 }

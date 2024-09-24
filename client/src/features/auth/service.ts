@@ -16,9 +16,9 @@ export const createUser = async (email: string, password: string): Promise<Eithe
   }
   return left({ _type: "HttpError", errors: res.data.errors })
 }
-export const loginUser = async (username: string, password: string): Promise<Either<UnauthorizedError | HttpError, string>> => {
+export const loginUser = async (email: string, password: string): Promise<Either<UnauthorizedError | HttpError, string>> => {
   const res = await apiClient.post("/users/login", {
-    username: username,
+    email: email,
     password: password
   });
   if (res.status === 200) {

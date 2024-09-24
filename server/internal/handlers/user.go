@@ -21,6 +21,7 @@ func NewUserHandler(us *services.UserService) *userHandler {
 }
 func (u *userHandler) RegisterUserRoutes(e *echo.Group) {
 	e.POST("/users", u.createUser)
+	e.POST("/users/login", u.loginUser)
 }
 
 //		createUser godoc
@@ -47,4 +48,14 @@ func (u *userHandler) createUser(ctx echo.Context) error {
 		return ctx.JSON(http.StatusUnprocessableEntity, httperror.ConvertErrorToHttpError(err))
 	}
 	return ctx.JSON(http.StatusCreated, util.ApiResponse{Status: http.StatusCreated, Body: "User created successfully"})
+}
+func (u *userHandler) loginUser(ctx echo.Context) error {
+	var data dto.LoginUserRequest
+	if err := ctx.Bind(&data); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")
+	}
+	if err := ctx.Validate(data); err != nil {
+		return err
+	}
+	return u.us.LoginUser(data)
 }
