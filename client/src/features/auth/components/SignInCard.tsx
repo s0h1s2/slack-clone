@@ -5,16 +5,29 @@ import { LoginFormT, LoginValidationSchema } from '../validation'
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { AuthFlowProps } from '../types'
-import { createUser } from '../service'
+import { createUser, loginUser } from '../service'
 import { pipe } from 'fp-ts/pipeable'
 import { match } from 'fp-ts/Either'
+import { matchError } from '@/lib/adt'
+import { toast } from 'react-toastify'
 
 const SignInCard = (props: AuthFlowProps) => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormT>({
     resolver: yupResolver(LoginValidationSchema),
   })
-  const onSubmit: SubmitHandler<LoginFormT> = (data) => {
-
+  const onSubmit: SubmitHandler<LoginFormT> = async (data) => {
+    pipe(
+      await loginUser(data.email, data.password),
+      match(
+        matchError({
+          UnauthorizedError: () => toast("Invalid crendentials"),
+          HttpError: (e) => console.log(`HTTP ERROR:${e}`)
+        }),
+        (e) => {
+          // do stuff
+        }
+      )
+    )
   }
 
   return (

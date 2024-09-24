@@ -29,6 +29,7 @@ const SignUpCard = (props: AuthFlowProps) => {
         }),
         (s) => {
           toast(s)
+          props.setAuthState("signin")
         }
       )
     )
