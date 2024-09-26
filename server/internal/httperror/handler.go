@@ -2,8 +2,10 @@ package httperror
 
 import (
 	"errors"
+	"log"
 	"net/http"
 
+	"github.com/labstack/echo/v4"
 	"github.com/s0h1s2/slack-clone/internal/apperr"
 	"github.com/s0h1s2/slack-clone/internal/services"
 )
@@ -50,8 +52,13 @@ func ConvertErrorToHttpError(err error) *ErrorApiResponse {
 			}
 		}
 	}
+	log.Printf("ERROR:an error occured during request:%v\n", err)
 	return &ErrorApiResponse{
 		Status: http.StatusInternalServerError,
 		Errors: "Internal server error",
 	}
+}
+func WrapHttpErrorToEchoError(err error, ctx echo.Context) error {
+	result := ConvertErrorToHttpError(err)
+	return ctx.JSON(result.Status, result)
 }

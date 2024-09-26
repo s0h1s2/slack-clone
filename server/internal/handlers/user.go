@@ -45,7 +45,7 @@ func (u *userHandler) createUser(ctx echo.Context) error {
 		return err
 	}
 	if err := u.us.CreateUserByEmail(data); err != nil {
-		return ctx.JSON(http.StatusUnprocessableEntity, httperror.ConvertErrorToHttpError(err))
+		return httperror.WrapHttpErrorToEchoError(err, ctx)
 	}
 	return ctx.JSON(http.StatusCreated, util.ApiResponse{Status: http.StatusCreated, Body: "User created successfully"})
 }
@@ -59,8 +59,7 @@ func (u *userHandler) loginUser(ctx echo.Context) error {
 	}
 	result, err := u.us.LoginUser(data)
 	if err != nil {
-		err := httperror.ConvertErrorToHttpError(err)
-		return ctx.JSON(err.Status, err)
+		return httperror.WrapHttpErrorToEchoError(err, ctx)
 	}
 	return ctx.JSON(http.StatusOK, result)
 }

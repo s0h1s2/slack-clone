@@ -5,6 +5,6 @@ type jwtGenerator struct{}
 func NewJwtGenerator() *jwtGenerator {
 	return &jwtGenerator{}
 }
-func (a *jwtGenerator) GenerateAccessToken() (string, error) {
+func (a *jwtGenerator) GenerateAccessToken(payload interface{}) (string, error) {
 	return "token", nil
 }
