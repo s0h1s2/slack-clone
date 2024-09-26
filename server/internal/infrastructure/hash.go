@@ -20,11 +20,11 @@ func (b *bcryptHahser) HashPassword(password string) (string, error) {
 	}
 	return string(hashedPassword), nil
 }
-func (b *bcryptHahser) CompareHashAndRawPassword(hashedPassword, rawPassword string) error {
+func (b *bcryptHahser) CompareHashAndRawPassword(hashedPassword, rawPassword string) (bool, error) {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(rawPassword))
 	if err != nil {
-		return fmt.Errorf("Unable to compare hashed password and raw password:%w", err)
+		return false, nil
 
 	}
-	return nil
+	return true, nil
 }

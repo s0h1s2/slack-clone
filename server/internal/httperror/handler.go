@@ -28,6 +28,13 @@ func ConvertErrorToHttpError(err error) *ErrorApiResponse {
 					Errors: svcErr.Err,
 				}
 			}
+		case services.ErrUnauthorized:
+			{
+				return &ErrorApiResponse{
+					Status: http.StatusUnauthorized,
+					Errors: svcErr.Err,
+				}
+			}
 		case services.ErrBadRequest:
 			{
 				if fieldErrors, ok := svcErr.Err.(*apperr.FieldErrors); ok {

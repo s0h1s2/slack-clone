@@ -23,7 +23,7 @@ func NewPostgresUserRepo(db *pgxpool.Pool) *userPostgresRepo {
 
 func (u *userPostgresRepo) FindUserByEmail(ctx context.Context, email string) (*entities.User, error) {
 	user := &entities.User{}
-	err := u.db.QueryRow(ctx, "SELECT * FROM users WHERE email=$1", email).Scan(user)
+	err := u.db.QueryRow(ctx, "SELECT id,email,password FROM users WHERE email=$1", email).Scan(user.ID, user.Email, user.HashedPassword)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, repositories.ErrRecordNotFound

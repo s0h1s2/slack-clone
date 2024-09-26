@@ -9,3 +9,7 @@ type LoginUserRequest struct {
 	Email    string `json:"email" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
+
+type AccessTokenResponse struct {
+	AccessToken string `json:"access_token"`
+}

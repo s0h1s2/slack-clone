@@ -57,5 +57,10 @@ func (u *userHandler) loginUser(ctx echo.Context) error {
 	if err := ctx.Validate(data); err != nil {
 		return err
 	}
-	return u.us.LoginUser(data)
+	result, err := u.us.LoginUser(data)
+	if err != nil {
+		err := httperror.ConvertErrorToHttpError(err)
+		return ctx.JSON(err.Status, err)
+	}
+	return ctx.JSON(http.StatusOK, result)
 }
