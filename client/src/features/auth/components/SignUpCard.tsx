@@ -17,7 +17,7 @@ const SignUpCard = (props: AuthFlowProps) => {
   })
   const onSubmit: SubmitHandler<SignupFormT> = async (data) => {
     pipe(
-      await createUser(data.email, data.password),
+      await createUser(data.name, data.email, data.password),
       E.match(
         matchError({
           HttpError: () => { },
@@ -46,6 +46,8 @@ const SignUpCard = (props: AuthFlowProps) => {
       </CardHeader>
       <CardContent className="space-y-5 px-0 pb-0">
         <form className="space-y-2.5" onSubmit={handleSubmit(onSubmit)} >
+          <Input type="text" placeholder="Name" {...register("name")} />
+          <p className="text-red-500">{errors.email?.message}</p>
           <Input type="email" placeholder="Email" {...register("email")} />
           <p className="text-red-500">{errors.email?.message}</p>
           <Input type="password" placeholder="Password" {...register("password")} />

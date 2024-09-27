@@ -24,6 +24,7 @@ const SignInCard = (props: AuthFlowProps) => {
           HttpError: (e) => console.log(`HTTP ERROR:${e}`)
         }),
         (e) => {
+          console.log(e.accessToken)
           // do stuff
         }
       )

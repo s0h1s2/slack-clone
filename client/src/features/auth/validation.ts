@@ -4,6 +4,7 @@ export const LoginValidationSchema = object({
   password: string().required(),
 });
 export const SignupValidationSchema = object({
+  name: string().required(),
   email: string().email().required(),
   password: string().min(8).required(),
   confirmPassword: string().oneOf([yupRef("password")], "Passwords must match").required("Confirm Password is required")
