@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/s0h1s2/slack-clone/internal/apperr"
 	"github.com/s0h1s2/slack-clone/internal/dto"
@@ -34,11 +35,12 @@ func (s *UserService) CreateUserByEmail(userData dto.CreateUserRequest) error {
 		return err
 	}
 	user := &entities.User{
+		Name:           userData.Name,
 		Email:          userData.Email,
 		HashedPassword: hashedPassword,
 	}
 	if err := s.ur.CreateUser(context.Background(), user); err != nil {
-		return errors.New("Unable to create user.")
+		return fmt.Errorf("Unable to create user %w", err)
 	}
 	return nil
 }
@@ -64,6 +66,7 @@ func (s *UserService) LoginUser(data dto.LoginUserRequest) (*dto.AccessTokenResp
 	if err != nil {
 		return nil, err
 	}
+
 	return &dto.AccessTokenResponse{
 		AccessToken: token,
 	}, nil

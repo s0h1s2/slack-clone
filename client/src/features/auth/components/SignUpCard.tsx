@@ -47,7 +47,7 @@ const SignUpCard = (props: AuthFlowProps) => {
       <CardContent className="space-y-5 px-0 pb-0">
         <form className="space-y-2.5" onSubmit={handleSubmit(onSubmit)} >
           <Input type="text" placeholder="Name" {...register("name")} />
-          <p className="text-red-500">{errors.email?.message}</p>
+          <p className="text-red-500">{errors.name?.message}</p>
           <Input type="email" placeholder="Email" {...register("email")} />
           <p className="text-red-500">{errors.email?.message}</p>
           <Input type="password" placeholder="Password" {...register("password")} />
