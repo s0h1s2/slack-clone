@@ -1,5 +1,5 @@
 package services
 
 type Auth interface {
-	GenerateAccessToken() (string, error)
+	GenerateAccessToken(email string) (string, error)
 }

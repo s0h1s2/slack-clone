@@ -43,7 +43,6 @@ func (s *UserService) CreateUserByEmail(userData dto.CreateUserRequest) error {
 	return nil
 }
 func (s *UserService) LoginUser(data dto.LoginUserRequest) (*dto.AccessTokenResponse, error) {
-	// find user by email
 	user, err := s.ur.FindUserByEmail(context.Background(), data.Email)
 	if err != nil {
 		if errors.Is(err, repositories.ErrRecordNotFound) {
@@ -52,19 +51,21 @@ func (s *UserService) LoginUser(data dto.LoginUserRequest) (*dto.AccessTokenResp
 		return nil, err
 	}
 
-	// compare password and hahsed password
 	ok, err := s.hashing.CompareHashAndRawPassword(user.HashedPassword, data.Password)
+	if err != nil {
+		return nil, err
+	}
 
 	if ok == false {
 		return nil, apperr.NewServiceError(ErrUnauthorized, errors.New("Credentials are wrong."))
 	}
 
-	// if password match then generate token
-	token, err := s.auth.GenerateAccessToken()
+	token, err := s.auth.GenerateAccessToken(user.Email)
 	if err != nil {
 		return nil, err
 	}
 	return &dto.AccessTokenResponse{
 		AccessToken: token,
 	}, nil
+
 }
