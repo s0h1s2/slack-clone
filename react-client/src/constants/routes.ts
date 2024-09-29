@@ -1,19 +1,16 @@
-interface Route  {
-  readonly name:string 
-  url: string
+interface Route {
+  [key: string]: {
+    url: string
+  }
 }
 
-const routes:Route[]=[
-    {
-      name:"login",
-      url:"/login"
-    }
-] as const
-// export type ArrayValues<T extends readonly unknown[]> = T[number];
-export type ArrayValues<T extends readonly unknown[]> = T[number];
-export type NamedRoutes=ArrayValues<typeof routes>['name']
+const routes: Route = {
+  login: {
+    url: "/login"
+  }
+} as const
+export type NamedRoutes = (keyof typeof routes)
 
-export const navigate=(route:NamedRoutes)=>{
-  
+export const navigate = (route: NamedRoutes) => {
 }
 
