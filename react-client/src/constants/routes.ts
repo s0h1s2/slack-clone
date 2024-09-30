@@ -1,16 +1,23 @@
-interface Route {
+declare function ParamType<T extends Record<string, unknown>>(): T
+type Route = {
   [key: string]: {
     url: string
+    params?: Record<string, unknown>
   }
 }
-
-const routes: Route = {
+const routes = {
   login: {
-    url: "/login"
+    url: "/login",
+  },
+  signup: {
+    url: "/signup"
+  },
+  workspace: {
+    url: "/workspaces/:id",
+    params: ParamType<{ id: number }>()
   }
-} as const
-export type NamedRoutes = (keyof typeof routes)
+} as const satisfies Route;
+export type NamedRoutes = keyof typeof routes
 
-export const navigate = (route: NamedRoutes) => {
+const navigateTo = (route: NamedRoutes, params: Record<string, unknown>) => {
 }
-
