@@ -1,13 +1,13 @@
-import { Link } from "react-router-dom";
-import { NamedRoutes } from "../constants/routes";
+import { Route } from "wouter";
+import { getRouteUrl, NamedRoutes } from "../constants/routes";
+import { ReactNode } from "react";
 type Props = {
-  name:NamedRoutes
+  name: NamedRoutes
+  page: ReactNode
 }
-const NamedRoute = ({ name }: Props) => {
+const NamedRoute = ({ name, page }: Props) => {
   return (
-    <Link to={}>
-
-    </Link>
+    <Route path={getRouteUrl(name)} component={() => page} />
   )
 }
 
