@@ -21,21 +21,9 @@ func NewUserHandler(us *services.UserService) *userHandler {
 }
 func (u *userHandler) RegisterUserRoutes(e *echo.Group) {
 	e.POST("/users", u.createUser)
-	e.POST("/users/login", u.loginUser)
+	// e.POST("/users/login", u.loginUser)
 }
 
-//		createUser godoc
-//
-//		@Summary	Create user by email address
-//		@Accept		json
-//		@Produce	json
-//
-//	 @Param data body dto.CreateUserRequest true "body"
-//
-//		@Success	200
-//		@Failure	422	{object}	httperror.UnprocessableEntityApiResponse
-//
-// @Router /users [post]
 func (u *userHandler) createUser(ctx echo.Context) error {
 	var data dto.CreateUserRequest
 	if err := ctx.Bind(&data); err != nil {
@@ -49,17 +37,18 @@ func (u *userHandler) createUser(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusCreated, util.ApiResponse{Status: http.StatusCreated, Body: "User created successfully"})
 }
-func (u *userHandler) loginUser(ctx echo.Context) error {
-	var data dto.LoginUserRequest
-	if err := ctx.Bind(&data); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")
-	}
-	if err := ctx.Validate(data); err != nil {
-		return err
-	}
-	result, err := u.us.LoginUser(data)
-	if err != nil {
-		return httperror.WrapHttpErrorToEchoError(err, ctx)
-	}
-	return ctx.JSON(http.StatusOK, result)
-}
+
+// func (u *userHandler) loginUser(ctx echo.Context) error {
+// 	var data dto.LoginUserRequest
+// 	if err := ctx.Bind(&data); err != nil {
+// 		return echo.NewHTTPError(http.StatusBadRequest, "Bad Request")
+// 	}
+// 	if err := ctx.Validate(data); err != nil {
+// 		return err
+// 	}
+// 	result, err := u.us.LoginUser(data)
+// 	if err != nil {
+// 		return httperror.WrapHttpErrorToEchoError(err, ctx)
+// 	}
+// 	return ctx.JSON(http.StatusCreated, result)
+// }
