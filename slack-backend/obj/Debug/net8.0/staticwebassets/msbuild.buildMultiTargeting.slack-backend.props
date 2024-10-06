@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/slack-backend.props" />
+</Project>
