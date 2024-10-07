@@ -31,3 +31,4 @@
 /home/mrprogrammez/Desktop/projects/slack-clone/slack-backend/obj/Debug/net8.0/slack-backend.pdb
 /home/mrprogrammez/Desktop/projects/slack-clone/slack-backend/obj/Debug/net8.0/slack-backend.genruntimeconfig.cache
 /home/mrprogrammez/Desktop/projects/slack-clone/slack-backend/obj/Debug/net8.0/ref/slack-backend.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/slack-backend/bin/Debug/net8.0/FluentValidation.dll

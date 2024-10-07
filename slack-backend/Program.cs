@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using slack_backend.Endpoints;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -18,8 +19,8 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/", () => "Hello World!");
 var v1Router = app.MapGroup("/api/v1");
-v1Router.MapGet("/users", () =>
-{
-    return new User { username = "John" };
-});
+
+UsersEndpoint.MapUsersEndpoint(v1Router);
+
+
 app.Run();
