@@ -11,7 +11,9 @@ public static class UsersEndpoint
     {
         router.MapPost("/users", CreateUser);
     }
-    public static IResult CreateUser(CreateUserDto request)
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(CreateUserDto), StatusCodes.Status422UnprocessableEntity)]
+    public static IResult CreateUser([FromBody] CreateUserDto request)
     {
         CreateUserValidator validation = new CreateUserValidator();
         var result = validation.Validate(request);
