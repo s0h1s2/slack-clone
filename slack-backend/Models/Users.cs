@@ -1,13 +1,7 @@
 namespace slack_backend.Models;
 using FluentValidation;
 
-public class CreateUserDto
-{
-    public required string Email { get; set; }
-    public required string Name { get; set; }
-    public required string Password { get; set; }
-
-}
+public record CreateUserDto(string Email, string Name, string Password);
 
 public class CreateUserValidator : AbstractValidator<CreateUserDto>
 {

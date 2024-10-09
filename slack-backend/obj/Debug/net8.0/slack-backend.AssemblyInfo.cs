@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("slack-backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd07b3d02ecbee3de5488ee09f17a4b593ec417b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5d1e614bb0c38cebb9f2e16a046cf7d3acd09893")]
 [assembly: System.Reflection.AssemblyProductAttribute("slack-backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("slack-backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

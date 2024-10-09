@@ -9,18 +9,12 @@ public static class UsersEndpoint
 
     public static void MapUsersEndpoint(this IEndpointRouteBuilder router)
     {
-        router.MapPost("/users", CreateUser);
+        router.MapPost("/users", CreateUser).WithRequestValidation<CreateUserDto>();
     }
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(CreateUserDto), StatusCodes.Status422UnprocessableEntity)]
     public static IResult CreateUser([FromBody] CreateUserDto request)
     {
-        CreateUserValidator validation = new CreateUserValidator();
-        var result = validation.Validate(request);
-        if (!result.IsValid)
-        {
-            return TypedResults.UnprocessableEntity(result.Errors);
-        }
+
         return TypedResults.Created("User Created!");
     }
 
