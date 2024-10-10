@@ -14,7 +14,6 @@ public static class UsersEndpoint
     [ProducesResponseType(StatusCodes.Status201Created)]
     public static IResult CreateUser([FromBody] CreateUserDto request)
     {
-
         return TypedResults.Created("User Created!");
     }
 
