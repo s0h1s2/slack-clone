@@ -7,8 +7,8 @@ public class CreateUserValidator : AbstractValidator<CreateUserDto>
 {
     public CreateUserValidator()
     {
-        RuleFor(customer => customer.Email).NotEmpty();
+        RuleFor(customer => customer.Email).NotEmpty().EmailAddress();
         RuleFor(customer => customer.Name).NotEmpty();
-        RuleFor(customer => customer.Password).NotEmpty();
+        RuleFor(customer => customer.Password).NotEmpty().MinimumLength(8);
     }
 }
