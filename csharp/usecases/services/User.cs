@@ -14,7 +14,6 @@ public class UserService
     public LoginReponse? LoginUser(string email, string password)
     {
         var user=userRepository.GetUserByEmail(email);
-       
         return null;
     }
 }
