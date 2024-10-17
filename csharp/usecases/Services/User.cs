@@ -1,7 +1,7 @@
-﻿using usecases.entites;
+﻿using usecases.Entites;
 using usecases.repository;
 
-namespace usecases.services;
+namespace usecases.Services;
 
 public class UserService
 {

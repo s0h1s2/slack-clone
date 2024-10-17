@@ -1,6 +1,5 @@
+using Npgsql.TypeMapping;
+using usecases.repository;
+
 namespace infra.db;
 
-public class User
-{
-    
-}

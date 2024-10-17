@@ -1,4 +1,4 @@
-using usecases.entites;
+using usecases.Entites;
 
 namespace usecases.repository;
 

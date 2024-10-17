@@ -1,4 +1,4 @@
-namespace usecases.entites;
+namespace usecases.Entites;
 
 public class User
 {
