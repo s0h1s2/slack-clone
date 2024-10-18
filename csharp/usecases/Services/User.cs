@@ -1,26 +1,55 @@
-﻿using usecases.Entites;
-using usecases.repository;
+﻿using Usecases.Entites;
+using Usecases.repository;
 
-namespace usecases.Services;
+namespace Usecases.Services;
 
 public class UserService
 {
+    private IPasswordHash passwordHash;
     IUserRepository userRepository;
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository userRepository,IPasswordHash passwordHash)
     {
+        this.passwordHash = passwordHash;
         this.userRepository = userRepository;
     }
 
-    public LoginReponse? LoginUser(string email, string password)
+    public LoginResponse LoginUser(string email, string password)
     {
-        var user=userRepository.GetUserByEmail(email);
+        try
+        {
+            var user = userRepository.GetUserByEmail(email);
+            var result=passwordHash.Verify(user.HashedPassword,password);
+            if (result)
+            {
+                return new LoginResponse
+                {
+                    AccessToken="Some access toke here",
+                    RefreshToken = "Some refresh token here"
+                };
+            }
+            throw new exceptions.EntityNotFound();
+        }
+        catch (exceptions.EntityNotFound e)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
+
         return null;
     }
 }
 
-public class LoginReponse
+public interface IPasswordHash
 {
-    string accessToken { get; set; }
-    string refreshToken { get; set; }
+    public bool Verify(string passwordHash, string password);
+}
+
+public class LoginResponse
+{
+    public string AccessToken { get; set; }
+    public string RefreshToken { get; set; }
 }
 

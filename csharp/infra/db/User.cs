@@ -1,5 +1,4 @@
 using Npgsql.TypeMapping;
-using usecases.repository;
+using Usecases.repository;
 
 namespace infra.db;
-

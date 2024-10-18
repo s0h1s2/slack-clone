@@ -1,10 +1,9 @@
-using usecases.Entites;
+using Usecases.Entites;
 
-namespace usecases.repository;
+namespace Usecases.repository;
 
 
 public interface IUserRepository
 {
     User GetUserByEmail(string email);
-    
 }
