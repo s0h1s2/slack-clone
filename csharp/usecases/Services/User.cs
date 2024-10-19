@@ -1,7 +1,7 @@
-﻿using Usecases.Entites;
+﻿namespace Usecases.Services;
+using usecases.Dto.Response;
+using usecases.Interfaces;
 using Usecases.repository;
-
-namespace Usecases.Services;
 
 public class UserService
 {
@@ -13,11 +13,11 @@ public class UserService
         this.userRepository = userRepository;
     }
 
-    public LoginResponse LoginUser(string email, string password)
+    public async Task<LoginResponse> LoginUser(string email, string password)
     {
         try
         {
-            var user = userRepository.GetUserByEmail(email);
+            var user = await userRepository.GetUserByEmail(email);
             var result=passwordHash.Verify(user.HashedPassword,password);
             if (result)
             {
@@ -42,14 +42,5 @@ public class UserService
     }
 }
 
-public interface IPasswordHash
-{
-    public bool Verify(string passwordHash, string password);
-}
 
-public class LoginResponse
-{
-    public string AccessToken { get; set; }
-    public string RefreshToken { get; set; }
-}
 

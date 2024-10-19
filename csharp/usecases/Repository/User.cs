@@ -5,5 +5,5 @@ namespace Usecases.repository;
 
 public interface IUserRepository
 {
-    User GetUserByEmail(string email);
+    Task<User> GetUserByEmail(string email);
 }
