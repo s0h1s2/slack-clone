@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace infra.db;
 
-public class ApplicationContext: DbContext
+public class ApplicationDBContext: DbContext
 {
     public DbSet<User> Users { get; set; }
 
-    public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+    public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
     {
     }
     public class User

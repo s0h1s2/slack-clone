@@ -1,0 +1,12 @@
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/bin/Debug/net8.0/usecases.deps.json
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/bin/Debug/net8.0/usecases.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/bin/Debug/net8.0/usecases.pdb
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/obj/Debug/net8.0/usecases.GeneratedMSBuildEditorConfig.editorconfig
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/obj/Debug/net8.0/usecases.AssemblyInfoInputs.cache
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/obj/Debug/net8.0/usecases.AssemblyInfo.cs
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/obj/Debug/net8.0/usecases.csproj.CoreCompileInputs.cache
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/obj/Debug/net8.0/usecases.sourcelink.json
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/obj/Debug/net8.0/usecases.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/obj/Debug/net8.0/refint/usecases.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/obj/Debug/net8.0/usecases.pdb
+/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/obj/Debug/net8.0/ref/usecases.dll
