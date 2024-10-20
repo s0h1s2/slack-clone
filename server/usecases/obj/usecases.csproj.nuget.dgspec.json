@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/usecases.csproj": {}
+    "/home/mrprogrammez/Desktop/projects/slack-clone/server/usecases/usecases.csproj": {}
   },
   "projects": {
-    "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/usecases.csproj": {
+    "/home/mrprogrammez/Desktop/projects/slack-clone/server/usecases/usecases.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/usecases.csproj",
+        "projectUniqueName": "/home/mrprogrammez/Desktop/projects/slack-clone/server/usecases/usecases.csproj",
         "projectName": "usecases",
-        "projectPath": "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/usecases.csproj",
+        "projectPath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/usecases/usecases.csproj",
         "packagesPath": "/home/mrprogrammez/.nuget/packages/",
-        "outputPath": "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/obj/",
+        "outputPath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/usecases/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/mrprogrammez/.nuget/NuGet/NuGet.Config"

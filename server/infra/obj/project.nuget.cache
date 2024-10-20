@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bqDuPcL2p/g=",
+  "dgSpecHash": "1uQdjOijV+8=",
   "success": true,
-  "projectFilePath": "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/infra/infra.csproj",
+  "projectFilePath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/infra/infra.csproj",
   "expectedPackageFiles": [
     "/home/mrprogrammez/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/mrprogrammez/.nuget/packages/microsoft.bcl.asyncinterfaces/7.0.0/microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",

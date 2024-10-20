@@ -3774,11 +3774,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/presentation/presentation.csproj",
+      "projectUniqueName": "/home/mrprogrammez/Desktop/projects/slack-clone/server/presentation/presentation.csproj",
       "projectName": "presentation",
-      "projectPath": "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/presentation/presentation.csproj",
+      "projectPath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/presentation/presentation.csproj",
       "packagesPath": "/home/mrprogrammez/.nuget/packages/",
-      "outputPath": "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/presentation/obj/",
+      "outputPath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/presentation/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/mrprogrammez/.nuget/NuGet/NuGet.Config"
@@ -3793,11 +3793,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/infra/infra.csproj": {
-              "projectPath": "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/infra/infra.csproj"
+            "/home/mrprogrammez/Desktop/projects/slack-clone/server/infra/infra.csproj": {
+              "projectPath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/infra/infra.csproj"
             },
-            "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/usecases.csproj": {
-              "projectPath": "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/usecases.csproj"
+            "/home/mrprogrammez/Desktop/projects/slack-clone/server/usecases/usecases.csproj": {
+              "projectPath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/usecases/usecases.csproj"
             }
           }
         }

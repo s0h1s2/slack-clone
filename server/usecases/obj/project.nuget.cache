@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2yTuvWBd2iE=",
+  "dgSpecHash": "mwrl+GrwX7Q=",
   "success": true,
-  "projectFilePath": "/home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/usecases.csproj",
+  "projectFilePath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/usecases/usecases.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

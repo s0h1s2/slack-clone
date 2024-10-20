@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = usecases
-build_property.ProjectDir = /home/mrprogrammez/Desktop/projects/slack-clone/csharp/usecases/
+build_property.ProjectDir = /home/mrprogrammez/Desktop/projects/slack-clone/server/usecases/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
