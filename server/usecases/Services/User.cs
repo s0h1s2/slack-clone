@@ -1,4 +1,5 @@
-﻿using usecases.Dto.Response;
+﻿using usecases.Dto.Request;
+using usecases.Dto.Response;
 using Usecases.Entites;
 using Usecases.exceptions;
 using usecases.Interfaces;
@@ -17,19 +18,19 @@ public class UserService
         _userRepository = userRepository;
     }
 
-    public async void CreateUser(string email, string name, string password)
+    public async Task CreateUser(CreateUser userDto)
     {
-        var user=await _userRepository.GetUserByEmail(email);
+        var user=await _userRepository.GetUserByEmail(userDto.Email);
         if (user != null)
         {
-            throw new EntityAlreadyExist();
+            throw new EntityAlreadyExist("Email already exists. Please try another one.");
         }
-        var hashedPassword=_passwordHash.Hash(password);
+        var hashedPassword=_passwordHash.Hash(userDto.Password);
         var newUser = new User
         {
             Id = Guid.NewGuid(),
-            Email = email,
-            Name = name,
+            Email = userDto.Email,
+            Name = userDto.Name,
             HashedPassword = hashedPassword,
         };
         _userRepository.SaveUser(newUser);
