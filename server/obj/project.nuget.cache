@@ -1,11 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "6hrAArsG9eA=",
+  "dgSpecHash": "xy0JvzClzAnZCFHc0Qas5MdJJR3aKuxepZKr+ftSJv5vweJ8LftIolOHzegdjIdseAEnAvBMj9Q4I8KiCjEq7Q==",
   "success": true,
   "projectFilePath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/server.csproj",
   "expectedPackageFiles": [
-    "/home/mrprogrammez/.nuget/packages/carter/8.2.1/carter.8.2.1.nupkg.sha512",
-    "/home/mrprogrammez/.nuget/packages/carter.analyzers/8.2.1/carter.analyzers.8.2.1.nupkg.sha512",
     "/home/mrprogrammez/.nuget/packages/fluentvalidation/11.10.0/fluentvalidation.11.10.0.nupkg.sha512",
     "/home/mrprogrammez/.nuget/packages/fluentvalidation.dependencyinjectionextensions/11.10.0/fluentvalidation.dependencyinjectionextensions.11.10.0.nupkg.sha512",
     "/home/mrprogrammez/.nuget/packages/humanizer/2.14.1/humanizer.2.14.1.nupkg.sha512",
@@ -114,6 +112,8 @@
     "/home/mrprogrammez/.nuget/packages/nuget.projectmodel/6.11.0/nuget.projectmodel.6.11.0.nupkg.sha512",
     "/home/mrprogrammez/.nuget/packages/nuget.protocol/6.11.0/nuget.protocol.6.11.0.nupkg.sha512",
     "/home/mrprogrammez/.nuget/packages/nuget.versioning/6.11.0/nuget.versioning.6.11.0.nupkg.sha512",
+    "/home/mrprogrammez/.nuget/packages/sharpgrip.fluentvalidation.autovalidation.mvc/1.4.0/sharpgrip.fluentvalidation.autovalidation.mvc.1.4.0.nupkg.sha512",
+    "/home/mrprogrammez/.nuget/packages/sharpgrip.fluentvalidation.autovalidation.shared/1.4.0/sharpgrip.fluentvalidation.autovalidation.shared.1.4.0.nupkg.sha512",
     "/home/mrprogrammez/.nuget/packages/swashbuckle.aspnetcore/6.6.2/swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
     "/home/mrprogrammez/.nuget/packages/swashbuckle.aspnetcore.swagger/6.6.2/swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
     "/home/mrprogrammez/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.6.2/swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",
