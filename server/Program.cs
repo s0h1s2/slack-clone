@@ -1,3 +1,4 @@
+using Carter;
 using Microsoft.EntityFrameworkCore;
 using server.Database;
 
@@ -5,8 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContextPool<AppDbContext>(opt=>opt.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+builder.Services.AddCarter();
 
 var app = builder.Build();
 
@@ -18,3 +21,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapCarter();
+
+app.Run();
