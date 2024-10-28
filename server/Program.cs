@@ -9,7 +9,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContextPool<AppDbContext>(opt=>opt.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
-builder.Services.AddCarter();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -21,6 +21,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapCarter();
-
+app.MapControllers();
 app.Run();
