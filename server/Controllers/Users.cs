@@ -9,6 +9,11 @@ namespace server.Controllers
     [ApiController]
     public class Users : ControllerBase
     {
+        
+        public Users()
+        {
+            
+        }
         // GET: api/<Users>
         [HttpGet]
         public IEnumerable<string> Get()
