@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using server.Database;
 using server.Dto;
+using server.Filters;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Interceptors;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -11,10 +12,13 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.OperationFilter<AddDefaultErrorResponseFilter>();
+});
 builder.Services.AddFluentValidationAutoValidation(c =>
 {
-    c.OverrideDefaultResultFactoryWith<ValidationErrorFactory>();
+    //c.OverrideDefaultResultFactoryWith<ValidationErrorFactory>();
 });
 
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));

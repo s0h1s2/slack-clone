@@ -31,6 +31,7 @@ namespace server.Controllers
         // POST api/<Users>
         [HttpPost]
         [ProducesResponseType(typeof(CreateUserResponse),StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public void CreateUser([FromBody] CreateUserRequest request) 
         {
         }
