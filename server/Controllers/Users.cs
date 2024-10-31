@@ -6,6 +6,7 @@ using server.Dto.Response;
 namespace server.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class Users : ControllerBase
     {
