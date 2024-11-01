@@ -1,6 +1,12 @@
+import {Button} from "@/components/ui/button.tsx";
+
 const LoginPage = () => {
   return (
-    <div>LoginPage</div>
+    <div>
+      <Button>
+        LoginPage
+      </Button>
+    </div>
   )
 }
 
