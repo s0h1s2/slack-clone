@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-api": "npx @openapitools/openapi-generator-cli generate -i http://localhost:8000/docs/doc.json -g typescript-fetch -o ./src/api"
+    "generate-api": "npx @openapitools/openapi-generator-cli generate -i http://localhost:8000/swagger/v1/swagger.json -g typescript-fetch -o ./src/api"
   },
   "dependencies": {
     "@radix-ui/react-icons": "^1.3.1",

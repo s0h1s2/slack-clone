@@ -1,7 +1,7 @@
 
 const RouteTest = () => {
   return (
-    <div>RouteTest</div>
+    <div className="h-full bg-green-400">RouteTest</div>
   )
 }
 
