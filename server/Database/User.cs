@@ -1,9 +1,13 @@
+using server.Repository;
+
 namespace server.Database;
 
-public class User
+public class UserDb(AppDbContext appDbContext) : IUserRepository
 {
-    public int UserId { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public async Task<User> SaveUser(User user)
+    {
+        var userResult=appDbContext.Users.Add(user);
+        await appDbContext.SaveChangesAsync();
+        return userResult.Entity;
+    }
 }

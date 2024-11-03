@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using server.Database;
 using server.Dto;
 using server.Filters;
+using server.Repository;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Interceptors;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -23,12 +24,14 @@ builder.Services.AddFluentValidationAutoValidation(c =>
 builder.Services.AddSwaggerGen(c =>
 {   
     c.OperationFilter<AddDefaultErrorResponseFilter>();
+    c.ResolveConflictingActions (apiDescriptions => apiDescriptions.First ());
 });
 
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContextPool<AppDbContext>(opt=>opt.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddControllers();
+builder.Services.AddScoped<IUserRepository,UserDb>();
 
 var app = builder.Build();
 

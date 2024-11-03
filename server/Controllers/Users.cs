@@ -1,40 +1,48 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using server.Database;
 using server.Dto.Request;
 using server.Dto.Response;
+using server.Repository;
 
 namespace server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
     [Produces("application/json")]
     [ApiController]
     public class Users : ControllerBase
     {
-        
-        public Users()
+        private readonly IUserRepository _userRepository;
+
+        public Users(IUserRepository userRepository)
         {
-            
+            _userRepository = userRepository;
         }
-        // GET: api/<Users>
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<Users>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
-
-        // POST api/<Users>
-        [HttpPost]
+        [HttpPost("createuser")]
         [ProducesResponseType(typeof(CreateUserResponse),StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public void CreateUser([FromBody] CreateUserRequest request) 
+        public async  Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
+            var user = new User
+            {
+                Name = request.Name,
+                Email = request.Email,
+                Password = request.Password,
+
+            };
+            var result=await _userRepository.SaveUser(user);
+            return CreatedAtAction(nameof(CreateUser), user.UserId,new CreateUserResponse { UserId = result.UserId,Email = result.Email,Name = result.Name});
         }
 
         // PUT api/<Users>/5
