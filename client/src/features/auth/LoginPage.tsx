@@ -9,7 +9,10 @@ const LoginPage = () => {
   return (
     <div className="h-full flex items-center justify-center bg-[#5C3B58]">
       <div className="md:h-auto md:w-[420px]">
-        {screenState==="login"?<SignInCard setScreenState={setScreenState}/>:<SignUpCard setScreenState={setScreenState}/>}
+        {screenState === "login" ?
+          <SignInCard setScreenState={setScreenState} /> :
+          <SignUpCard setScreenState={setScreenState} />
+        }
       </div>
     </div>
   );
