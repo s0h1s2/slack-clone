@@ -39,7 +39,6 @@ namespace server.Controllers
                 Name = request.Name,
                 Email = request.Email,
                 Password = request.Password,
-
             };
             var result=await _userRepository.SaveUser(user);
             return CreatedAtAction(nameof(CreateUser), user.UserId,new CreateUserResponse { UserId = result.UserId,Email = result.Email,Name = result.Name});
