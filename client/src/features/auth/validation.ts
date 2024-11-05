@@ -8,7 +8,7 @@ export const SignUpFormSchema = object({
     email: string().email().required(),
     name: string().required(),
     password: string().required(),
-    confirmPassword: ref("password"),
+    confirmPassword: string().oneOf([ref("password")], "Passwords must match").required("Confirm password is required"),
 });
 
 export type SignInFormSchemaT = InferType<typeof SignInFormSchema>;
