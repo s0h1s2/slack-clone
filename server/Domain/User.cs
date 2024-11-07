@@ -1,4 +1,4 @@
-namespace server.Database;
+namespace server.Domain;
 
 public class User
 {

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using server.Domain;
 using server.Repository;
 
 namespace server.Database;
