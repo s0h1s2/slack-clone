@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using server.Database;
 using server.Domain;
+using server.Dto;
 using server.Dto.Request;
 using server.Dto.Response;
+using server.Exceptions;
 using server.Repository;
 using server.Services;
 
 namespace server.Controllers
 {
     [Route("api/[controller]/")]
-    [Produces("application/json")]
     [ApiController]
     public class Users : ControllerBase
     {
@@ -33,11 +35,19 @@ namespace server.Controllers
         }
         [HttpPost("createuser")]
         [ProducesResponseType(typeof(CreateUserResponse),StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async  Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public async  Task<IResult> CreateUser([FromBody] CreateUserRequest request)
         {
-            var result=await _usersService.CreateUser(request);
-            return CreatedAtAction(nameof(CreateUser), result.UserId,result);
+            try
+            {
+                var result=await _usersService.CreateUser(request);
+                return TypedResults.CreatedAtRoute(result);
+            }
+            catch (UserAlreadyExistException)
+            {
+                return TypedResults.ValidationProblem(new Dictionary<string, string[]>() {{"email",["Email is already been taken"]} });
+            }
+            
         }
 
         // PUT api/<Users>/5

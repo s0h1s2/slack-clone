@@ -35,6 +35,7 @@ public class UsersService
             Email = result.Email,
             Name = result.Name,
             UserId =   result.UserId
-        } ;
+        };
+        
     }
 }
