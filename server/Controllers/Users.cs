@@ -5,6 +5,7 @@ using server.Domain;
 using server.Dto.Request;
 using server.Dto.Response;
 using server.Repository;
+using server.Services;
 
 namespace server.Controllers
 {
@@ -13,11 +14,11 @@ namespace server.Controllers
     [ApiController]
     public class Users : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly UsersService _usersService;
 
-        public Users(IUserRepository userRepository)
+        public Users(UsersService usersService)
         {
-            _userRepository = userRepository;
+            _usersService = usersService;
         }
         [HttpGet]
         public IEnumerable<string> Get()
@@ -35,14 +36,8 @@ namespace server.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async  Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
-            var user = new User
-            {
-                Name = request.Name,
-                Email = request.Email,
-                Password = request.Password,
-            };
-            var result=await _userRepository.SaveUser(user);
-            return CreatedAtAction(nameof(CreateUser), user.UserId,new CreateUserResponse { UserId = result.UserId,Email = result.Email,Name = result.Name});
+            var result=await _usersService.CreateUser(request);
+            return CreatedAtAction(nameof(CreateUser), result.UserId,result);
         }
 
         // PUT api/<Users>/5
