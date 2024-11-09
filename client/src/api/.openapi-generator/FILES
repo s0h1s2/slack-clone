@@ -1,9 +1,0 @@
-apis/UsersApi.ts
-apis/index.ts
-index.ts
-models/CreateUserRequest.ts
-models/CreateUserResponse.ts
-models/ProblemDetails.ts
-models/ValidationErrorsResponse.ts
-models/index.ts
-runtime.ts
