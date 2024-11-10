@@ -13,6 +13,8 @@ import { useForm } from "react-hook-form";
 import { SignUpFormSchema, SignUpFormSchemaT } from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {usersApi} from "@/client.ts";
+import {ProblemDetails} from "@/api";
 
 type Props = {
   setScreenState: SetScreenState;
@@ -20,7 +22,15 @@ type Props = {
 const SignUpCard = ({ setScreenState }: Props) => {
   const form = useForm<SignUpFormSchemaT>({
     resolver: yupResolver(SignUpFormSchema)
-  })
+  });
+  const onSubmit = async (data: SignUpFormSchemaT) => {
+      try {
+          await usersApi.apiUsersCreateuserPost({createUserRequest:{name:data.name,email:data.email,password:data.password}});
+      }catch (e:ProblemDetails| Error |unknown) {
+            console.error("ERROR",e);
+      }
+      
+  }
   return (
     <Card className="w-full h-full p-8">
       <CardHeader className="px-0 pt-0">
@@ -29,7 +39,7 @@ const SignUpCard = ({ setScreenState }: Props) => {
       </CardHeader>
       <CardContent className="space-y-5 px-0 pb-0">
         <Form {...form}>
-          <form className="space-y-2.5" onSubmit={form.handleSubmit((values) => console.log(values))}>
+          <form className="space-y-2.5" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField control={form.control} render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>

@@ -10,11 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddSwaggerGen();
-builder.Services.AddProblemDetails(c =>
-{
-});
+builder.Services.AddProblemDetails();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 builder.Services.AddFluentValidationAutoValidation();
 builder.Configuration.AddEnvironmentVariables();
@@ -22,7 +20,10 @@ builder.Services.AddDbContextPool<AppDbContext>(opt=>opt.UseNpgsql(builder.Confi
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository,UserDb>();
 builder.Services.AddScoped<UsersService>();
-
+builder.Services.AddCors(c =>
+{
+  c.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader()); 
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +33,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+app.UseCors();
 app.MapControllers();
+
 app.Run();
