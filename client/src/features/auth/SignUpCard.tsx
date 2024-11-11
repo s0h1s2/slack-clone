@@ -13,8 +13,7 @@ import { useForm } from "react-hook-form";
 import { SignUpFormSchema, SignUpFormSchemaT } from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import {usersApi} from "@/client.ts";
-import {ProblemDetails} from "@/api";
+import {$client} from "@/api/fetch.ts";
 
 type Props = {
   setScreenState: SetScreenState;
@@ -23,12 +22,11 @@ const SignUpCard = ({ setScreenState }: Props) => {
   const form = useForm<SignUpFormSchemaT>({
     resolver: yupResolver(SignUpFormSchema)
   });
+  const {isPending,mutateAsync,error}=$client.useMutation("post","/api/Users/createuser");
+  
   const onSubmit = async (data: SignUpFormSchemaT) => {
-      try {
-          await usersApi.apiUsersCreateuserPost({createUserRequest:{name:data.name,email:data.email,password:data.password}});
-      }catch (e:ProblemDetails| Error |unknown) {
-            console.error("ERROR",e);
-      }
+      await mutateAsync({body:data})
+      console.log(error);
       
   }
   return (
@@ -80,7 +78,7 @@ const SignUpCard = ({ setScreenState }: Props) => {
               </FormItem>
             )} name="confirmPassword" />
 
-            <Button type="submit" className="w-full" size="lg">
+            <Button type="submit" className="w-full" size="lg" disabled={isPending}>
               Continue
             </Button>
           </form>
