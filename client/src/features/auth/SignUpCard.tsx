@@ -22,12 +22,17 @@ const SignUpCard = ({ setScreenState }: Props) => {
   const form = useForm<SignUpFormSchemaT>({
     resolver: yupResolver(SignUpFormSchema)
   });
-  const {isPending,mutateAsync,error}=$client.useMutation("post","/api/Users/createuser");
+  const {isPending,mutateAsync,error,isError}=$client.useMutation("post","/api/Users/createuser");
   
   const onSubmit = async (data: SignUpFormSchemaT) => {
-      await mutateAsync({body:data})
-      console.log(error);
-      
+      try{
+          await mutateAsync({body:data})
+      }catch (e) {
+          if(isError){
+              Object.keys(error?.errors).map(field=>form.setError(field,{message:error?.errors[field]}));
+          }     
+          
+      }
   }
   return (
     <Card className="w-full h-full p-8">

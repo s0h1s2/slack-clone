@@ -7520,6 +7520,7 @@
       "packagesPath": "/home/mrprogrammez/.nuget/packages/",
       "outputPath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/obj/",
       "projectStyle": "PackageReference",
+      "UsingMicrosoftNETSdk": false,
       "configFilePaths": [
         "/home/mrprogrammez/.nuget/NuGet/NuGet.Config"
       ],
