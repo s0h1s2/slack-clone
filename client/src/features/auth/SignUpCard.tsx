@@ -14,11 +14,14 @@ import { SignUpFormSchema, SignUpFormSchemaT } from "./validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import {$client} from "@/api/fetch.ts";
+import {useToast} from "@/hooks/use-toast.ts";
 
 type Props = {
   setScreenState: SetScreenState;
 };
 const SignUpCard = ({ setScreenState }: Props) => {
+    const {toast}=useToast();
+    
   const form = useForm<SignUpFormSchemaT>({
     resolver: yupResolver(SignUpFormSchema)
   });
@@ -27,6 +30,7 @@ const SignUpCard = ({ setScreenState }: Props) => {
   const onSubmit = async (data: SignUpFormSchemaT) => {
       try{
           await mutateAsync({body:data})
+          toast({title:"Sign up successfully",description:"Successfully registered",variant:"success",});
       }catch (e) {
           if(isError){
               Object.keys(error?.errors).map(field=>form.setError(field,{message:error?.errors[field]}));
