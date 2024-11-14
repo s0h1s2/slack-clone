@@ -159,15 +159,15 @@ export interface paths {
                         "text/json": components["schemas"]["CreateUserResponse"];
                     };
                 };
-                /** @description Unprocessable Content */
-                422: {
+                /** @description Bad Request */
+                400: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ValidationProblemDetails"];
+                        "application/json": components["schemas"]["ValidationProblemDetails"];
+                        "text/json": components["schemas"]["ValidationProblemDetails"];
                     };
                 };
             };
@@ -193,13 +193,16 @@ export interface components {
             email?: string | null;
             name?: string | null;
         };
-        ProblemDetails: {
+        ValidationProblemDetails: {
             type?: string | null;
             title?: string | null;
             /** Format: int32 */
             status?: number | null;
             detail?: string | null;
             instance?: string | null;
+            errors?: {
+                [key: string]: string[];
+            } | null;
         } & {
             [key: string]: unknown;
         };
