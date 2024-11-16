@@ -35,7 +35,8 @@ namespace server.Controllers
         }
         [HttpPost("createuser")]
         [ProducesResponseType(typeof(CreateUserResponse),StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
+        
         public async  Task<IResult> CreateUser([FromBody] CreateUserRequest request)
         {
             try

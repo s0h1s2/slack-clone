@@ -1,21 +1,26 @@
+using System.Text.Json;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using server.Database;
-using server.Dto;
 using server.Repository;
 using server.Services;
+using server.Util;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddEndpointsApiExplorer();
-
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
-builder.Services.AddFluentValidationAutoValidation();
-builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddFluentValidationAutoValidation(c =>
+{
+    c.OverrideDefaultResultFactoryWith<FluentValidationErrorsFactory>();
+});
+
+builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
+
 builder.Services.AddDbContextPool<AppDbContext>(opt=>opt.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository,UserDb>();
@@ -36,5 +41,4 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 app.UseCors();
 app.MapControllers();
-
 app.Run();

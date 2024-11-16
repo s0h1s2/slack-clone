@@ -32,10 +32,7 @@ const SignUpCard = ({ setScreenState }: Props) => {
           await mutateAsync({body:data})
           toast({title:"Sign up successfully",description:"Successfully registered",variant:"success",});
       }catch (e) {
-          if(isError){
-              Object.keys(error?.errors).map(field=>form.setError(field,{message:error?.errors[field]}));
-          }     
-          
+          Object.entries(error.errors).forEach(([key,value]) => form.setError(key,{message:value[0]}));
       }
   }
   return (
