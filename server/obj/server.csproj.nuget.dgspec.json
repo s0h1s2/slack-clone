@@ -13,6 +13,7 @@
         "packagesPath": "/home/mrprogrammez/.nuget/packages/",
         "outputPath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/obj/",
         "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
         "configFilePaths": [
           "/home/mrprogrammez/.nuget/NuGet/NuGet.Config"
         ],
@@ -45,6 +46,10 @@
             "FluentValidation.DependencyInjectionExtensions": {
               "target": "Package",
               "version": "[11.10.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.11, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",

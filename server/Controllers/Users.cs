@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -22,21 +23,9 @@ namespace server.Controllers
         {
             _usersService = usersService;
         }
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
         [HttpPost("createuser")]
         [ProducesResponseType(typeof(CreateUserResponse),StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
-        
         public async  Task<IResult> CreateUser([FromBody] CreateUserRequest request)
         {
             try
@@ -51,16 +40,11 @@ namespace server.Controllers
             
         }
 
-        // PUT api/<Users>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("auth")]
+        public async Task<LoginResponse> Authentication([FromBody] LoginRequest request)
         {
-        }
-
-        // DELETE api/<Users>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return await _usersService.LoginUser(request);
+            
         }
     }
 

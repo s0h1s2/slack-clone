@@ -325,3 +325,11 @@
 /home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/zh-Hant/Microsoft.TestPlatform.CommunicationUtilities.resources.dll
 /home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/zh-Hant/Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 /home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/zh-Hant/Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/Microsoft.IdentityModel.Abstractions.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/Microsoft.IdentityModel.Logging.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
+/home/mrprogrammez/Desktop/projects/slack-clone/server/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll

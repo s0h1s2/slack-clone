@@ -1,21 +1,31 @@
+using Microsoft.AspNetCore.Identity.Data;
 using server.Database;
 using server.Domain;
 using server.Dto.Request;
 using server.Dto.Response;
 using server.Exceptions;
 using server.Repository;
+using server.Util;
+using LoginRequest = server.Dto.Request.LoginRequest;
 
 namespace server.Services;
 
 public class UsersService
 {
     private readonly IUserRepository _userRepository;
-
-    public UsersService(IUserRepository userRepository)
+    private readonly TokenProvider _tokenProvider;
+    public UsersService(IUserRepository userRepository,TokenProvider tokenProvider)
     {
         _userRepository = userRepository;
+        _tokenProvider = tokenProvider;
     }
 
+    public async Task<LoginResponse> LoginUser(LoginRequest request)
+    {
+        
+        var token=_tokenProvider.GenerateToken(new User() { Email = "john@gmail.com" });
+        return new LoginResponse(token);
+    }
     public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
     {
         var userExists=await _userRepository.GetUserByEmail(request.Email);
