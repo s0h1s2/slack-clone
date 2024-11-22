@@ -22,6 +22,8 @@ public class UsersService
 
     public async Task<LoginResponse> LoginUser(LoginRequest request)
     {
+        var user=await _userRepository.GetUserByEmail(request.Email);
+        if (user == null) throw new InvalidCredentialsException();
         
         var token=_tokenProvider.GenerateToken(new User() { Email = "john@gmail.com" });
         return new LoginResponse(token);

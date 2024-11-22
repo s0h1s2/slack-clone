@@ -1,14 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using server.Database;
-using server.Domain;
-using server.Dto;
 using server.Dto.Request;
 using server.Dto.Response;
 using server.Exceptions;
-using server.Repository;
 using server.Services;
 
 namespace server.Controllers
@@ -41,9 +34,19 @@ namespace server.Controllers
         }
 
         [HttpPost("auth")]
-        public async Task<LoginResponse> Authentication([FromBody] LoginRequest request)
+        [ProducesResponseType(typeof(LoginResponse),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IResult> Authentication([FromBody] LoginRequest request)
         {
-            return await _usersService.LoginUser(request);
+            try
+            {
+                var token=await _usersService.LoginUser(request);
+                return TypedResults.Ok(token);
+            }
+            catch (InvalidCredentialsException)
+            {
+                return TypedResults.Unauthorized();
+            }
             
         }
     }
