@@ -14,18 +14,22 @@ public class UsersService
 {
     private readonly IUserRepository _userRepository;
     private readonly TokenProvider _tokenProvider;
-    public UsersService(IUserRepository userRepository,TokenProvider tokenProvider)
+    private readonly PasswordHasher _passwordHasher;
+
+    public UsersService(IUserRepository userRepository,TokenProvider tokenProvider,PasswordHasher passwordHasher)
     {
         _userRepository = userRepository;
         _tokenProvider = tokenProvider;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<LoginResponse> LoginUser(LoginRequest request)
     {
         var user=await _userRepository.GetUserByEmail(request.Email);
         if (user == null) throw new InvalidCredentialsException();
+        if (!_passwordHasher.VerifyPassword(request.Password,user.Password)) throw new InvalidCredentialsException();
         
-        var token=_tokenProvider.GenerateToken(new User() { Email = "john@gmail.com" });
+        var token=_tokenProvider.GenerateToken(new User() { Email = user.Email });
         return new LoginResponse(token);
     }
     public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
@@ -39,7 +43,7 @@ public class UsersService
         {
             Email = request.Email,
             Name = request.Name,
-            Password = request.Password,
+            Password = _passwordHasher.HashPassword(request.Password),
         };
         var result=await _userRepository.SaveUser(user);
         return new CreateUserResponse

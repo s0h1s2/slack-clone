@@ -39,6 +39,8 @@ builder.Services.AddDbContextPool<AppDbContext>(opt=>opt.UseNpgsql(builder.Confi
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository,UserDb>();
 builder.Services.AddScoped<UsersService>();
+builder.Services.AddSingleton<PasswordHasher>();
+
 builder.Services.AddCors(c =>
 {
   c.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader()); 
