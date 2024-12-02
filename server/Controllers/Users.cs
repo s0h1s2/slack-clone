@@ -16,7 +16,7 @@ namespace server.Controllers
         {
             _usersService = usersService;
         }
-        [HttpPost("createuser")]
+        [HttpPost]
         [ProducesResponseType(typeof(CreateUserResponse),StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
         public async  Task<IResult> CreateUser([FromBody] CreateUserRequest request)

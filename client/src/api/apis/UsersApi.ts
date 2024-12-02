@@ -17,32 +17,32 @@ import * as runtime from '../runtime';
 import type {
   CreateUserRequest,
   CreateUserResponse,
+  LoginRequest,
+  LoginResponse,
   ProblemDetails,
+  ValidationProblemDetails,
 } from '../models/index';
 import {
     CreateUserRequestFromJSON,
     CreateUserRequestToJSON,
     CreateUserResponseFromJSON,
     CreateUserResponseToJSON,
+    LoginRequestFromJSON,
+    LoginRequestToJSON,
+    LoginResponseFromJSON,
+    LoginResponseToJSON,
     ProblemDetailsFromJSON,
     ProblemDetailsToJSON,
+    ValidationProblemDetailsFromJSON,
+    ValidationProblemDetailsToJSON,
 } from '../models/index';
 
-export interface ApiUsersCreateuserPostRequest {
+export interface ApiUsersAuthPostRequest {
+    loginRequest?: LoginRequest;
+}
+
+export interface ApiUsersPostRequest {
     createUserRequest?: CreateUserRequest;
-}
-
-export interface ApiUsersIdDeleteRequest {
-    id: number;
-}
-
-export interface ApiUsersIdGetRequest {
-    id: number;
-}
-
-export interface ApiUsersIdPutRequest {
-    id: number;
-    body?: string;
 }
 
 /**
@@ -52,7 +52,7 @@ export class UsersApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUsersCreateuserPostRaw(requestParameters: ApiUsersCreateuserPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateUserResponse>> {
+    async apiUsersAuthPostRaw(requestParameters: ApiUsersAuthPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -60,7 +60,34 @@ export class UsersApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/api/Users/createuser`,
+            path: `/api/Users/auth`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: LoginRequestToJSON(requestParameters['loginRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LoginResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiUsersAuthPost(requestParameters: ApiUsersAuthPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginResponse> {
+        const response = await this.apiUsersAuthPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiUsersPostRaw(requestParameters: ApiUsersPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateUserResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/Users`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -72,131 +99,9 @@ export class UsersApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUsersCreateuserPost(requestParameters: ApiUsersCreateuserPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateUserResponse> {
-        const response = await this.apiUsersCreateuserPostRaw(requestParameters, initOverrides);
+    async apiUsersPost(requestParameters: ApiUsersPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateUserResponse> {
+        const response = await this.apiUsersPostRaw(requestParameters, initOverrides);
         return await response.value();
-    }
-
-    /**
-     */
-    async apiUsersGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/Users`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     */
-    async apiUsersGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
-        const response = await this.apiUsersGetRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiUsersIdDeleteRaw(requestParameters: ApiUsersIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiUsersIdDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/Users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async apiUsersIdDelete(requestParameters: ApiUsersIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiUsersIdDeleteRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     */
-    async apiUsersIdGetRaw(requestParameters: ApiUsersIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiUsersIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/Users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<string>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
-    }
-
-    /**
-     */
-    async apiUsersIdGet(requestParameters: ApiUsersIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.apiUsersIdGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiUsersIdPutRaw(requestParameters: ApiUsersIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling apiUsersIdPut().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/api/Users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: requestParameters['body'] as any,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async apiUsersIdPut(requestParameters: ApiUsersIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiUsersIdPutRaw(requestParameters, initOverrides);
     }
 
 }

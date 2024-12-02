@@ -12,7 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
-import { Route as WorkspacesWorkspaceIdImport } from './routes/workspaces/$workspaceId'
+import { Route as WorkspacesIndexImport } from './routes/workspaces/index'
 
 // Create/Update Routes
 
@@ -21,8 +21,8 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const WorkspacesWorkspaceIdRoute = WorkspacesWorkspaceIdImport.update({
-  path: '/workspaces/$workspaceId',
+const WorkspacesIndexRoute = WorkspacesIndexImport.update({
+  path: '/workspaces/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -37,11 +37,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/workspaces/$workspaceId': {
-      id: '/workspaces/$workspaceId'
-      path: '/workspaces/$workspaceId'
-      fullPath: '/workspaces/$workspaceId'
-      preLoaderRoute: typeof WorkspacesWorkspaceIdImport
+    '/workspaces/': {
+      id: '/workspaces/'
+      path: '/workspaces'
+      fullPath: '/workspaces'
+      preLoaderRoute: typeof WorkspacesIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -51,37 +51,37 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
-  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRoute
+  '/workspaces': typeof WorkspacesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
-  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRoute
+  '/workspaces': typeof WorkspacesIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/login': typeof LoginRoute
-  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRoute
+  '/workspaces/': typeof WorkspacesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/login' | '/workspaces/$workspaceId'
+  fullPaths: '/login' | '/workspaces'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/workspaces/$workspaceId'
-  id: '__root__' | '/login' | '/workspaces/$workspaceId'
+  to: '/login' | '/workspaces'
+  id: '__root__' | '/login' | '/workspaces/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
-  WorkspacesWorkspaceIdRoute: typeof WorkspacesWorkspaceIdRoute
+  WorkspacesIndexRoute: typeof WorkspacesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
-  WorkspacesWorkspaceIdRoute: WorkspacesWorkspaceIdRoute,
+  WorkspacesIndexRoute: WorkspacesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +97,14 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/login",
-        "/workspaces/$workspaceId"
+        "/workspaces/"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/workspaces/$workspaceId": {
-      "filePath": "workspaces/$workspaceId.tsx"
+    "/workspaces/": {
+      "filePath": "workspaces/index.tsx"
     }
   }
 }

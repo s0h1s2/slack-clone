@@ -4,6 +4,9 @@ apis/index.ts
 index.ts
 models/CreateUserRequest.ts
 models/CreateUserResponse.ts
+models/LoginRequest.ts
+models/LoginResponse.ts
 models/ProblemDetails.ts
+models/ValidationProblemDetails.ts
 models/index.ts
 runtime.ts
