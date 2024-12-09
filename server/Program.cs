@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using server.Database;
-using server.Repository;
 using server.Services;
 using server.Util;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
@@ -31,14 +30,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     c.TokenValidationParameters = new TokenValidationParameters
     {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Jwt:Key") ?? throw new InvalidOperationException())),
-        
+        ValidateAudience = false,
+        ValidateIssuer =   false,
         
     };
 });
 builder.Services.AddDbContextPool<AppDbContext>(opt=>opt.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+
 builder.Services.AddControllers();
-builder.Services.AddScoped<IUserRepository,UserDb>();
 builder.Services.AddScoped<UsersService>();
+builder.Services.AddScoped<WorkspaceService>();
 builder.Services.AddSingleton<PasswordHasher>();
 
 builder.Services.AddCors(c =>

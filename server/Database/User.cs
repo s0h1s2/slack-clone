@@ -1,21 +1,10 @@
-using Microsoft.EntityFrameworkCore;
-using server.Domain;
-using server.Repository;
-
 namespace server.Database;
 
-public class UserDb(AppDbContext appDbContext) : IUserRepository
+public class User
 {
-    public async Task<User> SaveUser(User user)
-    {
-        var userResult=appDbContext.Users.Add(user);
-        await appDbContext.SaveChangesAsync();
-        return userResult.Entity;
-    }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
 
-    public async Task<User?> GetUserByEmail(string email)
-    {
-        var user=await appDbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-        return user;
-    }
 }
