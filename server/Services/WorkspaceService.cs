@@ -14,11 +14,8 @@ public class WorkspaceService
         _dbContext = dbContext;
     }
 
-    public async Task<CreateWorkspaceResponse> CreateWorkspace(CreateWorkspaceRequest request,string ownerEmail)
+    public async Task<CreateWorkspaceResponse> CreateWorkspace(CreateWorkspaceRequest request,User user)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(user=>user.Email == ownerEmail);
-        
-        if(user==null) throw new Exception($"User with email {ownerEmail} not found");
         // TODO: i'm not sure about this approach need more research.
        var joiningCode=Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8);
        
@@ -30,7 +27,7 @@ public class WorkspaceService
        };
        _dbContext.Workspaces.Add(workspace);
        await _dbContext.SaveChangesAsync();
-       return new CreateWorkspaceResponse(workspace.Name,joiningCode);
+       return new CreateWorkspaceResponse(workspace.Id,workspace.Name,joiningCode);
        
     }
 }

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using server.Database;
@@ -14,12 +15,13 @@ public class UsersService
     private readonly AppDbContext _dbContext;
     private readonly TokenProvider _tokenProvider;
     private readonly PasswordHasher _passwordHasher;
-
-    public UsersService(AppDbContext dbContext, TokenProvider tokenProvider, PasswordHasher passwordHasher)
+    IHttpContextAccessor _httpContextAccessor;
+    public UsersService(AppDbContext dbContext, TokenProvider tokenProvider, PasswordHasher passwordHasher, IHttpContextAccessor httpContextAccessor)
     {
         _dbContext = dbContext;
         _tokenProvider = tokenProvider;
         _passwordHasher = passwordHasher;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<LoginResponse> LoginUser(LoginRequest request)
@@ -48,5 +50,17 @@ public class UsersService
         await _dbContext.SaveChangesAsync();
 
         return new CreateUserResponse(user.Id, user.Email, user.Email);
+    }
+
+    public async Task<User?> GetAuthenicatedUser()
+    {
+        string email = String.Empty;
+        if (_httpContextAccessor.HttpContext.User is not null)
+        {
+            email = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return user;
+        }
+       return null;
     }
 }

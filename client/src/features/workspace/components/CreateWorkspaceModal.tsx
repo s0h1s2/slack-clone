@@ -9,9 +9,30 @@ import {
 import {useCreateWorkspaceModal} from "@/features/workspace/hooks/create-workspace-modal.ts";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import {ResponseError} from "@/api";
+import {useState} from "react";
+import {apiClient} from "@/api/client.ts";
+import {useToast} from "@/hooks/use-toast.ts";
+import {useRouter} from "@tanstack/react-router";
 
 const CreateWorkspaceModal = () => {
     const [open, setOpen] = useCreateWorkspaceModal();
+    const [workspaceName,setWorkspaceName]=useState<string>("");
+    const toast=useToast();
+    const router=useRouter();
+    const createWorkspace=async (e)=>{
+        e.preventDefault();
+        try {
+            const res=await apiClient.workspaceApi.apiWorkspacesPost({createWorkspaceRequest:{name:workspaceName}})
+            router.navigate({to:"/workspaces/$workspaceId",params:{workspaceId:res.workspaceId}})
+            handleClose();
+        }catch (e:Error | ResponseError | unknown){
+            if(e instanceof ResponseError){
+               toast.toast({description:"Error happend while creating workspace",variant: "destructive"});
+            }
+        }    
+    }
+    
     const handleClose = () => {
         setOpen(false);
     }
@@ -23,9 +44,9 @@ const CreateWorkspaceModal = () => {
                     <DialogTitle>Add a workspace</DialogTitle>
                 </DialogHeader>
                 <form className="space-y-4">
-                    <Input  disabled={false} placeholder="Create a workspace e.g. 'Personal','Work'" />
+                    <Input value={workspaceName} onChange={(e)=>setWorkspaceName(e.target.value)} disabled={false} placeholder="Create a workspace e.g. 'Personal','Work'" />
                     <div className="flex justify-end">
-                        <Button>Create</Button>
+                        <Button onClick={(e)=>createWorkspace(e)}>Create</Button>
                     </div>
                 </form>
             </DialogContent>

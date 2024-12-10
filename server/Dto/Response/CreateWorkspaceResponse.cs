@@ -1,3 +1,3 @@
 namespace server.Dto.Response;
 
-public record CreateWorkspaceResponse(string Name,string joinCode);
+public record CreateWorkspaceResponse(int WorkspaceId,string Name,string JoinCode);

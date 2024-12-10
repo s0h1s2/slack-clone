@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-api": "npx openapi-typescript http://localhost:8000/swagger/v1/swagger.json -o ./src/api/schema.d.ts"
+    "generate-api": "npx openapi-generator-cli generate -i http://localhost:8000/swagger/v1/swagger.json -o ./src/api -g typescript-fetch"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

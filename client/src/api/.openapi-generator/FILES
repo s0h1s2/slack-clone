@@ -1,9 +1,11 @@
-.openapi-generator-ignore
 apis/UsersApi.ts
+apis/WorkspacesApi.ts
 apis/index.ts
 index.ts
 models/CreateUserRequest.ts
 models/CreateUserResponse.ts
+models/CreateWorkspaceRequest.ts
+models/CreateWorkspaceResponse.ts
 models/LoginRequest.ts
 models/LoginResponse.ts
 models/ProblemDetails.ts

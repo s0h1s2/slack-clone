@@ -30,13 +30,13 @@ export interface CreateUserResponse {
      * @type {string}
      * @memberof CreateUserResponse
      */
-    email?: string | null;
+    name?: string | null;
     /**
      * 
      * @type {string}
      * @memberof CreateUserResponse
      */
-    name?: string | null;
+    email?: string | null;
 }
 
 /**
@@ -57,8 +57,8 @@ export function CreateUserResponseFromJSONTyped(json: any, ignoreDiscriminator: 
     return {
         
         'userId': json['userId'] == null ? undefined : json['userId'],
-        'email': json['email'] == null ? undefined : json['email'],
         'name': json['name'] == null ? undefined : json['name'],
+        'email': json['email'] == null ? undefined : json['email'],
     };
 }
 
@@ -69,8 +69,8 @@ export function CreateUserResponseToJSON(value?: CreateUserResponse | null): any
     return {
         
         'userId': value['userId'],
-        'email': value['email'],
         'name': value['name'],
+        'email': value['email'],
     };
 }
 

@@ -27,8 +27,8 @@ const SignInCard = ({ setScreenState }: Props) => {
     
     const handleSubmit = async (data:SignInFormSchemaT) => {
         try {
-            const res=await apiClient.usersApi.apiUsersAuthPost({loginRequest:{email:data.email, password:data.password}});
-            navigate({to:"/workspaces"})
+            await apiClient.usersApi.apiUsersAuthPost({loginRequest:{email:data.email, password:data.password}});
+            await navigate({to:"/workspaces"})
         }catch (e:ResponseError | Error | unknown) {
             if(e instanceof ResponseError) {
                 if(e.response.status===401){
