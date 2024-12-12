@@ -24,7 +24,8 @@ const CreateWorkspaceModal = () => {
         e.preventDefault();
         try {
             const res=await apiClient.workspaceApi.apiWorkspacesPost({createWorkspaceRequest:{name:workspaceName}})
-            router.navigate({to:"/workspaces/$workspaceId",params:{workspaceId:res.workspaceId}})
+            router.navigate({to:"/workspaces/$workspaceId",params:{workspaceId:res.workspaceId?.toString()}})
+            toast.toast({description:"Workspace created successfully",variant: "success"});
             handleClose();
         }catch (e:Error | ResponseError | unknown){
             if(e instanceof ResponseError){

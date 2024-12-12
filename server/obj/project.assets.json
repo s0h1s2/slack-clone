@@ -7828,7 +7828,6 @@
       "packagesPath": "/home/mrprogrammez/.nuget/packages/",
       "outputPath": "/home/mrprogrammez/Desktop/projects/slack-clone/server/obj/",
       "projectStyle": "PackageReference",
-      "UsingMicrosoftNETSdk": false,
       "configFilePaths": [
         "/home/mrprogrammez/.nuget/NuGet/NuGet.Config"
       ],
@@ -7928,7 +7927,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.110/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.111/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

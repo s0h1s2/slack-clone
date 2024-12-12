@@ -5,7 +5,6 @@ const WorkspaceDashboard= () => {
     setOpen(true);
     return (
         <div>
-            
         </div>
     );
 };

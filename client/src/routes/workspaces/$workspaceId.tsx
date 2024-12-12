@@ -1,5 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import {createFileRoute} from '@tanstack/react-router'
+import WorkspacePage from "@/features/workspace/WorkspacePage.tsx";
 
 export const Route = createFileRoute('/workspaces/$workspaceId')({
-  component: () => <div>Hello /workspaces/$workspaceId!</div>,
+  component: () => {
+    const {workspaceId}=Route.useParams();
+    return <WorkspacePage workspaceId={parseInt(workspaceId)}/>
+  }
 })
