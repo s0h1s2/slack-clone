@@ -1,12 +1,16 @@
-import * as React from 'react'
-import { Outlet, createRootRoute } from '@tanstack/react-router'
+import * as React from "react";
+import { Outlet, createRootRoute } from "@tanstack/react-router";
 import CreateWorkspaceModal from "@/features/workspace/components/CreateWorkspaceModal.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient();
 
 export const Route = createRootRoute({
   component: () => (
     <React.Fragment>
-      <Outlet />
-        <CreateWorkspaceModal/>
+      <QueryClientProvider client={queryClient}>
+        <Outlet />
+        <CreateWorkspaceModal />
+      </QueryClientProvider>
     </React.Fragment>
   ),
-})
+});

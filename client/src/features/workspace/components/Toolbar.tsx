@@ -1,10 +1,13 @@
 import {Button} from "@/components/ui/button.tsx";
+import {useGetWorkspace} from "../hooks/get-workspace-by-id";
 import {Info, Search} from "lucide-react";
-import {useParams} from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 
 const Toolbar = () => {
     const {workspaceId}=useParams({from:"/workspaces/$workspaceId"});
-    
+    const {workspace,isWorkspaceLoading}=useGetWorkspace(parseInt(workspaceId))
+    if(isWorkspaceLoading) return "Loading...";
+
     return (
         <nav className="bg-[#481349] flex items-center justify-between h-10 p-1.5">
             <div className="flex-1"/>
@@ -12,7 +15,7 @@ const Toolbar = () => {
                 <Button size="sm" className="bg-accent/25 hover:background-accent-25 w-full justify-start px-2">
                     <Search className="size-4 text-white mr-2"/>
                     <span className="text-white text-xs">
-                        Search workspace
+                        Search {workspace?.name}
                     </span>
                 </Button>
             </div>
@@ -26,3 +29,5 @@ const Toolbar = () => {
 };
 
 export default Toolbar;
+
+
