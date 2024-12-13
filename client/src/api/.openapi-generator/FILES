@@ -6,6 +6,7 @@ models/CreateUserRequest.ts
 models/CreateUserResponse.ts
 models/CreateWorkspaceRequest.ts
 models/CreateWorkspaceResponse.ts
+models/GetWorkspaceResponse.ts
 models/LoginRequest.ts
 models/LoginResponse.ts
 models/ProblemDetails.ts

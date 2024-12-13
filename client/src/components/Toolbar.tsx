@@ -1,4 +1,3 @@
-import React from 'react';
 import {Button} from "@/components/ui/button.tsx";
 import {Info, Search} from "lucide-react";
 import {useParams} from "@tanstack/react-router";
@@ -13,7 +12,7 @@ const Toolbar = () => {
                 <Button size="sm" className="bg-accent/25 hover:background-accent-25 w-full justify-start px-2">
                     <Search className="size-4 text-white mr-2"/>
                     <span className="text-white text-xs">
-                        Search 
+                        Search workspace
                     </span>
                 </Button>
             </div>

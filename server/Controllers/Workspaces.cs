@@ -21,6 +21,16 @@ public class Workspaces : Controller
         _workspaceService = workspaceService;
         _usersService = usersService;
     }
+
+    [HttpGet("{id}"),Authorize]
+    [ProducesResponseType(typeof(GetWorkspaceResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetWorkspaces(int id)
+    {
+        var worksapce = await _workspaceService.GetWorkspace(id);
+        if (worksapce == null) return TypedResults.NotFound();
+        return TypedResults.Ok(worksapce);
+    }
     [HttpPost,Authorize]
     [ProducesResponseType(typeof(CreateWorkspaceResponse),StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]

@@ -17,6 +17,8 @@ import * as runtime from '../runtime';
 import type {
   CreateWorkspaceRequest,
   CreateWorkspaceResponse,
+  GetWorkspaceResponse,
+  ProblemDetails,
   ValidationProblemDetails,
 } from '../models/index';
 import {
@@ -24,9 +26,17 @@ import {
     CreateWorkspaceRequestToJSON,
     CreateWorkspaceResponseFromJSON,
     CreateWorkspaceResponseToJSON,
+    GetWorkspaceResponseFromJSON,
+    GetWorkspaceResponseToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     ValidationProblemDetailsFromJSON,
     ValidationProblemDetailsToJSON,
 } from '../models/index';
+
+export interface ApiWorkspacesIdGetRequest {
+    id: number;
+}
 
 export interface ApiWorkspacesPostRequest {
     createWorkspaceRequest?: CreateWorkspaceRequest;
@@ -39,6 +49,45 @@ export class WorkspacesApi extends runtime.BaseAPI {
 
     /**
      */
+    async apiWorkspacesIdGetRaw(requestParameters: ApiWorkspacesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetWorkspaceResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiWorkspacesIdGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/Workspaces/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetWorkspaceResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiWorkspacesIdGet(requestParameters: ApiWorkspacesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetWorkspaceResponse> {
+        const response = await this.apiWorkspacesIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
     async apiWorkspacesPostRaw(requestParameters: ApiWorkspacesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateWorkspaceResponse>> {
         const queryParameters: any = {};
 
@@ -46,6 +95,14 @@ export class WorkspacesApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
         const response = await this.request({
             path: `/api/Workspaces`,
             method: 'POST',

@@ -4,6 +4,7 @@ export * from './CreateUserRequest';
 export * from './CreateUserResponse';
 export * from './CreateWorkspaceRequest';
 export * from './CreateWorkspaceResponse';
+export * from './GetWorkspaceResponse';
 export * from './LoginRequest';
 export * from './LoginResponse';
 export * from './ProblemDetails';

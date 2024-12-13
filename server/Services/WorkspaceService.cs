@@ -14,6 +14,11 @@ public class WorkspaceService
         _dbContext = dbContext;
     }
 
+    public async Task<GetWorkspaceResponse?> GetWorkspace(int id)
+    {
+       var workspace = await  _dbContext.Workspaces.FindAsync(id);
+       return workspace == null ? null : new GetWorkspaceResponse(workspace.Id, workspace.Name,workspace.JoinCode);
+    }
     public async Task<CreateWorkspaceResponse> CreateWorkspace(CreateWorkspaceRequest request,User user)
     {
         // TODO: i'm not sure about this approach need more research.
