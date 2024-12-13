@@ -6,6 +6,8 @@ models/CreateUserRequest.ts
 models/CreateUserResponse.ts
 models/CreateWorkspaceRequest.ts
 models/CreateWorkspaceResponse.ts
+models/GetUserWorkspaceResponse.ts
+models/GetUserWorkspacesResponse.ts
 models/GetWorkspaceResponse.ts
 models/LoginRequest.ts
 models/LoginResponse.ts

@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   CreateWorkspaceRequest,
   CreateWorkspaceResponse,
+  GetUserWorkspacesResponse,
   GetWorkspaceResponse,
   ProblemDetails,
   ValidationProblemDetails,
@@ -26,6 +27,8 @@ import {
     CreateWorkspaceRequestToJSON,
     CreateWorkspaceResponseFromJSON,
     CreateWorkspaceResponseToJSON,
+    GetUserWorkspacesResponseFromJSON,
+    GetUserWorkspacesResponseToJSON,
     GetWorkspaceResponseFromJSON,
     GetWorkspaceResponseToJSON,
     ProblemDetailsFromJSON,
@@ -83,6 +86,38 @@ export class WorkspacesApi extends runtime.BaseAPI {
      */
     async apiWorkspacesIdGet(requestParameters: ApiWorkspacesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetWorkspaceResponse> {
         const response = await this.apiWorkspacesIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiWorkspacesMyGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetUserWorkspacesResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/Workspaces/my`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetUserWorkspacesResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiWorkspacesMyGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserWorkspacesResponse> {
+        const response = await this.apiWorkspacesMyGetRaw(initOverrides);
         return await response.value();
     }
 

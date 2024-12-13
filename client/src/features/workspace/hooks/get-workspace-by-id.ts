@@ -1,4 +1,3 @@
-import { GetWorkspaceResponse } from "@/api";
 import { apiClient } from "@/api/client";
 import {useQuery} from "@tanstack/react-query"
 export const useGetWorkspace=(id:number)=>{
@@ -11,11 +10,23 @@ export const useGetWorkspace=(id:number)=>{
                 throw e
             }
         }
-        
     })
     return {
         workspace, 
         isWorkspaceLoading,
         workspaceError
     };
+};
+export const useGetMyWorkspaces=()=>{
+    const {data:workspaces,isLoading:isWorkspacesLoading}=useQuery({
+      queryKey:["workspaces"],  
+        queryFn:async ()=>{
+          const workspaces=await apiClient.workspaceApi.apiWorkspacesMyGet();
+          return workspaces;
+        }
+    });
+    return {
+        workspaces,
+        isWorkspacesLoading
+    }
 };

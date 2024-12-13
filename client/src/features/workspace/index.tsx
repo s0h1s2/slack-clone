@@ -4,8 +4,8 @@ const WorkspaceDashboard= () => {
     const [_open, setOpen] = useCreateWorkspaceModal();
     setOpen(true);
     return (
-        <div>
-        </div>
+        <>
+        </>
     );
 };
 

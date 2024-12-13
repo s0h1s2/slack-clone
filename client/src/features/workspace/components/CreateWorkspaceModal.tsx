@@ -1,10 +1,8 @@
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import {useCreateWorkspaceModal} from "@/features/workspace/hooks/create-workspace-modal.ts";
 import {Input} from "@/components/ui/input.tsx";
@@ -39,7 +37,6 @@ const CreateWorkspaceModal = () => {
     }
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogTrigger>Workspace</DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Add a workspace</DialogTitle>

@@ -9,7 +9,7 @@ const WorkspaceLayout = ({children}:{children:React.ReactNode}) => {
             {/* Toolbar is 40px high */}
             <div className="flex h-[calc(100vh-40px)]">
                 <Sidebar/>
-            {children}
+                {children}
             </div>
         </div>
     );
