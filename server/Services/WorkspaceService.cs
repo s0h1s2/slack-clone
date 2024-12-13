@@ -14,6 +14,17 @@ public class WorkspaceService
         _dbContext = dbContext;
     }
 
+    public async Task<GetUserWorkspacesResponse> GetUserWorkspaces(User user)
+    {
+        var result = await _dbContext.WorkspaceMembers.Where(member => member.UserId == user.Id)
+            .Include(member => member.Workspace).ToListAsync();
+        List<GetUserWorkspaceResponse> workspaces = result.Select(workspace => new GetUserWorkspaceResponse(workspace.Workspace.Id,workspace.Workspace.Name)).ToList();
+        
+        return new GetUserWorkspacesResponse()
+        {
+            Workspaces = workspaces
+        };
+    }
     public async Task<GetWorkspaceResponse?> GetWorkspace(int id)
     {
         var workspace = await _dbContext.Workspaces.FindAsync(id);

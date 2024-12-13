@@ -49,4 +49,15 @@ public class Workspaces : Controller
         }
         
     }
+
+    [HttpGet("my"), Authorize]
+    [ProducesResponseType(typeof(GetUserWorkspacesResponse),StatusCodes.Status200OK)]
+    public async Task<IResult> GetUserWorkspaces()
+    {
+        var user = await _usersService.GetAuthenicatedUser();
+        var workspaces = await _workspaceService.GetUserWorkspaces(user);
+        
+        return TypedResults.Ok(workspaces);
+        
+    }
 }
