@@ -55,13 +55,14 @@ export interface ValidationProblemDetails {
      * @type {{ [key: string]: Array<string>; }}
      * @memberof ValidationProblemDetails
      */
-    errors?: { [key: string]: Array<string>; } | null;
+    errors: { [key: string]: Array<string>; };
 }
 
 /**
  * Check if a given object implements the ValidationProblemDetails interface.
  */
 export function instanceOfValidationProblemDetails(value: object): value is ValidationProblemDetails {
+    if (!('errors' in value) || value['errors'] === undefined) return false;
     return true;
 }
 
@@ -81,7 +82,7 @@ export function ValidationProblemDetailsFromJSONTyped(json: any, ignoreDiscrimin
         'status': json['status'] == null ? undefined : json['status'],
         'detail': json['detail'] == null ? undefined : json['detail'],
         'instance': json['instance'] == null ? undefined : json['instance'],
-        'errors': json['errors'] == null ? undefined : json['errors'],
+        'errors': json['errors'],
     };
 }
 

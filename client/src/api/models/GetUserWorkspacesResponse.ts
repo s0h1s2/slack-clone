@@ -31,13 +31,14 @@ export interface GetUserWorkspacesResponse {
      * @type {Array<GetUserWorkspaceResponse>}
      * @memberof GetUserWorkspacesResponse
      */
-    workspaces?: Array<GetUserWorkspaceResponse> | null;
+    workspaces: Array<GetUserWorkspaceResponse>;
 }
 
 /**
  * Check if a given object implements the GetUserWorkspacesResponse interface.
  */
 export function instanceOfGetUserWorkspacesResponse(value: object): value is GetUserWorkspacesResponse {
+    if (!('workspaces' in value) || value['workspaces'] === undefined) return false;
     return true;
 }
 
@@ -51,7 +52,7 @@ export function GetUserWorkspacesResponseFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
-        'workspaces': json['workspaces'] == null ? undefined : ((json['workspaces'] as Array<any>).map(GetUserWorkspaceResponseFromJSON)),
+        'workspaces': ((json['workspaces'] as Array<any>).map(GetUserWorkspaceResponseFromJSON)),
     };
 }
 
@@ -61,7 +62,7 @@ export function GetUserWorkspacesResponseToJSON(value?: GetUserWorkspacesRespons
     }
     return {
         
-        'workspaces': value['workspaces'] == null ? undefined : ((value['workspaces'] as Array<any>).map(GetUserWorkspaceResponseToJSON)),
+        'workspaces': ((value['workspaces'] as Array<any>).map(GetUserWorkspaceResponseToJSON)),
     };
 }
 

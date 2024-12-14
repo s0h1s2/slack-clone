@@ -24,25 +24,28 @@ export interface CreateUserResponse {
      * @type {number}
      * @memberof CreateUserResponse
      */
-    userId?: number;
+    userId: number;
     /**
      * 
      * @type {string}
      * @memberof CreateUserResponse
      */
-    name?: string | null;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof CreateUserResponse
      */
-    email?: string | null;
+    email: string;
 }
 
 /**
  * Check if a given object implements the CreateUserResponse interface.
  */
 export function instanceOfCreateUserResponse(value: object): value is CreateUserResponse {
+    if (!('userId' in value) || value['userId'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
     return true;
 }
 
@@ -56,9 +59,9 @@ export function CreateUserResponseFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'userId': json['userId'] == null ? undefined : json['userId'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'email': json['email'] == null ? undefined : json['email'],
+        'userId': json['userId'],
+        'name': json['name'],
+        'email': json['email'],
     };
 }
 

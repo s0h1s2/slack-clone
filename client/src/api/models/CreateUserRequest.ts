@@ -24,25 +24,28 @@ export interface CreateUserRequest {
      * @type {string}
      * @memberof CreateUserRequest
      */
-    name?: string | null;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof CreateUserRequest
      */
-    email?: string | null;
+    email: string;
     /**
      * 
      * @type {string}
      * @memberof CreateUserRequest
      */
-    password?: string | null;
+    password: string;
 }
 
 /**
  * Check if a given object implements the CreateUserRequest interface.
  */
 export function instanceOfCreateUserRequest(value: object): value is CreateUserRequest {
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
+    if (!('password' in value) || value['password'] === undefined) return false;
     return true;
 }
 
@@ -56,9 +59,9 @@ export function CreateUserRequestFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'name': json['name'] == null ? undefined : json['name'],
-        'email': json['email'] == null ? undefined : json['email'],
-        'password': json['password'] == null ? undefined : json['password'],
+        'name': json['name'],
+        'email': json['email'],
+        'password': json['password'],
     };
 }
 

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using server.Database;
+using server.Filters;
 using server.Services;
 using server.Util;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
@@ -25,7 +26,8 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "bearer",
         Description = "Please insert JWT token into field"
     });
-
+    c.SupportNonNullableReferenceTypes();
+    c.SchemaFilter<RequiredNotNullableSchemaFilter>();
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -39,8 +41,8 @@ builder.Services.AddSwaggerGen(c =>
             },
             new string[] { }
         }
-    }); 
-    
+    });
+
 });
 builder.Services.AddProblemDetails();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
@@ -59,11 +61,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Jwt:Key") ?? throw new InvalidOperationException())),
         ValidateAudience = false,
-        ValidateIssuer =   false,
-        
+        ValidateIssuer = false,
+
     };
 });
-builder.Services.AddDbContextPool<AppDbContext>(opt=>opt.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+builder.Services.AddDbContextPool<AppDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 
@@ -73,7 +75,7 @@ builder.Services.AddSingleton<PasswordHasher>();
 
 builder.Services.AddCors(c =>
 {
-  c.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader()); 
+    c.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
 });
 builder.Services.AddSingleton<TokenProvider>();
 

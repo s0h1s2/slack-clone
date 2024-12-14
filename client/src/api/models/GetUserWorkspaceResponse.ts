@@ -24,19 +24,21 @@ export interface GetUserWorkspaceResponse {
      * @type {number}
      * @memberof GetUserWorkspaceResponse
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {string}
      * @memberof GetUserWorkspaceResponse
      */
-    name?: string | null;
+    name: string;
 }
 
 /**
  * Check if a given object implements the GetUserWorkspaceResponse interface.
  */
 export function instanceOfGetUserWorkspaceResponse(value: object): value is GetUserWorkspaceResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 
@@ -50,8 +52,8 @@ export function GetUserWorkspaceResponseFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
+        'id': json['id'],
+        'name': json['name'],
     };
 }
 

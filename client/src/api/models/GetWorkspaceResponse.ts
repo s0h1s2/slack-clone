@@ -24,25 +24,28 @@ export interface GetWorkspaceResponse {
      * @type {number}
      * @memberof GetWorkspaceResponse
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {string}
      * @memberof GetWorkspaceResponse
      */
-    name?: string | null;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof GetWorkspaceResponse
      */
-    joinCode?: string | null;
+    joinCode: string;
 }
 
 /**
  * Check if a given object implements the GetWorkspaceResponse interface.
  */
 export function instanceOfGetWorkspaceResponse(value: object): value is GetWorkspaceResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('joinCode' in value) || value['joinCode'] === undefined) return false;
     return true;
 }
 
@@ -56,9 +59,9 @@ export function GetWorkspaceResponseFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'joinCode': json['joinCode'] == null ? undefined : json['joinCode'],
+        'id': json['id'],
+        'name': json['name'],
+        'joinCode': json['joinCode'],
     };
 }
 
