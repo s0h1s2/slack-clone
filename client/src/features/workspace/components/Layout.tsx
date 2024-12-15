@@ -4,6 +4,12 @@ import Sidebar from "./Sidebar";
 import PageLoading from "@/components/PageLoading";
 import { useGetWorkspace } from "../hooks/get-workspace-by-id";
 import { useParams } from "@tanstack/react-router";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import WorkspaceSidebar from "./WorkspaceSidebar";
 
 const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
   const { workspaceId } = useParams({ from: "/workspaces/$workspaceId" });
@@ -18,7 +24,20 @@ const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Toolbar is 40px high */}
       <div className="flex h-[calc(100vh-40px)]">
         <Sidebar currentWorkspace={workspace} />
-        {children}
+        <ResizablePanelGroup
+          direction={"horizontal"}
+          autoSaveId="slack-clone-workspace-layout"
+        >
+          <ResizablePanel
+            defaultSize={20}
+            minSize={11}
+            className="bg-[#5E2C5F]"
+          >
+            <WorkspaceSidebar currentWorkspace={workspace} />
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel minSize={20}>{children}</ResizablePanel>
+        </ResizablePanelGroup>
       </div>
     </div>
   );
