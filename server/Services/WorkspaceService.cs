@@ -18,22 +18,25 @@ public class WorkspaceService
     {
         var result = await _dbContext.WorkspaceMembers.Where(member => member.UserId == user.Id)
             .Include(member => member.Workspace).ToListAsync();
-        List<GetUserWorkspaceResponse> workspaces = result.Select(workspace => new GetUserWorkspaceResponse(workspace.Workspace.Id,workspace.Workspace.Name)).ToList();
-        
+        List<GetUserWorkspaceResponse> workspaces = result.Select(workspace => new GetUserWorkspaceResponse(workspace.Workspace.Id, workspace.Workspace.Name)).ToList();
+
         return new GetUserWorkspacesResponse()
         {
             Workspaces = workspaces
         };
     }
-    public async Task<GetWorkspaceResponse?> GetWorkspace(int id)
+    public async Task<GetWorkspaceResponse?> GetWorkspace(int id, User user)
     {
         var workspace = await _dbContext.Workspaces.FindAsync(id);
-        return workspace == null ? null : new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode);
+        if (workspace == null) return null;
+        var userHasAccess = await _dbContext.WorkspaceMembers.Where(member => member.UserId == user.Id && member.WorkspaceId == workspace.Id).FirstOrDefaultAsync();
+        if (userHasAccess == null) return null;
+        return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode);
     }
 
     public async Task<CreateWorkspaceResponse> CreateWorkspace(CreateWorkspaceRequest request, User user)
     {
-// TODO: i'm not sure about this approach need more research.
+        // TODO: i'm not sure about this approach need more research.
         var joiningCode = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8);
 
         var workspace = new Workspace()
