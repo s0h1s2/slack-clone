@@ -11,3 +11,4 @@ export * from './LoginRequest';
 export * from './LoginResponse';
 export * from './ProblemDetails';
 export * from './ValidationProblemDetails';
+export * from './WorkspaceUserRole';

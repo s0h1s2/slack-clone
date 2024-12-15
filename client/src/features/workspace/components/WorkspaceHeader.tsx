@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CurrentWorksapce } from "../types";
 import { ChevronDown } from "lucide-react";
-import { workerData } from "worker_threads";
 type Props = {
   currentWorkspace: CurrentWorksapce;
   isAdmin: boolean;

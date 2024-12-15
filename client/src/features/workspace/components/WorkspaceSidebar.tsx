@@ -6,7 +6,10 @@ type Props = {
 const WorkspaceSidebar = ({ currentWorkspace }: Props) => {
   return (
     <div className="flex flex-col bg-[#5E2C5F] h-full">
-      <WorkspaceHeader currentWorkspace={currentWorkspace} />
+      <WorkspaceHeader
+        currentWorkspace={currentWorkspace}
+        isAdmin={currentWorkspace.isAdmin || false}
+      />
     </div>
   );
 };
