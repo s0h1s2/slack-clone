@@ -7,7 +7,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CurrentWorksapce } from "../types";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, SquarePen } from "lucide-react";
+import Hint from "@/components/Hint";
 type Props = {
   currentWorkspace: CurrentWorksapce;
 };
@@ -52,6 +53,13 @@ const WorkspaceHeader = ({ currentWorkspace }: Props) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <div className="flex items-center gap-0.5">
+        <Hint label="New Message" side="bottom">
+          <Button variant="transparent" size="iconSm">
+            <SquarePen className="size-4" />
+          </Button>
+        </Hint>
+      </div>
     </div>
   );
 };
