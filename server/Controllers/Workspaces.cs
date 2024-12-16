@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using server.Database;
 using server.Dto.Request;
 using server.Dto.Response;
+using server.Exceptions;
 using server.Services;
 
 namespace server.Controllers;
@@ -61,6 +62,27 @@ public class Workspaces : Controller
         var workspaces = await _workspaceService.GetUserWorkspaces(user);
 
         return TypedResults.Ok(workspaces);
+    }
+    [HttpDelete("{id}"), Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> DeleteWorkspace(int id)
+    {
+        var user = await _usersService.GetAuthenicatedUser();
+        try
+        {
+            _workspaceService.DeleteWorkspace(id, user);
+            return Ok();
+        }
+        catch (ResourceNotFound)
+        {
+            return NotFound();
 
+        }
+        catch (OnlyAdminDeleteWorkspaceException)
+        {
+            return Forbid();
+        }
     }
 }
