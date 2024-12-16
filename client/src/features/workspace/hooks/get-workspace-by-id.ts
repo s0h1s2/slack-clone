@@ -1,5 +1,8 @@
+import { ResponseError } from "@/api";
 import { apiClient } from "@/api/client";
-import { useQuery } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation } from "@tanstack/react-query";
+
 export const useGetWorkspace = (id: number) => {
   const {
     data: workspace,
@@ -32,5 +35,31 @@ export const useGetMyWorkspaces = () => {
   return {
     workspaces,
     isWorkspacesLoading,
+  };
+};
+
+export const useDeleteWorkspace = () => {
+  const { toast } = useToast();
+  const { mutate: deleteWorkspace } = useMutation({
+    mutationFn: async (workspaceId: number) => {
+      try {
+        await apiClient.workspaceApi.apiWorkspacesIdDelete({ id: workspaceId });
+      } catch (e: ResponseError | Error | unknown) {
+        if (e instanceof ResponseError) {
+          if (e.response.status == 403) {
+            toast({ description: "Only admin can delete workspace" });
+            return;
+          } else if (e.response.status == 404) {
+            toast({ description: "Workspace not found" });
+            return;
+          }
+        }
+        console.error(e);
+        toast({ description: "Unknown Error happend" });
+      }
+    },
+  });
+  return {
+    deleteWorkspace,
   };
 };

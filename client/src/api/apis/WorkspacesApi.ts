@@ -37,6 +37,10 @@ import {
     ValidationProblemDetailsToJSON,
 } from '../models/index';
 
+export interface ApiWorkspacesIdDeleteRequest {
+    id: number;
+}
+
 export interface ApiWorkspacesIdGetRequest {
     id: number;
 }
@@ -49,6 +53,44 @@ export interface ApiWorkspacesPostRequest {
  * 
  */
 export class WorkspacesApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async apiWorkspacesIdDeleteRaw(requestParameters: ApiWorkspacesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiWorkspacesIdDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/Workspaces/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async apiWorkspacesIdDelete(requestParameters: ApiWorkspacesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiWorkspacesIdDeleteRaw(requestParameters, initOverrides);
+    }
 
     /**
      */

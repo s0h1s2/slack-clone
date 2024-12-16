@@ -2,9 +2,8 @@ import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import './index.css'
-import {Toaster} from "@/components/ui/toaster.tsx";
-import CreateWorkspaceModal from "@/features/workspace/components/CreateWorkspaceModal.tsx";
+import "./index.css";
+import { Toaster } from "@/components/ui/toaster.tsx";
 // Create a new router instance
 const router = createRouter({ routeTree });
 
@@ -18,10 +17,10 @@ declare module "@tanstack/react-router" {
 createRoot(document.getElementById("root")!).render(
   <React.Fragment>
     <StrictMode>
-        <>
-            <RouterProvider router={router} />
-            <Toaster/>
-        </>
+      <>
+        <RouterProvider router={router} />
+        <Toaster />
+      </>
     </StrictMode>
   </React.Fragment>
 );

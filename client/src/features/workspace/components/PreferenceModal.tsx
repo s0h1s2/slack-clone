@@ -6,13 +6,17 @@ import {
 } from "@/components/ui/dialog";
 import { Trash } from "lucide-react";
 import { useState } from "react";
+import { useDeleteWorkspace } from "../hooks/get-workspace-by-id";
+import { useParams } from "@tanstack/react-router";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   initialValue: string;
 };
 const PreferenceModal = ({ initialValue, open, setOpen }: Props) => {
+  const { workspaceId } = useParams({ from: "/workspaces/$workspaceId" });
   const [value, setValue] = useState(initialValue);
+  const { deleteWorkspace } = useDeleteWorkspace();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="p-0 bg-gray-50 overflow-hidden">
@@ -31,7 +35,9 @@ const PreferenceModal = ({ initialValue, open, setOpen }: Props) => {
           </div>
           <button
             disabled={false}
-            onClick={() => {}}
+            onClick={() => {
+              deleteWorkspace(parseInt(workspaceId));
+            }}
             className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50 text-rose-600"
           >
             <Trash className="size-4" />
