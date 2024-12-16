@@ -13,6 +13,5 @@ models/LoginRequest.ts
 models/LoginResponse.ts
 models/ProblemDetails.ts
 models/ValidationProblemDetails.ts
-models/WorkspaceUserRole.ts
 models/index.ts
 runtime.ts

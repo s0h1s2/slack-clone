@@ -2,4 +2,4 @@ using server.Database;
 
 namespace server.Dto.Response;
 
-public record GetWorkspaceResponse(int Id, string Name, string JoinCode, WorkspaceUserRole UserRole);
+public record GetWorkspaceResponse(int Id, string Name, string JoinCode, bool IsAdmin);

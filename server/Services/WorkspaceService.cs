@@ -31,7 +31,7 @@ public class WorkspaceService
         if (workspace == null) return null;
         var userHasAccess = await _dbContext.WorkspaceMembers.Where(member => member.UserId == user.Id && member.WorkspaceId == workspace.Id).FirstOrDefaultAsync();
         if (userHasAccess == null) return null;
-        return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role);
+        return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role == WorkspaceUserRole.Admin);
     }
 
     public async Task<CreateWorkspaceResponse> CreateWorkspace(CreateWorkspaceRequest request, User user)

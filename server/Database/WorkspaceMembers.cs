@@ -13,4 +13,5 @@ public class WorkspaceMembers
     public Workspace Workspace { get; set; } = null!;
     public User User { get; set; } = null!;
     public WorkspaceUserRole Role { get; set; }
+    
 }

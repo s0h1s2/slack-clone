@@ -13,13 +13,6 @@
  */
 
 import { mapValues } from '../runtime';
-import type { WorkspaceUserRole } from './WorkspaceUserRole';
-import {
-    WorkspaceUserRoleFromJSON,
-    WorkspaceUserRoleFromJSONTyped,
-    WorkspaceUserRoleToJSON,
-} from './WorkspaceUserRole';
-
 /**
  * 
  * @export
@@ -46,13 +39,11 @@ export interface GetWorkspaceResponse {
     joinCode: string;
     /**
      * 
-     * @type {WorkspaceUserRole}
+     * @type {boolean}
      * @memberof GetWorkspaceResponse
      */
-    userRole: WorkspaceUserRole;
+    isAdmin: boolean;
 }
-
-
 
 /**
  * Check if a given object implements the GetWorkspaceResponse interface.
@@ -61,7 +52,7 @@ export function instanceOfGetWorkspaceResponse(value: object): value is GetWorks
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('joinCode' in value) || value['joinCode'] === undefined) return false;
-    if (!('userRole' in value) || value['userRole'] === undefined) return false;
+    if (!('isAdmin' in value) || value['isAdmin'] === undefined) return false;
     return true;
 }
 
@@ -78,7 +69,7 @@ export function GetWorkspaceResponseFromJSONTyped(json: any, ignoreDiscriminator
         'id': json['id'],
         'name': json['name'],
         'joinCode': json['joinCode'],
-        'userRole': WorkspaceUserRoleFromJSON(json['userRole']),
+        'isAdmin': json['isAdmin'],
     };
 }
 
@@ -91,7 +82,7 @@ export function GetWorkspaceResponseToJSON(value?: GetWorkspaceResponse | null):
         'id': value['id'],
         'name': value['name'],
         'joinCode': value['joinCode'],
-        'userRole': WorkspaceUserRoleToJSON(value['userRole']),
+        'isAdmin': value['isAdmin'],
     };
 }
 
