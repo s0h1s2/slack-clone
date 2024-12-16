@@ -1,5 +1,5 @@
 export type CurrentWorksapce = {
   name: string;
   id: number;
-  isAdmin?: boolean;
+  isAdmin: boolean;
 };
