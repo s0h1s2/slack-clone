@@ -22,13 +22,17 @@ const WorkspaceSwitcher = ({ currentWorkspace }: Props) => {
   const [_open, setOpen] = useCreateWorkspaceModal();
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button className="size-9 relative overflow-hidden bg-[#ABABAD] hover:bg-[#ABABAD]/80 text-slate-800 font-semibold text-xl">
           {currentWorkspace.name.charAt(0).toUpperCase()}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent side="bottom" align="start" className="w-64">
+      <DropdownMenuContent
+        side="bottom"
+        align="start"
+        className="w-64 overflow-y-scroll h-96"
+      >
         <DropdownMenuItem className="cursor-pointer flex-col justify-start items-start capitalize">
           {currentWorkspace.name}
           <span className="text-xs text-muted-foreground">
