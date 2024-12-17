@@ -60,15 +60,17 @@ public class WorkspaceService
         await _dbContext.SaveChangesAsync();
         return new CreateWorkspaceResponse(workspace.Id, workspace.Name, joiningCode);
     }
-    public async void DeleteWorkspace(int id, User user)
+    public void DeleteWorkspace(int id, User user)
     {
-        var workspace = await _dbContext.Workspaces.FindAsync(id);
+        var workspace = _dbContext.Workspaces.Find(id);
         if (workspace == null) throw new ResourceNotFound();
-        var isUserAdmin = await _dbContext.WorkspaceMembers.FirstOrDefaultAsync((member) => member.WorkspaceId == id && member.UserId == user.Id);
+        
+        var isUserAdmin = _dbContext.WorkspaceMembers.FirstOrDefault((member) => member.WorkspaceId == id && member.UserId == user.Id);
         if (isUserAdmin == null) throw new ResourceNotFound();
+        
         if (isUserAdmin.Role != WorkspaceUserRole.Admin) throw new OnlyAdminDeleteWorkspaceException();
         _dbContext.Remove(workspace);
-        await _dbContext.SaveChangesAsync();
+        _dbContext.SaveChanges();
 
     }
 }

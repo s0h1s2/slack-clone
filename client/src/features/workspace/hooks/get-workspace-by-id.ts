@@ -44,13 +44,14 @@ export const useDeleteWorkspace = () => {
     mutationFn: async (workspaceId: number) => {
       try {
         await apiClient.workspaceApi.apiWorkspacesIdDelete({ id: workspaceId });
+        toast({description:"Workspace deleted successfully"});
       } catch (e: ResponseError | Error | unknown) {
         if (e instanceof ResponseError) {
           if (e.response.status == 403) {
-            toast({ description: "Only admin can delete workspace" });
+            toast({ description: "Only admin can delete workspace",variant: "destructive"});
             return;
           } else if (e.response.status == 404) {
-            toast({ description: "Workspace not found" });
+            toast({ description: "Workspace not found",variant: "destructive" });
             return;
           }
         }
