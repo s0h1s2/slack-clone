@@ -87,7 +87,7 @@ public class Workspaces : Controller
             return Forbid();
         }
     }
-
+    
     [HttpPost("{id}/channels"), Authorize]
     [ProducesResponseType(typeof(CreateChannelResponse),StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
@@ -105,4 +105,21 @@ public class Workspaces : Controller
             return Forbid(exception.Message);
         }
     }
+        [HttpGet("{id}/channels"), Authorize]
+        [ProducesResponseType(typeof(CreateChannelResponse),StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(PermmissionException),StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> GetWorkspaceChannels(int id, [FromBody] CreateWorkspaceChannelRequest request)
+        {
+            var user = await _usersService.GetAuthenicatedUser();
+            try
+            {
+                var channel=await _channelService.CreateChannel(request, id, user!);
+                return Created($"/channels/{id}", channel);
+            }
+            catch (PermmissionException exception)
+            {
+                return Forbid(exception.Message);
+            }
+        }
 }
