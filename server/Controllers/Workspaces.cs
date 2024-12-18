@@ -46,7 +46,7 @@ public class Workspaces : Controller
         {
             var user = await _usersService.GetAuthenicatedUser();
             if (user == null) return TypedResults.Unauthorized();
-            var result = await _workspaceService.CreateWorkspace(request, user);
+            var result = await _workspaceService.CreateWorkspaceWithGeneralChannel(request, user);
             return TypedResults.Created("/", result);
         }
         catch (Exception ex)

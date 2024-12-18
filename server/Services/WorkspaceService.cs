@@ -36,7 +36,7 @@ public class WorkspaceService
         return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role == WorkspaceUserRole.Admin);
     }
 
-    public async Task<CreateWorkspaceResponse> CreateWorkspace(CreateWorkspaceRequest request, User user)
+    public async Task<CreateWorkspaceResponse> CreateWorkspaceWithGeneralChannel(CreateWorkspaceRequest request, User user)
     {
         // TODO: i'm not sure about this approach need more research.
         var joiningCode = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8);
@@ -50,6 +50,9 @@ public class WorkspaceService
 
         _dbContext.Workspaces.Add(workspace);
         await _dbContext.SaveChangesAsync();
+         _dbContext.WorkspaceChannels.Add(new WorkspaceChannel(){WorkspaceId = workspace.Id,Name = "general"});
+        await _dbContext.SaveChangesAsync();
+        
         var member = new WorkspaceMembers()
         {
             UserId = user.Id,
