@@ -108,7 +108,7 @@ public class Workspaces : Controller
         [HttpGet("{id}/channels"), Authorize]
         [ProducesResponseType(typeof(GetChannelsResponse),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(PermmissionException),StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetWorkspaceChannels(int id, [FromBody] CreateWorkspaceChannelRequest request)
+        public async Task<IActionResult> GetWorkspaceChannels(int id)
         {
             var user = await _usersService.GetAuthenicatedUser();
             try
