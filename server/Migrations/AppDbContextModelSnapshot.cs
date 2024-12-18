@@ -21,6 +21,28 @@ namespace server.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("WorkspaceChannel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("WorkspaceId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.ToTable("WorkspaceChannels");
+                });
+
             modelBuilder.Entity("server.Database.User", b =>
                 {
                     b.Property<int>("Id")
@@ -96,6 +118,17 @@ namespace server.Migrations
                     b.HasIndex("WorkspaceId");
 
                     b.ToTable("WorkspaceMembers");
+                });
+
+            modelBuilder.Entity("WorkspaceChannel", b =>
+                {
+                    b.HasOne("server.Database.Workspace", "Workspace")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Workspace");
                 });
 
             modelBuilder.Entity("server.Database.Workspace", b =>

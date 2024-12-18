@@ -16,11 +16,13 @@ public class Workspaces : Controller
 {
     private readonly WorkspaceService _workspaceService;
     private readonly UsersService _usersService;
+    private readonly ChannelService _channelService;
 
-    public Workspaces(WorkspaceService workspaceService, UsersService usersService)
+    public Workspaces(WorkspaceService workspaceService, UsersService usersService,ChannelService channelService)
     {
         _workspaceService = workspaceService;
         _usersService = usersService;
+        _channelService = channelService;
     }
 
     [HttpGet("{id}"), Authorize]
@@ -80,9 +82,27 @@ public class Workspaces : Controller
             return NotFound();
 
         }
-        catch (OnlyAdminDeleteWorkspaceException)
+        catch (PermmissionException)
         {
             return Forbid();
+        }
+    }
+
+    [HttpPost("{id}/channels"), Authorize]
+    [ProducesResponseType(typeof(CreateChannelResponse),StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(PermmissionException),StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> CreateWorkspaceChannel(int id, [FromBody] CreateWorkspaceChannelRequest request)
+    {
+        var user = await _usersService.GetAuthenicatedUser();
+        try
+        {
+            var channel=await _channelService.CreateChannel(request, id, user!);
+            return Created($"/channels/{id}", channel);
+        }
+        catch (PermmissionException exception)
+        {
+            return Forbid(exception.Message);
         }
     }
 }

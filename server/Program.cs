@@ -75,6 +75,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<WorkspaceService>();
+builder.Services.AddScoped<ChannelService>();
+
 builder.Services.AddSingleton<PasswordHasher>();
 
 builder.Services.AddCors(c =>

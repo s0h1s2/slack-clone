@@ -68,7 +68,7 @@ public class WorkspaceService
         var isUserAdmin = _dbContext.WorkspaceMembers.FirstOrDefault((member) => member.WorkspaceId == id && member.UserId == user.Id);
         if (isUserAdmin == null) throw new ResourceNotFound();
         
-        if (isUserAdmin.Role != WorkspaceUserRole.Admin) throw new OnlyAdminDeleteWorkspaceException();
+        if (isUserAdmin.Role != WorkspaceUserRole.Admin) throw new PermmissionException("Only admin can delete workspaces");
         _dbContext.Remove(workspace);
         _dbContext.SaveChanges();
 
