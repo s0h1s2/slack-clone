@@ -2,7 +2,7 @@ import React from "react";
 import Toolbar from "./Toolbar";
 import Sidebar from "./Sidebar";
 import PageLoading from "@/components/PageLoading";
-import { useGetWorkspace } from "../hooks/get-workspace-by-id";
+import { useGetWorkspace } from "../hooks/workspace-queries";
 import { useParams } from "@tanstack/react-router";
 import {
   ResizableHandle,

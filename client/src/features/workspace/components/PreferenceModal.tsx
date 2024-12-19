@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import { Trash } from "lucide-react";
 import { useState } from "react";
-import { useDeleteWorkspace } from "../hooks/get-workspace-by-id";
+import { useDeleteWorkspace } from "../hooks/workspace-queries";
 import { useParams } from "@tanstack/react-router";
 type Props = {
   open: boolean;

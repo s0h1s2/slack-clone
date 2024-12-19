@@ -2,10 +2,15 @@ apis/UsersApi.ts
 apis/WorkspacesApi.ts
 apis/index.ts
 index.ts
+models/CreateChannelResponse.ts
 models/CreateUserRequest.ts
 models/CreateUserResponse.ts
+models/CreateWorkspaceChannelRequest.ts
 models/CreateWorkspaceRequest.ts
 models/CreateWorkspaceResponse.ts
+models/GetChannel.ts
+models/GetChannelResponse.ts
+models/GetChannelsResponse.ts
 models/GetUserWorkspaceResponse.ts
 models/GetUserWorkspacesResponse.ts
 models/GetWorkspaceResponse.ts

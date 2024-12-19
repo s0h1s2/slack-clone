@@ -18,7 +18,7 @@ const Hint = ({ children, side, align, label }: Props) => {
   return (
     <TooltipProvider>
       <Tooltip delayDuration={50}>
-        <TooltipTrigger>{children}</TooltipTrigger>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
           className="bg-black text-white border border-white/5"
           side={side}

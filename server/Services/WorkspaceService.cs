@@ -33,7 +33,9 @@ public class WorkspaceService
         if (workspace == null) return null;
         var userHasAccess = await _dbContext.WorkspaceMembers.Where(member => member.UserId == user.Id && member.WorkspaceId == workspace.Id).FirstOrDefaultAsync();
         if (userHasAccess == null) return null;
-        return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role == WorkspaceUserRole.Admin);
+        var channels=await _dbContext.WorkspaceChannels.Where(channel => channel.WorkspaceId == workspace.Id).ToListAsync();
+        
+        return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role == WorkspaceUserRole.Admin,channels.Select((channel)=>new GetChannel(channel.Name,channel.Id)).ToList());
     }
 
     public async Task<CreateWorkspaceResponse> CreateWorkspaceWithGeneralChannel(CreateWorkspaceRequest request, User user)

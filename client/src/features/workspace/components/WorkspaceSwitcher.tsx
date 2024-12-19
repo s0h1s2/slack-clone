@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { useGetMyWorkspaces } from "@/features/workspace/hooks/get-workspace-by-id.ts";
+import { useGetMyWorkspaces } from "@/features/workspace/hooks/workspace-queries.ts";
 import { useNavigate } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { useCreateWorkspaceModal } from "@/features/workspace/hooks/create-workspace-modal.ts";

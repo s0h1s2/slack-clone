@@ -15,18 +15,27 @@
 
 import * as runtime from '../runtime';
 import type {
+  CreateChannelResponse,
+  CreateWorkspaceChannelRequest,
   CreateWorkspaceRequest,
   CreateWorkspaceResponse,
+  GetChannelsResponse,
   GetUserWorkspacesResponse,
   GetWorkspaceResponse,
   ProblemDetails,
   ValidationProblemDetails,
 } from '../models/index';
 import {
+    CreateChannelResponseFromJSON,
+    CreateChannelResponseToJSON,
+    CreateWorkspaceChannelRequestFromJSON,
+    CreateWorkspaceChannelRequestToJSON,
     CreateWorkspaceRequestFromJSON,
     CreateWorkspaceRequestToJSON,
     CreateWorkspaceResponseFromJSON,
     CreateWorkspaceResponseToJSON,
+    GetChannelsResponseFromJSON,
+    GetChannelsResponseToJSON,
     GetUserWorkspacesResponseFromJSON,
     GetUserWorkspacesResponseToJSON,
     GetWorkspaceResponseFromJSON,
@@ -36,6 +45,15 @@ import {
     ValidationProblemDetailsFromJSON,
     ValidationProblemDetailsToJSON,
 } from '../models/index';
+
+export interface ApiWorkspacesIdChannelsGetRequest {
+    id: number;
+}
+
+export interface ApiWorkspacesIdChannelsPostRequest {
+    id: number;
+    createWorkspaceChannelRequest?: CreateWorkspaceChannelRequest;
+}
 
 export interface ApiWorkspacesIdDeleteRequest {
     id: number;
@@ -53,6 +71,87 @@ export interface ApiWorkspacesPostRequest {
  * 
  */
 export class WorkspacesApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async apiWorkspacesIdChannelsGetRaw(requestParameters: ApiWorkspacesIdChannelsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetChannelsResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiWorkspacesIdChannelsGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/Workspaces/{id}/channels`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetChannelsResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiWorkspacesIdChannelsGet(requestParameters: ApiWorkspacesIdChannelsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetChannelsResponse> {
+        const response = await this.apiWorkspacesIdChannelsGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiWorkspacesIdChannelsPostRaw(requestParameters: ApiWorkspacesIdChannelsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateChannelResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiWorkspacesIdChannelsPost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/Workspaces/{id}/channels`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateWorkspaceChannelRequestToJSON(requestParameters['createWorkspaceChannelRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CreateChannelResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiWorkspacesIdChannelsPost(requestParameters: ApiWorkspacesIdChannelsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateChannelResponse> {
+        const response = await this.apiWorkspacesIdChannelsPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      */

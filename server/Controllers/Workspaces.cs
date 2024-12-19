@@ -28,7 +28,7 @@ public class Workspaces : Controller
     [HttpGet("{id}"), Authorize]
     [ProducesResponseType(typeof(GetWorkspaceResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IResult> GetWorkspaces(int id)
+    public async Task<IResult> GetWorkspaceById(int id)
     {
 
         var user = await _usersService.GetAuthenicatedUser();
@@ -91,7 +91,7 @@ public class Workspaces : Controller
     [HttpPost("{id}/channels"), Authorize]
     [ProducesResponseType(typeof(CreateChannelResponse),StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(PermmissionException),StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateWorkspaceChannel(int id, [FromBody] CreateWorkspaceChannelRequest request)
     {
         var user = await _usersService.GetAuthenicatedUser();
@@ -102,12 +102,12 @@ public class Workspaces : Controller
         }
         catch (PermmissionException exception)
         {
-            return Forbid(exception.Message);
+            return Forbid();
         }
     }
         [HttpGet("{id}/channels"), Authorize]
         [ProducesResponseType(typeof(GetChannelsResponse),StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(PermmissionException),StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetWorkspaceChannels(int id)
         {
             var user = await _usersService.GetAuthenicatedUser();
