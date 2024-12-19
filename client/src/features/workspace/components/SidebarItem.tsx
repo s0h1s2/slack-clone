@@ -36,7 +36,10 @@ const SidebarItem = ({ label, icon: Icon, id, variant }: Props) => {
     >
       <Link
         to="/workspaces/$workspaceId/channels/$channelId"
-        params={{ worksapceId: params.workspaceId, channelId: id }}
+        params={{
+          workspaceId: params.workspaceId.toString(),
+          channelId: id.toString(),
+        }}
       >
         <Icon className="size-3.5 mr-1 shrink-0" />
         <span className="text-sm truncate">{label}</span>
