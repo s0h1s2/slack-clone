@@ -4,6 +4,7 @@ import SidebarItem from "./SidebarItem";
 import { useContext } from "react";
 import { CurrentWorkspaceContext } from "../hooks/context";
 import WorkspaceSection from "./WorkspaceSection";
+import UserItem from "./UserItem";
 
 const WorkspaceSidebar = () => {
   const workspace = useContext(CurrentWorkspaceContext);
@@ -31,6 +32,20 @@ const WorkspaceSidebar = () => {
             label={channel.name}
             icon={HashIcon}
             id={channel.id}
+          />
+        ))}
+      </WorkspaceSection>
+      <WorkspaceSection
+        hint="Chat with a user"
+        label="Direct Messages"
+        onNew={() => {}}
+      >
+        {workspace?.members.map((member) => (
+          <UserItem
+            key={member.id}
+            label={member.name}
+            icon={HashIcon}
+            userId={member.id}
           />
         ))}
       </WorkspaceSection>

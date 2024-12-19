@@ -24,8 +24,10 @@ const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
       <Toolbar workspaceName={workspace.name} />
       {/* Toolbar is 40px high */}
       <div className="flex h-[calc(100vh-40px)]">
-        <CurrentWorkspaceContext.Provider value={workspace}>
-          <Sidebar currentWorkspace={workspace} />
+        <CurrentWorkspaceContext.Provider
+          value={{ ...workspace, members: [{ id: 1, name: "Shkar" }] }}
+        >
+          <Sidebar />
           <ResizablePanelGroup
             direction={"horizontal"}
             autoSaveId="slack-clone-workspace-layout"
@@ -35,7 +37,7 @@ const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
               minSize={11}
               className="bg-[#5E2C5F]"
             >
-              <WorkspaceSidebar currentWorkspace={workspace} />
+              <WorkspaceSidebar />
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel minSize={20}>{children}</ResizablePanel>
