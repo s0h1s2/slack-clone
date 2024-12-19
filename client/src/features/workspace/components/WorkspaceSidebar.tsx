@@ -5,9 +5,11 @@ import { useContext } from "react";
 import { CurrentWorkspaceContext } from "../hooks/context";
 import WorkspaceSection from "./WorkspaceSection";
 import UserItem from "./UserItem";
+import { useCreateChannelModal } from "@/features/channel/store/create-channel-modal";
 
 const WorkspaceSidebar = () => {
   const workspace = useContext(CurrentWorkspaceContext);
+  const [_openChannelModal, setOpenChannelModal] = useCreateChannelModal();
 
   return (
     <div className="flex flex-col bg-[#5E2C5F] h-full">
@@ -24,7 +26,7 @@ const WorkspaceSidebar = () => {
       <WorkspaceSection
         hint="Create a new channel"
         label="Channels"
-        onNew={() => {}}
+        onNew={workspace?.isAdmin ? () => setOpenChannelModal(true) : undefined}
       >
         {workspace?.channels.map((channel) => (
           <SidebarItem
