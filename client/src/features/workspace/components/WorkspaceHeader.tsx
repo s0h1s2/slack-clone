@@ -10,12 +10,16 @@ import { CurrentWorksapce } from "../types";
 import { ChevronDown, SquarePen } from "lucide-react";
 import Hint from "@/components/Hint";
 import PreferenceModal from "./PreferenceModal";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { CurrentWorkspaceContext } from "../hooks/context";
 type Props = {
   currentWorkspace: CurrentWorksapce;
 };
-const WorkspaceHeader = ({ currentWorkspace }: Props) => {
+const WorkspaceHeader = () => {
   const [perferenceOpen, setPerferenceOpen] = useState(false);
+  const currentWorkspace = useContext(CurrentWorkspaceContext);
+  if (!currentWorkspace) throw new Error("Workspace context not provided");
+
   return (
     <>
       <PreferenceModal

@@ -10,6 +10,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import WorkspaceSidebar from "./WorkspaceSidebar";
+import { CurrentWorkspaceContext } from "../hooks/context";
 
 const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
   const { workspaceId } = useParams({ from: "/workspaces/$workspaceId" });
@@ -23,21 +24,23 @@ const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
       <Toolbar workspaceName={workspace.name} />
       {/* Toolbar is 40px high */}
       <div className="flex h-[calc(100vh-40px)]">
-        <Sidebar currentWorkspace={workspace} />
-        <ResizablePanelGroup
-          direction={"horizontal"}
-          autoSaveId="slack-clone-workspace-layout"
-        >
-          <ResizablePanel
-            defaultSize={20}
-            minSize={11}
-            className="bg-[#5E2C5F]"
+        <CurrentWorkspaceContext.Provider value={workspace}>
+          <Sidebar currentWorkspace={workspace} />
+          <ResizablePanelGroup
+            direction={"horizontal"}
+            autoSaveId="slack-clone-workspace-layout"
           >
-            <WorkspaceSidebar currentWorkspace={workspace} />
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel minSize={20}>{children}</ResizablePanel>
-        </ResizablePanelGroup>
+            <ResizablePanel
+              defaultSize={20}
+              minSize={11}
+              className="bg-[#5E2C5F]"
+            >
+              <WorkspaceSidebar currentWorkspace={workspace} />
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel minSize={20}>{children}</ResizablePanel>
+          </ResizablePanelGroup>
+        </CurrentWorkspaceContext.Provider>
       </div>
     </div>
   );

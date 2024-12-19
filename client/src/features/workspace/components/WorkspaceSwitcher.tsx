@@ -9,11 +9,12 @@ import { useGetMyWorkspaces } from "@/features/workspace/hooks/workspace-queries
 import { useNavigate } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { useCreateWorkspaceModal } from "@/features/workspace/hooks/create-workspace-modal.ts";
-import { CurrentWorksapce } from "../types";
-type Props = {
-  currentWorkspace: CurrentWorksapce;
-};
-const WorkspaceSwitcher = ({ currentWorkspace }: Props) => {
+import { useContext } from "react";
+import { CurrentWorkspaceContext } from "../hooks/context";
+
+const WorkspaceSwitcher = () => {
+  const currentWorkspace = useContext(CurrentWorkspaceContext);
+  if (!currentWorkspace) throw new Error("Current workspace not provided");
   const navigate = useNavigate();
   const workspaces = useGetMyWorkspaces();
   const workspacesExceptSelectedOne = workspaces.workspaces?.workspaces?.filter(
