@@ -3,5 +3,5 @@ export type CurrentWorksapce = {
   id: number;
   isAdmin: boolean;
   channels: Array<{ name: string; id: number }>;
-  members: Array<{ name: string; id: number; avatar?: string }>;
+  members: Array<{ name: string; id: number; avatar?: string | null }>;
 };

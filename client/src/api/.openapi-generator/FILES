@@ -11,6 +11,7 @@ models/CreateWorkspaceResponse.ts
 models/GetChannel.ts
 models/GetChannelResponse.ts
 models/GetChannelsResponse.ts
+models/GetMember.ts
 models/GetUserWorkspaceResponse.ts
 models/GetUserWorkspacesResponse.ts
 models/GetWorkspaceResponse.ts

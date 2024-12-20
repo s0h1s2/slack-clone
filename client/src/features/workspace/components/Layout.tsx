@@ -24,9 +24,7 @@ const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
       <Toolbar workspaceName={workspace.name} />
       {/* Toolbar is 40px high */}
       <div className="flex h-[calc(100vh-40px)]">
-        <CurrentWorkspaceContext.Provider
-          value={{ ...workspace, members: [{ id: 1, name: "Shkar" }] }}
-        >
+        <CurrentWorkspaceContext.Provider value={workspace}>
           <Sidebar />
           <ResizablePanelGroup
             direction={"horizontal"}
