@@ -5,65 +5,69 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useCreateWorkspaceModal } from "@/features/workspace/hooks/create-workspace-modal.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { ResponseError } from "@/api";
-import { MouseEventHandler, useState } from "react";
-import { apiClient } from "@/api/client.ts";
-import { useToast } from "@/hooks/use-toast.ts";
-import { useRouter } from "@tanstack/react-router";
 import { useCreateChannelModal } from "../store/create-channel-modal";
+import { useForm } from "react-hook-form";
+import { object, string } from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useCreateChannel } from "../channel-service";
+import { useParams } from "@tanstack/react-router";
+import { ApiValidationErrors } from "@/lib/errors";
 
 const CreateWorkspaceChannelModal = () => {
   const [open, setOpen] = useCreateChannelModal();
-  const [workspaceName, setWorkspaceName] = useState<string>("");
-  const toast = useToast();
-  const router = useRouter();
-  const createWorkspace = async (e: MouseEventHandler<HTMLButtonElement>) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isDirty, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(object({ name: string().required() })),
+  });
+  const { workspaceId } = useParams({ from: "/workspaces/$workspaceId" });
+  const { createChannel } = useCreateChannel();
+  const onSubmit = handleSubmit(async (data) => {
     try {
-      const res = await apiClient.workspaceApi.apiWorkspacesPost({
-        createWorkspaceRequest: { name: workspaceName },
+      await createChannel({
+        workspaceId: Number(workspaceId),
+        channelName: data.name,
       });
-      router.navigate({
-        to: "/workspaces/$workspaceId",
-        params: { workspaceId: res.workspaceId.toString() },
-      });
-      toast.toast({
-        description: "Workspace created successfully",
-        variant: "success",
-      });
-      handleClose(false);
-    } catch (e: Error | ResponseError | unknown) {
-      if (e instanceof ResponseError) {
-        toast.toast({
-          description: "Error happend while creating workspace",
-          variant: "destructive",
-        });
+      setOpen(false);
+    } catch (e: ApiValidationErrors | Error | unknown) {
+      if (e instanceof ApiValidationErrors) {
+        Object.keys(e.errors).forEach((key) =>
+          // @ts-ignore
+          setError(key, { message: e.errors[key][0] })
+        );
+        return;
       }
     }
-  };
+  });
 
-  const handleClose = (state: boolean) => {
-    setOpen(state);
-  };
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild></DialogTrigger>
-      <DialogContent>
+      <DialogContent aria-describedby="create-channel-form">
         <DialogHeader>
           <DialogTitle>Add a channel</DialogTitle>
         </DialogHeader>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={onSubmit}>
           <Input
-            value={workspaceName}
-            onChange={(e) => setWorkspaceName(e.target.value)}
             disabled={false}
             placeholder="Create a channel e.g. 'general','project-x'"
+            {...register("name", {
+              onChange: (value) =>
+                (value.target.value = value.target.value.replace(/\s/g, "-")),
+            })}
           />
+          {errors.name && isDirty && (
+            <p className="ml-1 text-sm text-red-500">{errors.name.message}</p>
+          )}
           <div className="flex justify-end">
-            <Button onClick={(e) => createWorkspace(e)}>Create</Button>
+            <Button disabled={isSubmitting} type="submit">
+              Create
+            </Button>
           </div>
         </form>
       </DialogContent>
