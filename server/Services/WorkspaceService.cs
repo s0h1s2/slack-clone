@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using server.Database;
@@ -33,11 +34,11 @@ public class WorkspaceService
         if (workspace == null) return null;
         var userHasAccess = await _dbContext.WorkspaceMembers.Where(member => member.UserId == user.Id && member.WorkspaceId == workspace.Id).FirstOrDefaultAsync();
         if (userHasAccess == null) return null;
-        var channels = await _dbContext.WorkspaceChannels.Where(channel => channel.WorkspaceId == workspace.Id).ToListAsync();
-        var members = await _dbContext.WorkspaceMembers.Where(member => member.WorkspaceId == workspace.Id).ToListAsync();
-        var memberResult = members.Select(member => new GetMember(member.UserId, member.User.Name, null)).ToList();
-        var channelsResult = channels.Select(channel => new GetChannel(channel.Name, channel.Id)).ToList();
-        return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role == WorkspaceUserRole.Admin, channelsResult, memberResult);
+        // var channels = await _dbContext.WorkspaceChannels.Where(channel => channel.WorkspaceId == workspace.Id).ToListAsync();
+        var members = await _dbContext.WorkspaceMembers.Where(member => member.WorkspaceId == workspace.Id).Include(member => member.User).ToListAsync();
+        // var memberResult = members.Select(member => new GetMember(member.UserId, member.User.Name, null)).ToList();
+
+        return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role == WorkspaceUserRole.Admin, members.Select(member => new GetMember(member.UserId, member.User.Name, null)).ToList());
     }
 
     public async Task<CreateWorkspaceResponse> CreateWorkspaceWithGeneralChannel(CreateWorkspaceRequest request, User user)

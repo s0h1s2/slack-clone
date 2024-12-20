@@ -13,12 +13,6 @@
  */
 
 import { mapValues } from '../runtime';
-import type { GetChannel } from './GetChannel';
-import {
-    GetChannelFromJSON,
-    GetChannelFromJSONTyped,
-    GetChannelToJSON,
-} from './GetChannel';
 import type { GetMember } from './GetMember';
 import {
     GetMemberFromJSON,
@@ -58,12 +52,6 @@ export interface GetWorkspaceResponse {
     isAdmin: boolean;
     /**
      * 
-     * @type {Array<GetChannel>}
-     * @memberof GetWorkspaceResponse
-     */
-    channels: Array<GetChannel>;
-    /**
-     * 
      * @type {Array<GetMember>}
      * @memberof GetWorkspaceResponse
      */
@@ -78,7 +66,6 @@ export function instanceOfGetWorkspaceResponse(value: object): value is GetWorks
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('joinCode' in value) || value['joinCode'] === undefined) return false;
     if (!('isAdmin' in value) || value['isAdmin'] === undefined) return false;
-    if (!('channels' in value) || value['channels'] === undefined) return false;
     if (!('members' in value) || value['members'] === undefined) return false;
     return true;
 }
@@ -97,7 +84,6 @@ export function GetWorkspaceResponseFromJSONTyped(json: any, ignoreDiscriminator
         'name': json['name'],
         'joinCode': json['joinCode'],
         'isAdmin': json['isAdmin'],
-        'channels': ((json['channels'] as Array<any>).map(GetChannelFromJSON)),
         'members': ((json['members'] as Array<any>).map(GetMemberFromJSON)),
     };
 }
@@ -112,7 +98,6 @@ export function GetWorkspaceResponseToJSON(value?: GetWorkspaceResponse | null):
         'name': value['name'],
         'joinCode': value['joinCode'],
         'isAdmin': value['isAdmin'],
-        'channels': ((value['channels'] as Array<any>).map(GetChannelToJSON)),
         'members': ((value['members'] as Array<any>).map(GetMemberToJSON)),
     };
 }

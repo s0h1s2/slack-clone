@@ -8,7 +8,6 @@ models/CreateUserResponse.ts
 models/CreateWorkspaceChannelRequest.ts
 models/CreateWorkspaceRequest.ts
 models/CreateWorkspaceResponse.ts
-models/GetChannel.ts
 models/GetChannelResponse.ts
 models/GetChannelsResponse.ts
 models/GetMember.ts

@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { object, string } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCreateChannel } from "../channel-service";
-import { useMatch, useMatchRoute } from "@tanstack/react-router";
+import { useMatch } from "@tanstack/react-router";
 import { ApiValidationErrors } from "@/lib/errors";
 
 const CreateWorkspaceChannelModal = () => {
