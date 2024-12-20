@@ -6,3 +6,9 @@ export class ApiValidationErrors extends Error {
     this.errors = errors;
   }
 }
+export class NetworkError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "NetworkError";
+  }
+}

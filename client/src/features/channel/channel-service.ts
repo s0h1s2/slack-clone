@@ -1,10 +1,12 @@
 import { ResponseError, ValidationProblemDetails } from "@/api";
 import { apiClient } from "@/api/client";
-import { ApiValidationErrors } from "@/lib/errors";
-import { useMutation } from "@tanstack/react-query";
+import { ApiValidationErrors, NetworkError } from "@/lib/errors";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+const CHANNEL_QUERY_KEY = "channels";
 
 export const useCreateChannel = () => {
-  const { mutateAsync } = useMutation({
+  const queryClient = useQueryClient();
+  const { mutateAsync: createChannel } = useMutation({
     mutationFn: async ({
       workspaceId,
       channelName,
@@ -23,12 +25,40 @@ export const useCreateChannel = () => {
             const errors: ValidationProblemDetails = await e.response.json();
             throw new ApiValidationErrors(errors.errors, e.message);
           }
+          throw new NetworkError(e.message);
+        }
+        throw e;
+      }
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: [CHANNEL_QUERY_KEY] });
+    },
+  });
+  return {
+    createChannel,
+  };
+};
+
+export const useGetChannels = (workspaceId: number) => {
+  const { data: channels, isLoading: isChannelsLoading } = useQuery({
+    queryKey: [CHANNEL_QUERY_KEY],
+    queryFn: async () => {
+      try {
+        const response =
+          await apiClient.workspaceApi.apiWorkspacesIdChannelsGet({
+            id: workspaceId,
+          });
+        return response.channels;
+      } catch (e: ResponseError | Error | unknown) {
+        if (e instanceof ResponseError) {
+          throw new NetworkError(e.message);
         }
         throw e;
       }
     },
   });
   return {
-    createChannel: mutateAsync,
+    channels,
+    isChannelsLoading,
   };
 };
