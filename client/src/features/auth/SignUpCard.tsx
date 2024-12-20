@@ -47,8 +47,8 @@ const SignUpCard = ({ setScreenState }: Props) => {
       console.log(e);
       if (e instanceof ResponseError) {
         const errors: ValidationProblemDetails = await e.response.json();
-        // @ts-ignore
         Object.keys(errors.errors).forEach((key) =>
+          // @ts-ignore
           form.setError(key, { message: errors.errors[key][0] })
         );
         return;
