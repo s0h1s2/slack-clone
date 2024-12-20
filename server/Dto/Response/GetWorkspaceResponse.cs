@@ -1,7 +1,3 @@
-using System.Security.Cryptography;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using server.Database;
-
 namespace server.Dto.Response;
 
 public record GetChannel(string Name, int Id);
