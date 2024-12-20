@@ -2,7 +2,7 @@ import { ResponseError, ValidationProblemDetails } from "@/api";
 import { apiClient } from "@/api/client";
 import { ApiValidationErrors, NetworkError } from "@/lib/errors";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-const CHANNEL_QUERY_KEY = "channels";
+const CHANNELS_QUERY_KEY = "channels";
 
 export const useCreateChannel = () => {
   const queryClient = useQueryClient();
@@ -31,7 +31,7 @@ export const useCreateChannel = () => {
       }
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [CHANNEL_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [CHANNELS_QUERY_KEY] });
     },
   });
   return {
@@ -41,7 +41,7 @@ export const useCreateChannel = () => {
 
 export const useGetChannels = (workspaceId: number) => {
   const { data: channels, isLoading: isChannelsLoading } = useQuery({
-    queryKey: [CHANNEL_QUERY_KEY],
+    queryKey: [CHANNELS_QUERY_KEY],
     queryFn: async () => {
       try {
         const response =

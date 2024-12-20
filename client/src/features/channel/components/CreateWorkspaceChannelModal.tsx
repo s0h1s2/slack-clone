@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { object, string } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCreateChannel } from "../channel-service";
-import { useParams } from "@tanstack/react-router";
+import { useMatch, useMatchRoute } from "@tanstack/react-router";
 import { ApiValidationErrors } from "@/lib/errors";
 
 const CreateWorkspaceChannelModal = () => {
@@ -22,17 +22,26 @@ const CreateWorkspaceChannelModal = () => {
     handleSubmit,
     setError,
     formState: { errors, isDirty, isSubmitting },
+    reset,
   } = useForm({
     resolver: yupResolver(object({ name: string().required() })),
+    defaultValues: {
+      name: "",
+    },
   });
-  const { workspaceId } = useParams({ from: "/workspaces/$workspaceId" });
+  const workspaceId = useMatch({
+    from: "/workspaces/$workspaceId",
+    shouldThrow: false,
+  });
+
   const { createChannel } = useCreateChannel();
   const onSubmit = handleSubmit(async (data) => {
     try {
       await createChannel({
-        workspaceId: Number(workspaceId),
+        workspaceId: Number(workspaceId?.params.workspaceId),
         channelName: data.name,
       });
+      reset();
       setOpen(false);
     } catch (e: ApiValidationErrors | Error | unknown) {
       if (e instanceof ApiValidationErrors) {

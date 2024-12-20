@@ -11,20 +11,25 @@ import {
 } from "@/components/ui/resizable";
 import WorkspaceSidebar from "./WorkspaceSidebar";
 import { CurrentWorkspaceContext } from "../hooks/context";
+import { useGetChannels } from "@/features/channel/channel-service";
 
 const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
   const { workspaceId } = useParams({ from: "/workspaces/$workspaceId" });
   const { workspace, isWorkspaceLoading } = useGetWorkspace(
     parseInt(workspaceId)
   );
-  if (isWorkspaceLoading) return <PageLoading />;
+  const { channels, isChannelsLoading } = useGetChannels(parseInt(workspaceId));
+  if (isWorkspaceLoading || isChannelsLoading) return <PageLoading />;
   if (!workspace) return <div>No workspace found!</div>;
+  if (!channels) return <div>Channels error</div>;
   return (
     <div className="h-full ">
       <Toolbar workspaceName={workspace.name} />
       {/* Toolbar is 40px high */}
       <div className="flex h-[calc(100vh-40px)]">
-        <CurrentWorkspaceContext.Provider value={workspace}>
+        <CurrentWorkspaceContext.Provider
+          value={{ ...workspace, channels: channels }}
+        >
           <Sidebar />
           <ResizablePanelGroup
             direction={"horizontal"}
