@@ -33,9 +33,11 @@ public class WorkspaceService
         if (workspace == null) return null;
         var userHasAccess = await _dbContext.WorkspaceMembers.Where(member => member.UserId == user.Id && member.WorkspaceId == workspace.Id).FirstOrDefaultAsync();
         if (userHasAccess == null) return null;
-        var channels=await _dbContext.WorkspaceChannels.Where(channel => channel.WorkspaceId == workspace.Id).ToListAsync();
-        
-        return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role == WorkspaceUserRole.Admin,channels.Select((channel)=>new GetChannel(channel.Name,channel.Id)).ToList());
+        var channels = await _dbContext.WorkspaceChannels.Where(channel => channel.WorkspaceId == workspace.Id).ToListAsync();
+        var members = await _dbContext.WorkspaceMembers.Where(member => member.WorkspaceId == workspace.Id).ToListAsync();
+        var memberResult = members.Select(member => new GetMember(member.UserId, member.User.Name, null)).ToList();
+        var channelsResult = channels.Select(channel => new GetChannel(channel.Name, channel.Id)).ToList();
+        return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role == WorkspaceUserRole.Admin, channelsResult, memberResult);
     }
 
     public async Task<CreateWorkspaceResponse> CreateWorkspaceWithGeneralChannel(CreateWorkspaceRequest request, User user)
@@ -52,9 +54,9 @@ public class WorkspaceService
 
         _dbContext.Workspaces.Add(workspace);
         await _dbContext.SaveChangesAsync();
-         _dbContext.WorkspaceChannels.Add(new WorkspaceChannel(){WorkspaceId = workspace.Id,Name = "general"});
+        _dbContext.WorkspaceChannels.Add(new WorkspaceChannel() { WorkspaceId = workspace.Id, Name = "general" });
         await _dbContext.SaveChangesAsync();
-        
+
         var member = new WorkspaceMembers()
         {
             UserId = user.Id,
@@ -69,10 +71,10 @@ public class WorkspaceService
     {
         var workspace = _dbContext.Workspaces.Find(id);
         if (workspace == null) throw new ResourceNotFound();
-        
+
         var isUserAdmin = _dbContext.WorkspaceMembers.FirstOrDefault((member) => member.WorkspaceId == id && member.UserId == user.Id);
         if (isUserAdmin == null) throw new ResourceNotFound();
-        
+
         if (isUserAdmin.Role != WorkspaceUserRole.Admin) throw new PermmissionException("Only admin can delete workspaces");
         _dbContext.Remove(workspace);
         _dbContext.SaveChanges();
