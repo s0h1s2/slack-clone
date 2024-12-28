@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { FaCaretDown } from "react-icons/fa";
 import React from "react";
 import Hint from "@/components/Hint";
 import { Plus } from "lucide-react";

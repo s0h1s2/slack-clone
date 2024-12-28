@@ -12,6 +12,7 @@ export const Route = createRootRoute({
         <Outlet />
         <CreateWorkspaceModal />
         <CreateWorkspaceChannelModal />
+
       </QueryClientProvider>
     </React.Fragment>
   ),

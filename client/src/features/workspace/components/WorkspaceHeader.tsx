@@ -6,17 +6,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CurrentWorksapce } from "../types";
 import { ChevronDown, SquarePen } from "lucide-react";
 import Hint from "@/components/Hint";
 import PreferenceModal from "./PreferenceModal";
 import { useContext, useState } from "react";
 import { CurrentWorkspaceContext } from "../hooks/context";
-type Props = {
-  currentWorkspace: CurrentWorksapce;
-};
+import InviteModal from "./InviteModal";
+
 const WorkspaceHeader = () => {
   const [perferenceOpen, setPerferenceOpen] = useState(false);
+  const [inviteModal, setInviteModal] = useState(false);
   const currentWorkspace = useContext(CurrentWorkspaceContext);
   if (!currentWorkspace) throw new Error("Workspace context not provided");
 
@@ -27,6 +26,14 @@ const WorkspaceHeader = () => {
         open={perferenceOpen}
         setOpen={setPerferenceOpen}
       />
+      <InviteModal
+        name={currentWorkspace.name}
+        open={inviteModal}
+        setOpen={setInviteModal}
+        joinCode={currentWorkspace.joinCode}
+      />
+
+
       <div className="flex items-center justify-between px-4 h-[49px] gap-0.5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -56,7 +63,7 @@ const WorkspaceHeader = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="cursor-pointer py-2"
-                  onClick={() => {}}
+                  onClick={() => setInviteModal(true)}
                 >
                   Invite people to {currentWorkspace.name}
                 </DropdownMenuItem>

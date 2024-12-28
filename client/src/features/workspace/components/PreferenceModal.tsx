@@ -15,7 +15,7 @@ type Props = {
 };
 const PreferenceModal = ({ initialValue, open, setOpen }: Props) => {
   const { workspaceId } = useParams({ from: "/workspaces/$workspaceId" });
-  const [value, setValue] = useState(initialValue);
+  const [value, _setValue] = useState(initialValue);
   const { deleteWorkspace } = useDeleteWorkspace();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
