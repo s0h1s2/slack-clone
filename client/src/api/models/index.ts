@@ -12,6 +12,7 @@ export * from './GetMember';
 export * from './GetUserWorkspaceResponse';
 export * from './GetUserWorkspacesResponse';
 export * from './GetWorkspaceResponse';
+export * from './JoinCodeResponse';
 export * from './LoginRequest';
 export * from './LoginResponse';
 export * from './ProblemDetails';

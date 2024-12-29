@@ -81,4 +81,15 @@ public class WorkspaceService
         _dbContext.SaveChanges();
 
     }
+    public async Task<JoinCodeResponse> GenerateWorkspaceNewJoinCode(int workspaceId, User user)
+    {
+        var workspace = await _dbContext.Workspaces.FindAsync(workspaceId);
+        if (workspace == null) throw new ResourceNotFound();
+        var member = await _dbContext.WorkspaceMembers.SingleOrDefaultAsync((member) => member.UserId == user.Id && member.WorkspaceId == workspaceId);
+        if (member == null) throw new ResourceNotFound();
+        if (member.Role != WorkspaceUserRole.Admin) throw new PermmissionException("Only admin can generate new code");
+        var joiningCode = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8);
+        return new JoinCodeResponse(joiningCode);
+    }
+
 }

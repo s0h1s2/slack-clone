@@ -1,8 +1,5 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.DataProtection.Internal;
 using Microsoft.AspNetCore.Mvc;
-using server.Database;
 using server.Dto.Request;
 using server.Dto.Response;
 using server.Exceptions;
@@ -18,7 +15,7 @@ public class Workspaces : Controller
     private readonly UsersService _usersService;
     private readonly ChannelService _channelService;
 
-    public Workspaces(WorkspaceService workspaceService, UsersService usersService,ChannelService channelService)
+    public Workspaces(WorkspaceService workspaceService, UsersService usersService, ChannelService channelService)
     {
         _workspaceService = workspaceService;
         _usersService = usersService;
@@ -87,17 +84,17 @@ public class Workspaces : Controller
             return Forbid();
         }
     }
-    
+
     [HttpPost("{id}/channels"), Authorize]
-    [ProducesResponseType(typeof(CreateChannelResponse),StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(CreateChannelResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateWorkspaceChannel(int id, [FromBody] CreateWorkspaceChannelRequest request)
     {
         var user = await _usersService.GetAuthenicatedUser();
         try
         {
-            var channel=await _channelService.CreateChannel(request, id, user!);
+            var channel = await _channelService.CreateChannel(request, id, user!);
             return Created($"/channels/{id}", channel);
         }
         catch (PermmissionException exception)
@@ -105,20 +102,40 @@ public class Workspaces : Controller
             return Forbid();
         }
     }
-        [HttpGet("{id}/channels"), Authorize]
-        [ProducesResponseType(typeof(GetChannelsResponse),StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetWorkspaceChannels(int id)
+    [HttpGet("{id}/channels"), Authorize]
+    [ProducesResponseType(typeof(GetChannelsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> GetWorkspaceChannels(int id)
+    {
+        var user = await _usersService.GetAuthenicatedUser();
+        try
         {
-            var user = await _usersService.GetAuthenicatedUser();
-            try
-            {
-                var channels=await _channelService.GetWorkspaceChannels(id, user!);
-                return Ok(channels);
-            }
-            catch (PermmissionException exception)
-            {
-                return Forbid(exception.Message);
-            }
+            var channels = await _channelService.GetWorkspaceChannels(id, user!);
+            return Ok(channels);
         }
+        catch (PermmissionException exception)
+        {
+            return Forbid(exception.Message);
+        }
+    }
+    [HttpPost("{id}/join-code"), Authorize]
+    [ProducesResponseType(typeof(JoinCodeResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> NewWorkspaceJoinCode(int id)
+    {
+        var user = await _usersService.GetAuthenicatedUser();
+        try
+        {
+            var result = await _workspaceService.GenerateWorkspaceNewJoinCode(id, user);
+            return Ok(result);
+        }
+        catch (ResourceNotFound)
+        {
+            return NotFound();
+        }
+        catch (PermmissionException)
+        {
+            return Forbid();
+        }
+    }
 }
