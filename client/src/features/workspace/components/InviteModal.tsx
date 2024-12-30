@@ -25,35 +25,36 @@ const InviteModal = ({ open, setOpen, name, joinCode }: Props) => {
     });
   }
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Invite people to your {name}</DialogTitle>
-          <DialogDescription>Use the code below to invite people to your workspace</DialogDescription>
-        </DialogHeader>
-        <div className="flex flex-col gap-y-4 items-center justify-center py-10">
-          <p className="text-4xl font-bold tracking-widest uppercase">{joinCode}</p>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleCopy}
-          >
-            Copy Link
-            <CopyIcon className="size-4 ml-2" />
-          </Button>
-        </div>
-        <div className="flex items-center justify-between w-full">
-          <Button onClick={() => generateCode(currWorksapce.id)} disabled={isGeneratingCode} variant="outline">
-            New code
-            <RefreshCcw className="size-4 ml-2" />
-          </Button>
-          <DialogClose asChild>
-            <Button>Close</Button>
-          </DialogClose>
-        </div>
-      </DialogContent>
-    </Dialog >
-  )
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Invite people to your {name}</DialogTitle>
+            <DialogDescription>Use the code below to invite people to your workspace</DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-y-4 items-center justify-center py-10">
+            <p className="text-4xl font-bold tracking-widest uppercase">{joinCode}</p>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopy}
+            >
+              Copy Link
+              <CopyIcon className="size-4 ml-2" />
+            </Button>
+          </div>
+          <div className="flex items-center justify-between w-full">
+            <Button onClick={() => generateCode(currWorksapce.id)} disabled={isGeneratingCode} variant="outline">
+              New code
+              <RefreshCcw className="size-4 ml-2" />
+            </Button>
+            <DialogClose asChild>
+              <Button>Close</Button>
+            </DialogClose>
+          </div>
+        </DialogContent>
+      </Dialog >
+    </>)
 }
 
 export default InviteModal
