@@ -89,6 +89,9 @@ public class WorkspaceService
         if (member == null) throw new ResourceNotFound();
         if (member.Role != WorkspaceUserRole.Admin) throw new PermmissionException("Only admin can generate new code");
         var joiningCode = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8);
+        workspace.JoinCode = joiningCode;
+        _dbContext.Update(workspace);
+        await _dbContext.SaveChangesAsync();
         return new JoinCodeResponse(joiningCode);
     }
 

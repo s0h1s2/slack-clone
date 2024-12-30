@@ -2,6 +2,9 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { CopyIcon, RefreshCcw } from 'lucide-react';
+import { useGenerateNewJoinCode } from '../hooks/workspace-queries';
+import { useContext } from 'react';
+import { CurrentWorkspaceContext } from '../hooks/context';
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -10,6 +13,9 @@ type Props = {
 }
 const InviteModal = ({ open, setOpen, name, joinCode }: Props) => {
   const { toast } = useToast();
+  const { generateCode, isGeneratingCode } = useGenerateNewJoinCode();
+  const currWorksapce = useContext(CurrentWorkspaceContext)
+  if (!currWorksapce) throw new Error("Not in worksapce");
   const handleCopy = () => {
     const inviteLink = `${window.location.origin}/join/${joinCode}`
     navigator.clipboard.writeText(inviteLink).then(() => {
@@ -37,7 +43,7 @@ const InviteModal = ({ open, setOpen, name, joinCode }: Props) => {
           </Button>
         </div>
         <div className="flex items-center justify-between w-full">
-          <Button onClick={() => { }} variant="outline">
+          <Button onClick={() => generateCode(currWorksapce.id)} disabled={isGeneratingCode} variant="outline">
             New code
             <RefreshCcw className="size-4 ml-2" />
           </Button>
@@ -46,7 +52,7 @@ const InviteModal = ({ open, setOpen, name, joinCode }: Props) => {
           </DialogClose>
         </div>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   )
 }
 
