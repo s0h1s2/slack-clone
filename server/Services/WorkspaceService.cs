@@ -40,7 +40,12 @@ public class WorkspaceService
 
         return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role == WorkspaceUserRole.Admin, members.Select(member => new GetMember(member.UserId, member.User.Name, null)).ToList());
     }
-
+  public async Task<GetWorkspacePublicInfoResponse?> GetWorkspacePublicInfo(int id)
+    {
+        var workspace = await _dbContext.Workspaces.FindAsync(id);
+        if (workspace == null) return null;
+        return new GetWorkspacePublicInfoResponse(workspace.Name);
+    }
     public async Task<CreateWorkspaceResponse> CreateWorkspaceWithGeneralChannel(CreateWorkspaceRequest request, User user)
     {
         // TODO: i'm not sure about this approach need more research.
@@ -93,6 +98,21 @@ public class WorkspaceService
         _dbContext.Update(workspace);
         await _dbContext.SaveChangesAsync();
         return new JoinCodeResponse(joiningCode);
+    }
+    public void JoinWorkspace(int workspaceId,JoinWorkspaceRequest joinRequest,User user){
+        var workspace = _dbContext.Workspaces.Find(workspaceId);
+        if (workspace == null) throw new ResourceNotFound();
+        if(workspace.JoinCode!=joinRequest.JoinCode) throw new InvalidJoinCodeException();
+        // check if current user is member
+        var member=_dbContext.WorkspaceMembers.Where(member=>member.WorkspaceId==workspace.Id && member.UserId==user.Id).SingleOrDefault();
+        if (member!=null) throw new AlreadyMemberException();
+        var newMember=new WorkspaceMembers(){
+            Role=WorkspaceUserRole.User,
+            WorkspaceId=workspace.Id,
+            UserId=user.Id
+        };
+        _dbContext.Add(newMember);
+        _dbContext.SaveChanges();
     }
 
 }

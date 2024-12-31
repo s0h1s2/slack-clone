@@ -7,7 +7,9 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/input-otp'
-import { useGetWorkspace } from '@/features/workspace/hooks/workspace-queries'
+import {  useGetWorkspacePublicInfo, useJoinWorkspace } from '@/features/workspace/hooks/workspace-queries'
+import { ApiValidationErrors } from '@/lib/errors'
+import { cn } from '@/lib/utils'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import {  useForm } from 'react-hook-form'
 
@@ -17,14 +19,22 @@ export const Route = createFileRoute('/join/$workspaceId')({
 
 function RouteComponent() {
   const { workspaceId } = Route.useParams();
-  const { isWorkspaceLoading, workspace } = useGetWorkspace(Number(workspaceId));
+  const { isWorkspaceLoading, workspace } = useGetWorkspacePublicInfo(Number(workspaceId));
+  const {joinWorkspace,isJoiningWorkspace}=useJoinWorkspace();
   const form= useForm({
     defaultValues: {
       joinCode: ''
     }
   });
-  const handleJoinCodeSubmit=form.handleSubmit((data)=>{
-    console.log(data);
+  const handleJoinCodeSubmit=form.handleSubmit(async (data)=>{
+    try{
+      await joinWorkspace({id:Number(workspaceId),joinWorkspaceRequest:{joinCode:data.joinCode}})
+    }catch(e:ApiValidationErrors|Error|unknown){
+      if(e instanceof ApiValidationErrors ){
+        const firstKey=Object.keys(e.errors)[0];
+        form.setError(firstKey,{message:e.errors[firstKey][0]})
+      }
+    }
   });
   if (isWorkspaceLoading) return <PageLoading />
   return (
@@ -44,7 +54,7 @@ function RouteComponent() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <InputOTP  onComplete={handleJoinCodeSubmit} maxLength={8} {...field} autoFocus>
+                  <InputOTP containerClassName={cn(isJoiningWorkspace&&"opacity-25")} onComplete={handleJoinCodeSubmit} maxLength={8} {...field} autoFocus>
                     <InputOTPGroup>
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />

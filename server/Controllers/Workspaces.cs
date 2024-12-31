@@ -34,6 +34,17 @@ public class Workspaces : Controller
         if (worksapce == null) return TypedResults.NotFound();
         return TypedResults.Ok(worksapce);
     }
+    [HttpGet("{id}/public-info"), Authorize]
+    [ProducesResponseType(typeof(GetWorkspacePublicInfoResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetWorkspacePublicInfo(int id)
+    {
+        var user = await _usersService.GetAuthenicatedUser();
+        if (user == null) return TypedResults.Unauthorized();
+        var workspace = await _workspaceService.GetWorkspacePublicInfo(id);
+        if (workspace== null) return TypedResults.NotFound();
+        return TypedResults.Ok(workspace);
+    }
     [HttpPost, Authorize]
     [ProducesResponseType(typeof(CreateWorkspaceResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -136,6 +147,27 @@ public class Workspaces : Controller
         catch (PermmissionException)
         {
             return Forbid();
+        }
+    }
+    [HttpPost("{id}/join"), Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> JoinWorkspaceForCurrentUser(int id,[FromBody] JoinWorkspaceRequest joinCodeRequest)
+    {
+        try
+        {
+            var user = await _usersService.GetAuthenicatedUser();
+            _workspaceService.JoinWorkspace(id,joinCodeRequest, user);
+            return Ok();
+        }
+        catch (AlreadyMemberException) {
+           return BadRequest(new ValidationProblemDetails{Errors=new Dictionary<string,string[]>{{"joinCode",new string[]{"You already member of this workspace"}}}});
+        }
+        catch(InvalidJoinCodeException){
+           return BadRequest(new ValidationProblemDetails{Errors=new Dictionary<string,string[]>{{"joinCode",new string[]{"Invalid join code"}}}});
+        }
+        catch (ResourceNotFound) {
+          return NotFound();
         }
     }
 }

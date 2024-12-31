@@ -1,7 +1,7 @@
-import { ResponseError } from "@/api";
+import { ApiWorkspacesIdJoinPostRequest, ResponseError, ValidationProblemDetails } from "@/api";
 import { apiClient } from "@/api/client";
 import { useToast } from "@/hooks/use-toast";
-import { NetworkError } from "@/lib/errors";
+import { ApiValidationErrors, NetworkError } from "@/lib/errors";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 const WORKSPACE_KEY = "workspace";
 export const useGetWorkspace = (id: number) => {
@@ -25,6 +25,29 @@ export const useGetWorkspace = (id: number) => {
     workspaceError,
   };
 };
+export const useGetWorkspacePublicInfo = (id: number) => {
+  const {
+    data: workspace,
+    isLoading: isWorkspaceLoading,
+    error: workspaceError,
+  } = useQuery({
+    queryKey: ["workspace-public-info", id],
+    queryFn: async () => {
+      try {
+        return apiClient.workspaceApi.apiWorkspacesIdPublicInfoGet({ id: id });
+      } catch (e) {
+        throw e;
+      }
+    },
+  });
+  return {
+    workspace,
+    isWorkspaceLoading,
+    workspaceError,
+  };
+};
+
+
 export const useGetMyWorkspaces = () => {
   const { data: workspaces, isLoading: isWorkspacesLoading } = useQuery({
     queryKey: ["workspaces"],
@@ -83,4 +106,27 @@ export const useGenerateNewJoinCode = () => {
     isGeneratingCode,
     generateCode
   };
+}
+export const useJoinWorkspace = () => {
+  const { isPending: isJoiningWorkspace, mutateAsync: joinWorkspace } = useMutation({
+    mutationFn: async (joinRequest: ApiWorkspacesIdJoinPostRequest) => {
+      try {
+        await apiClient.workspaceApi.apiWorkspacesIdJoinPost(joinRequest);
+      } catch (e: Error | ResponseError | unknown) {
+        if (e instanceof ResponseError) {
+          if (e.response.status == 400) {
+            const errors: ValidationProblemDetails = await e.response.json()
+            throw new ApiValidationErrors(errors.errors, "join");
+          }
+          throw new NetworkError("network error happen when join workspace")
+        }
+        console.error(e);
+      }
+    }
+  })
+
+  return {
+    joinWorkspace,
+    isJoiningWorkspace
+  }
 }

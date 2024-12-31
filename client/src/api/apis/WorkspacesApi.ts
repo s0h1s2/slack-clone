@@ -21,8 +21,10 @@ import type {
   CreateWorkspaceResponse,
   GetChannelsResponse,
   GetUserWorkspacesResponse,
+  GetWorkspacePublicInfoResponse,
   GetWorkspaceResponse,
   JoinCodeResponse,
+  JoinWorkspaceRequest,
   ProblemDetails,
   ValidationProblemDetails,
 } from '../models/index';
@@ -39,10 +41,14 @@ import {
     GetChannelsResponseToJSON,
     GetUserWorkspacesResponseFromJSON,
     GetUserWorkspacesResponseToJSON,
+    GetWorkspacePublicInfoResponseFromJSON,
+    GetWorkspacePublicInfoResponseToJSON,
     GetWorkspaceResponseFromJSON,
     GetWorkspaceResponseToJSON,
     JoinCodeResponseFromJSON,
     JoinCodeResponseToJSON,
+    JoinWorkspaceRequestFromJSON,
+    JoinWorkspaceRequestToJSON,
     ProblemDetailsFromJSON,
     ProblemDetailsToJSON,
     ValidationProblemDetailsFromJSON,
@@ -67,6 +73,15 @@ export interface ApiWorkspacesIdGetRequest {
 }
 
 export interface ApiWorkspacesIdJoinCodePostRequest {
+    id: number;
+}
+
+export interface ApiWorkspacesIdJoinPostRequest {
+    id: number;
+    joinWorkspaceRequest?: JoinWorkspaceRequest;
+}
+
+export interface ApiWorkspacesIdPublicInfoGetRequest {
     id: number;
 }
 
@@ -273,6 +288,86 @@ export class WorkspacesApi extends runtime.BaseAPI {
      */
     async apiWorkspacesIdJoinCodePost(requestParameters: ApiWorkspacesIdJoinCodePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<JoinCodeResponse> {
         const response = await this.apiWorkspacesIdJoinCodePostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiWorkspacesIdJoinPostRaw(requestParameters: ApiWorkspacesIdJoinPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiWorkspacesIdJoinPost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/Workspaces/{id}/join`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: JoinWorkspaceRequestToJSON(requestParameters['joinWorkspaceRequest']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async apiWorkspacesIdJoinPost(requestParameters: ApiWorkspacesIdJoinPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiWorkspacesIdJoinPostRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async apiWorkspacesIdPublicInfoGetRaw(requestParameters: ApiWorkspacesIdPublicInfoGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetWorkspacePublicInfoResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiWorkspacesIdPublicInfoGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/Workspaces/{id}/public-info`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetWorkspacePublicInfoResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiWorkspacesIdPublicInfoGet(requestParameters: ApiWorkspacesIdPublicInfoGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetWorkspacePublicInfoResponse> {
+        const response = await this.apiWorkspacesIdPublicInfoGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

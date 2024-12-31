@@ -13,8 +13,10 @@ models/GetChannelsResponse.ts
 models/GetMember.ts
 models/GetUserWorkspaceResponse.ts
 models/GetUserWorkspacesResponse.ts
+models/GetWorkspacePublicInfoResponse.ts
 models/GetWorkspaceResponse.ts
 models/JoinCodeResponse.ts
+models/JoinWorkspaceRequest.ts
 models/LoginRequest.ts
 models/LoginResponse.ts
 models/ProblemDetails.ts

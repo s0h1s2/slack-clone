@@ -1,0 +1,1 @@
+public record JoinWorkspaceRequest(string JoinCode);
