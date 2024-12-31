@@ -17,7 +17,7 @@ const InviteModal = ({ open, setOpen, name, joinCode }: Props) => {
   const currWorksapce = useContext(CurrentWorkspaceContext)
   if (!currWorksapce) throw new Error("Not in worksapce");
   const handleCopy = () => {
-    const inviteLink = `${window.location.origin}/join/${joinCode}`
+    const inviteLink = `${window.location.origin}/join/${currWorksapce.id}`
     navigator.clipboard.writeText(inviteLink).then(() => {
       toast({ title: "Clipoard", description: "Invite link copied successfully", variant: "success" })
     }).catch(() => {
