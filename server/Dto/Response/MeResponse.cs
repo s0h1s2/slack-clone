@@ -1,0 +1,1 @@
+public record MeResponse(string Name,string Email);
