@@ -1,9 +1,12 @@
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { createRouter, redirect, RouterProvider, useNavigate } from "@tanstack/react-router";
 import "./index.css";
 import { Toaster } from "@/components/ui/toaster.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useCheckAuth } from "./features/auth/user-service";
+import { AuthProvider, useAuth } from "./features/auth/context";
 // Create a new router instance
 const router = createRouter({ routeTree });
 
@@ -13,14 +16,20 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
-
+const queryClient = new QueryClient();
+const App = () => {
+  const auth = useAuth();
+  return <RouterProvider router={router} context={{ auth }} />
+}
 createRoot(document.getElementById("root")!).render(
   <React.Fragment>
     <StrictMode>
-      <>
-        <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient} >
+        <AuthProvider>
+          <App />
+        </AuthProvider>
         <Toaster />
-      </>
+      </QueryClientProvider>
     </StrictMode>
   </React.Fragment>
 );

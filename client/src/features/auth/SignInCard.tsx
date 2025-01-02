@@ -7,16 +7,28 @@ import { useForm } from "react-hook-form";
 import { SignInFormSchema, SignInFormSchemaT } from "@/features/auth/validation.ts";
 import { FormControl, FormField, FormItem, FormLabel, Form, FormMessage } from "@/components/ui/form.tsx";
 import { yupResolver } from "@hookform/resolvers/yup"
-import {apiClient} from "@/api/client.ts";
-import {ResponseError} from "@/api";
-import {useToast} from "@/hooks/use-toast.ts";
-import {useNavigate} from "@tanstack/react-router";
+import { apiClient } from "@/api/client.ts";
+import { ResponseError } from "@/api";
+import { useToast } from "@/hooks/use-toast.ts";
+import { useNavigate } from "@tanstack/react-router";
+import { useAuth } from "./context"
+import { useGetAuthUser } from "./user-service"
+import { useEffect, useState } from "react"
 type Props = {
     setScreenState: SetScreenState
 }
 const SignInCard = ({ setScreenState }: Props) => {
-    const {toast}=useToast();
-    const navigate=useNavigate()
+    const { toast } = useToast();
+    const navigate = useNavigate()
+    const { setUser } = useAuth();
+    const [loadUser, setLoadUser] = useState(false);
+
+    // const { user, isUserLoading } = useGetAuthUser({ enabled: loadUser })
+    // useEffect(() => {
+    //     if (isUserLoading) return;
+    //     setUser({ name: user.name, email: user.email })
+    // }, [isUserLoading]);
+
     const form = useForm<SignInFormSchemaT>({
         resolver: yupResolver(SignInFormSchema),
         defaultValues: {
@@ -24,20 +36,21 @@ const SignInCard = ({ setScreenState }: Props) => {
             password: ""
         }
     });
-    
-    const handleSubmit = async (data:SignInFormSchemaT) => {
+
+    const handleSubmit = async (data: SignInFormSchemaT) => {
         try {
-            const res=await apiClient.usersApi.apiUsersAuthPost({loginRequest:{email:data.email, password:data.password}});
-            localStorage.setItem("token",res?.token);
-            await navigate({to:"/workspaces"})
-        }catch (e:ResponseError | Error | unknown) {
-            if(e instanceof ResponseError) {
-                if(e.response.status===401){
-                    toast({description:"Invalid credentials",variant:"destructive",title:"Login"});
+            const res = await apiClient.usersApi.apiUsersAuthPost({ loginRequest: { email: data.email, password: data.password } });
+            localStorage.setItem("token", res?.token);
+            setLoadUser(true);
+            await navigate({ to: "/workspaces" })
+        } catch (e: ResponseError | Error | unknown) {
+            if (e instanceof ResponseError) {
+                if (e.response.status === 401) {
+                    toast({ description: "Invalid credentials", variant: "destructive", title: "Login" });
                     return;
                 }
             }
-            
+
         }
     }
     return (

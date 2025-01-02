@@ -17,5 +17,6 @@ export * from './JoinCodeResponse';
 export * from './JoinWorkspaceRequest';
 export * from './LoginRequest';
 export * from './LoginResponse';
+export * from './MeResponse';
 export * from './ProblemDetails';
 export * from './ValidationProblemDetails';

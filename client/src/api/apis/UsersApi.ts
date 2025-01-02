@@ -19,6 +19,7 @@ import type {
   CreateUserResponse,
   LoginRequest,
   LoginResponse,
+  MeResponse,
   ProblemDetails,
   ValidationProblemDetails,
 } from '../models/index';
@@ -31,6 +32,8 @@ import {
     LoginRequestToJSON,
     LoginResponseFromJSON,
     LoginResponseToJSON,
+    MeResponseFromJSON,
+    MeResponseToJSON,
     ProblemDetailsFromJSON,
     ProblemDetailsToJSON,
     ValidationProblemDetailsFromJSON,
@@ -82,6 +85,38 @@ export class UsersApi extends runtime.BaseAPI {
      */
     async apiUsersAuthPost(requestParameters: ApiUsersAuthPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginResponse> {
         const response = await this.apiUsersAuthPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiUsersMeGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MeResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/Users/me`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MeResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiUsersMeGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MeResponse> {
+        const response = await this.apiUsersMeGetRaw(initOverrides);
         return await response.value();
     }
 
