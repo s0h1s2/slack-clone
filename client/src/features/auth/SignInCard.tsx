@@ -21,13 +21,14 @@ const SignInCard = ({ setScreenState }: Props) => {
     const { toast } = useToast();
     const navigate = useNavigate()
     const { setUser } = useAuth();
-    const [loadUser, setLoadUser] = useState(false);
-
-    // const { user, isUserLoading } = useGetAuthUser({ enabled: loadUser })
-    // useEffect(() => {
-    //     if (isUserLoading) return;
-    //     setUser({ name: user.name, email: user.email })
-    // }, [isUserLoading]);
+    const [loadUser,setLoadUser]=useState(false);
+    const { user, fetchUser, isUserLoading } = useGetAuthUser({enabled:loadUser})
+    useEffect(() => {
+        if (isUserLoading) return;
+        if (user) {
+            setUser({ name: user.name, email: user.email })
+        }
+    }, [isUserLoading, user]);
 
     const form = useForm<SignInFormSchemaT>({
         resolver: yupResolver(SignInFormSchema),

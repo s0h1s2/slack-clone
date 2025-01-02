@@ -1,11 +1,10 @@
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
-import { createRouter, redirect, RouterProvider, useNavigate } from "@tanstack/react-router";
+import { createRouter,  RouterProvider} from "@tanstack/react-router";
 import "./index.css";
 import { Toaster } from "@/components/ui/toaster.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useCheckAuth } from "./features/auth/user-service";
 import { AuthProvider, useAuth } from "./features/auth/context";
 // Create a new router instance
 const router = createRouter({ routeTree });
