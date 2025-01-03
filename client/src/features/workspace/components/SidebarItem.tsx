@@ -25,7 +25,7 @@ type Props = {
   variant?: VariantProps<typeof sidebarItemVariants>["variant"];
 };
 const SidebarItem = ({ label, icon: Icon, id, variant }: Props) => {
-  const params = useParams({ from: "/workspaces/$workspaceId" });
+  const params = useParams({ strict:false });
 
   return (
     <Button

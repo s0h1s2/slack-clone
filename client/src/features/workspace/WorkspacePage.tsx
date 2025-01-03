@@ -2,7 +2,7 @@ import WorkspaceLayout from "@/features/workspace/components/Layout.tsx";
 
 const WorkspacePage = ({workspaceId}:{workspaceId:number}) => {
     return (
-        <WorkspaceLayout>
+        <WorkspaceLayout workspaceId={workspaceId}>
             {workspaceId}
         </WorkspaceLayout>
     );

@@ -12,22 +12,16 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
-import { Route as WorkspacesImport } from './routes/_workspaces'
 import { Route as WorkspacesIndexImport } from './routes/workspaces/index'
 import { Route as WorkspacesWorkspaceIdImport } from './routes/workspaces/$workspaceId'
 import { Route as JoinWorkspaceIdImport } from './routes/join/$workspaceId'
-import { Route as WorkspacesWorkspaceIdChannelsChannelIdImport } from './routes/workspaces/$workspaceId/channels/$channelId'
+import { Route as WorkspacesWorkspaceIdChannelsChannelIdImport } from './routes/workspaces/$workspaceId_.channels.$channelId'
 
 // Create/Update Routes
 
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const WorkspacesRoute = WorkspacesImport.update({
-  id: '/_workspaces',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -51,22 +45,15 @@ const JoinWorkspaceIdRoute = JoinWorkspaceIdImport.update({
 
 const WorkspacesWorkspaceIdChannelsChannelIdRoute =
   WorkspacesWorkspaceIdChannelsChannelIdImport.update({
-    id: '/channels/$channelId',
-    path: '/channels/$channelId',
-    getParentRoute: () => WorkspacesWorkspaceIdRoute,
+    id: '/workspaces/$workspaceId_/channels/$channelId',
+    path: '/workspaces/$workspaceId/channels/$channelId',
+    getParentRoute: () => rootRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_workspaces': {
-      id: '/_workspaces'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof WorkspacesImport
-      parentRoute: typeof rootRoute
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -95,64 +82,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspacesIndexImport
       parentRoute: typeof rootRoute
     }
-    '/workspaces/$workspaceId/channels/$channelId': {
-      id: '/workspaces/$workspaceId/channels/$channelId'
-      path: '/channels/$channelId'
+    '/workspaces/$workspaceId_/channels/$channelId': {
+      id: '/workspaces/$workspaceId_/channels/$channelId'
+      path: '/workspaces/$workspaceId/channels/$channelId'
       fullPath: '/workspaces/$workspaceId/channels/$channelId'
       preLoaderRoute: typeof WorkspacesWorkspaceIdChannelsChannelIdImport
-      parentRoute: typeof WorkspacesWorkspaceIdImport
+      parentRoute: typeof rootRoute
     }
   }
 }
 
 // Create and export the route tree
 
-interface WorkspacesWorkspaceIdRouteChildren {
-  WorkspacesWorkspaceIdChannelsChannelIdRoute: typeof WorkspacesWorkspaceIdChannelsChannelIdRoute
-}
-
-const WorkspacesWorkspaceIdRouteChildren: WorkspacesWorkspaceIdRouteChildren = {
-  WorkspacesWorkspaceIdChannelsChannelIdRoute:
-    WorkspacesWorkspaceIdChannelsChannelIdRoute,
-}
-
-const WorkspacesWorkspaceIdRouteWithChildren =
-  WorkspacesWorkspaceIdRoute._addFileChildren(
-    WorkspacesWorkspaceIdRouteChildren,
-  )
-
 export interface FileRoutesByFullPath {
-  '': typeof WorkspacesRoute
   '/login': typeof LoginRoute
   '/join/$workspaceId': typeof JoinWorkspaceIdRoute
-  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRouteWithChildren
+  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRoute
   '/workspaces': typeof WorkspacesIndexRoute
   '/workspaces/$workspaceId/channels/$channelId': typeof WorkspacesWorkspaceIdChannelsChannelIdRoute
 }
 
 export interface FileRoutesByTo {
-  '': typeof WorkspacesRoute
   '/login': typeof LoginRoute
   '/join/$workspaceId': typeof JoinWorkspaceIdRoute
-  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRouteWithChildren
+  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRoute
   '/workspaces': typeof WorkspacesIndexRoute
   '/workspaces/$workspaceId/channels/$channelId': typeof WorkspacesWorkspaceIdChannelsChannelIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/_workspaces': typeof WorkspacesRoute
   '/login': typeof LoginRoute
   '/join/$workspaceId': typeof JoinWorkspaceIdRoute
-  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRouteWithChildren
+  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRoute
   '/workspaces/': typeof WorkspacesIndexRoute
-  '/workspaces/$workspaceId/channels/$channelId': typeof WorkspacesWorkspaceIdChannelsChannelIdRoute
+  '/workspaces/$workspaceId_/channels/$channelId': typeof WorkspacesWorkspaceIdChannelsChannelIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | ''
     | '/login'
     | '/join/$workspaceId'
     | '/workspaces/$workspaceId'
@@ -160,7 +129,6 @@ export interface FileRouteTypes {
     | '/workspaces/$workspaceId/channels/$channelId'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | ''
     | '/login'
     | '/join/$workspaceId'
     | '/workspaces/$workspaceId'
@@ -168,29 +136,29 @@ export interface FileRouteTypes {
     | '/workspaces/$workspaceId/channels/$channelId'
   id:
     | '__root__'
-    | '/_workspaces'
     | '/login'
     | '/join/$workspaceId'
     | '/workspaces/$workspaceId'
     | '/workspaces/'
-    | '/workspaces/$workspaceId/channels/$channelId'
+    | '/workspaces/$workspaceId_/channels/$channelId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  WorkspacesRoute: typeof WorkspacesRoute
   LoginRoute: typeof LoginRoute
   JoinWorkspaceIdRoute: typeof JoinWorkspaceIdRoute
-  WorkspacesWorkspaceIdRoute: typeof WorkspacesWorkspaceIdRouteWithChildren
+  WorkspacesWorkspaceIdRoute: typeof WorkspacesWorkspaceIdRoute
   WorkspacesIndexRoute: typeof WorkspacesIndexRoute
+  WorkspacesWorkspaceIdChannelsChannelIdRoute: typeof WorkspacesWorkspaceIdChannelsChannelIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  WorkspacesRoute: WorkspacesRoute,
   LoginRoute: LoginRoute,
   JoinWorkspaceIdRoute: JoinWorkspaceIdRoute,
-  WorkspacesWorkspaceIdRoute: WorkspacesWorkspaceIdRouteWithChildren,
+  WorkspacesWorkspaceIdRoute: WorkspacesWorkspaceIdRoute,
   WorkspacesIndexRoute: WorkspacesIndexRoute,
+  WorkspacesWorkspaceIdChannelsChannelIdRoute:
+    WorkspacesWorkspaceIdChannelsChannelIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -203,15 +171,12 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_workspaces",
         "/login",
         "/join/$workspaceId",
         "/workspaces/$workspaceId",
-        "/workspaces/"
+        "/workspaces/",
+        "/workspaces/$workspaceId_/channels/$channelId"
       ]
-    },
-    "/_workspaces": {
-      "filePath": "_workspaces.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
@@ -220,17 +185,13 @@ export const routeTree = rootRoute
       "filePath": "join/$workspaceId.tsx"
     },
     "/workspaces/$workspaceId": {
-      "filePath": "workspaces/$workspaceId.tsx",
-      "children": [
-        "/workspaces/$workspaceId/channels/$channelId"
-      ]
+      "filePath": "workspaces/$workspaceId.tsx"
     },
     "/workspaces/": {
       "filePath": "workspaces/index.tsx"
     },
-    "/workspaces/$workspaceId/channels/$channelId": {
-      "filePath": "workspaces/$workspaceId/channels/$channelId.tsx",
-      "parent": "/workspaces/$workspaceId"
+    "/workspaces/$workspaceId_/channels/$channelId": {
+      "filePath": "workspaces/$workspaceId_.channels.$channelId.tsx"
     }
   }
 }

@@ -14,7 +14,7 @@ type Props = {
   initialValue: string;
 };
 const PreferenceModal = ({ initialValue, open, setOpen }: Props) => {
-  const { workspaceId } = useParams({ from: "/workspaces/$workspaceId" });
+  const { workspaceId } = useParams({strict:false});
   const [value, _setValue] = useState(initialValue);
   const { deleteWorkspace } = useDeleteWorkspace();
   return (

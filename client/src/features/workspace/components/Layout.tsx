@@ -3,7 +3,7 @@ import Toolbar from "./Toolbar";
 import Sidebar from "./Sidebar";
 import PageLoading from "@/components/PageLoading";
 import { useGetWorkspace } from "../hooks/workspace-queries";
-import { useParams } from "@tanstack/react-router";
+import { useParams, useParentMatches } from "@tanstack/react-router";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -13,8 +13,7 @@ import WorkspaceSidebar from "./WorkspaceSidebar";
 import { CurrentWorkspaceContext } from "../hooks/context";
 import { useGetChannels } from "@/features/channel/channel-service";
 
-const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
-  const { workspaceId } = useParams({ from: "/workspaces/$workspaceId" });
+const WorkspaceLayout = ({ workspaceId,children }: { workspaceId:number,children: React.ReactNode }) => {
   const { workspace, isWorkspaceLoading } = useGetWorkspace(
     parseInt(workspaceId)
   );
