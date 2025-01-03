@@ -1,6 +1,6 @@
 import { ResponseError } from "@/api";
 import { apiClient } from "@/api/client";
-import { UnauthenticatedError } from "@/lib/errors";
+import PageLoading from "@/components/PageLoading";
 import { createContext, useContext, useEffect, useState } from "react";
 type User = {
   name: string
@@ -15,7 +15,7 @@ const AuthContext = createContext<AuthContext | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const isAuthenticated = !!user;
-
+  const [isLoading,setIsLoading]=useState(true);
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -26,10 +26,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           return;
         }
         console.error(e);
+      }finally{
+        setIsLoading(false);
       }
     }
     checkAuth();
   }, []);
+  if(isLoading) return <PageLoading/>
   return (
     <AuthContext.Provider value={{ isAuthenticated, user, setUser }}>
       {children}

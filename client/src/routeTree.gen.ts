@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
+import { Route as WorkspacesImport } from './routes/_workspaces'
 import { Route as WorkspacesIndexImport } from './routes/workspaces/index'
 import { Route as WorkspacesWorkspaceIdImport } from './routes/workspaces/$workspaceId'
 import { Route as JoinWorkspaceIdImport } from './routes/join/$workspaceId'
@@ -22,6 +23,11 @@ import { Route as WorkspacesWorkspaceIdChannelsChannelIdImport } from './routes/
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const WorkspacesRoute = WorkspacesImport.update({
+  id: '/_workspaces',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -54,6 +60,13 @@ const WorkspacesWorkspaceIdChannelsChannelIdRoute =
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_workspaces': {
+      id: '/_workspaces'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof WorkspacesImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -109,6 +122,7 @@ const WorkspacesWorkspaceIdRouteWithChildren =
   )
 
 export interface FileRoutesByFullPath {
+  '': typeof WorkspacesRoute
   '/login': typeof LoginRoute
   '/join/$workspaceId': typeof JoinWorkspaceIdRoute
   '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRouteWithChildren
@@ -117,6 +131,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '': typeof WorkspacesRoute
   '/login': typeof LoginRoute
   '/join/$workspaceId': typeof JoinWorkspaceIdRoute
   '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRouteWithChildren
@@ -126,6 +141,7 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/_workspaces': typeof WorkspacesRoute
   '/login': typeof LoginRoute
   '/join/$workspaceId': typeof JoinWorkspaceIdRoute
   '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRouteWithChildren
@@ -136,6 +152,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | ''
     | '/login'
     | '/join/$workspaceId'
     | '/workspaces/$workspaceId'
@@ -143,6 +160,7 @@ export interface FileRouteTypes {
     | '/workspaces/$workspaceId/channels/$channelId'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | ''
     | '/login'
     | '/join/$workspaceId'
     | '/workspaces/$workspaceId'
@@ -150,6 +168,7 @@ export interface FileRouteTypes {
     | '/workspaces/$workspaceId/channels/$channelId'
   id:
     | '__root__'
+    | '/_workspaces'
     | '/login'
     | '/join/$workspaceId'
     | '/workspaces/$workspaceId'
@@ -159,6 +178,7 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
+  WorkspacesRoute: typeof WorkspacesRoute
   LoginRoute: typeof LoginRoute
   JoinWorkspaceIdRoute: typeof JoinWorkspaceIdRoute
   WorkspacesWorkspaceIdRoute: typeof WorkspacesWorkspaceIdRouteWithChildren
@@ -166,6 +186,7 @@ export interface RootRouteChildren {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  WorkspacesRoute: WorkspacesRoute,
   LoginRoute: LoginRoute,
   JoinWorkspaceIdRoute: JoinWorkspaceIdRoute,
   WorkspacesWorkspaceIdRoute: WorkspacesWorkspaceIdRouteWithChildren,
@@ -182,11 +203,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/_workspaces",
         "/login",
         "/join/$workspaceId",
         "/workspaces/$workspaceId",
         "/workspaces/"
       ]
+    },
+    "/_workspaces": {
+      "filePath": "_workspaces.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
