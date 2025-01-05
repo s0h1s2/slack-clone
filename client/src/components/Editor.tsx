@@ -1,6 +1,6 @@
 import Quill, { Delta, Op, QuillOptions } from "quill"
 import "quill/dist/quill.snow.css"
-import {  RefObject, useEffect, useRef } from "react"
+import {  RefObject, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { PiTextAa } from "react-icons/pi"
 import { MdSend } from "react-icons/md"
 import { Button } from "./ui/button";
@@ -22,19 +22,52 @@ type Props = {
 
 }
 const Editor = ({ variant = "create", onSubmit, onCancel, onSave, innerRef, placeHolder = "Write something...", defaultValue = [], disabled = false }: Props) => {
+  const [message,setMessage]=useState("");
   const containerRef = useRef<HTMLDivElement>(null);
+  const submitRef=useRef(onSubmit);
+  const placeHolderRef=useRef(placeHolder);
+  const saveRef=useRef(onSave);
+  const quillRef=useRef<Quill | null>(null);
+  const defaultValueRef=useRef(defaultValue);
+  const disabledRef=useRef(disabled);
+  useLayoutEffect(() => {
+    submitRef.current=onSubmit;
+    placeHolderRef.current=placeHolder;
+    saveRef.current=onSave;
+    defaultValueRef.current=defaultValue;
+    disabledRef.current=disabled;
+  })
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current
     const editorContainer = container.appendChild(container.ownerDocument.createElement('div'))
-    const options: QuillOptions = { theme: "snow" };
-    const _quill = new Quill(editorContainer, options);
+    const options: QuillOptions = { 
+      theme: "snow",
+      placeholder:placeHolderRef.current,
+    };
+    const quill = new Quill(editorContainer, options);
+    quillRef.current=quill;
+    quillRef.current.focus();
+    quill.setContents(defaultValueRef.current)
+    setMessage(quill.getText())
+    quill.on(Quill.events.TEXT_CHANGE,()=>{
+      setMessage(quill.getText())
+    })
+    if(innerRef){}
     return () => {
+      quill.off(Quill.events.TEXT_CHANGE)
       if (container) {
         container.innerHTML = ""
       }
+      if(quillRef.current){
+        quillRef.current=null;
+      }
+
+      if(innerRef){
+        innerRef.current=null;
+      }
     }
-  }, [])
+  }, [innerRef])
   return (
     <div className="flex flex-col">
       <div className="flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-300 focus-within:shadow-sm transition bg-white">
@@ -62,7 +95,7 @@ const Editor = ({ variant = "create", onSubmit, onCancel, onSave, innerRef, plac
             <Button variant="outline" className="bg-[#007a5a] hover:bg-[#007a5a]/80 text-white" size="sm" onClick={() => { }} disabled>Save</Button>
           </div>)}
           {variant == "create" &&
-            <Button disabled className="ml-auto bg-[#007a5a] hover:bg-[#007a5a]/80 text-white" size="iconSm" onClick={() => { }}>
+            <Button disabled={message.trim().length===0} className="ml-auto bg-[#007a5a] hover:bg-[#007a5a]/80 text-white" size="iconSm" onClick={() => { }}>
               <MdSend />
             </Button>
           }
