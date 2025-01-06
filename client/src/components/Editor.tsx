@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { ImageIcon, Smile } from "lucide-react";
 import Hint from "./Hint"
 import { cn } from "@/lib/utils"
+import EmojiPopover from "./EmojiPopover"
 type Message = {
   image: File | null
   text: string
@@ -97,6 +98,12 @@ const Editor = ({ variant = "create", onSubmit, onCancel, onSave, innerRef, plac
       toolbarEl.classList.toggle("hidden");
     }
   }
+  const onEmojiSelect = (emoji: unknown) => {
+    const quill = quillRef.current
+    if (quill) {
+      quill.insertText(quill.getSelection()?.index || 0, emoji!.native)
+    }
+  }
   const isMessageBoxEmpty = message.trim().length === 0;
   return (
     <div className="flex flex-col">
@@ -108,11 +115,12 @@ const Editor = ({ variant = "create", onSubmit, onCancel, onSave, innerRef, plac
               <PiTextAa className="size-4" />
             </Button>
           </Hint>
-          <Hint label="Emoji">
-            <Button size="iconSm" variant="ghost" onClick={() => { }}>
+          <EmojiPopover hint="Emoji" onEmojiSelect={onEmojiSelect}>
+            <Button size="iconSm" variant="ghost" >
               <Smile className="size-4" />
+
             </Button>
-          </Hint>
+          </EmojiPopover >
           {variant == "create" &&
             <Hint label="Image">
               <Button size="iconSm" variant="ghost" onClick={() => { }}>
@@ -131,11 +139,12 @@ const Editor = ({ variant = "create", onSubmit, onCancel, onSave, innerRef, plac
           }
         </div>
       </div>
-      <div className="p-2 text-[12px] text-muted-foreground flex justify-end">
+      {variant == "create" && <div className={cn("p-2 text-[12px] text-muted-foreground flex justify-end opacity-0 transition cursor-default", !isMessageBoxEmpty && "opacity-100")}>
         <p>
           <strong>Shift + Return</strong> to enter new line
         </p>
       </div>
+      }
     </div >
   )
 }
