@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.JsonWebTokens;
 using server.Database;
 using server.Dto.Request;
 using server.Dto.Response;
@@ -28,15 +29,15 @@ public class UsersService
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
         if (user == null) throw new InvalidCredentialsException();
-        if (!_passwordHasher.VerifyPassword(request.Password,user.Password)) throw new InvalidCredentialsException();
-        
-        var token=_tokenProvider.GenerateToken(new User() { Email = user.Email });
+        if (!_passwordHasher.VerifyPassword(request.Password, user.Password)) throw new InvalidCredentialsException();
+
+        var token = _tokenProvider.GenerateToken(new User() { Email = user.Email });
         return new LoginResponse(token);
     }
     public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
     {
-        var userExists=_dbContext.Users.FirstOrDefault(u=>u.Email==request.Email);
-        if (userExists!= null)
+        var userExists = _dbContext.Users.FirstOrDefault(u => u.Email == request.Email);
+        if (userExists != null)
         {
             throw new UserAlreadyExistException();
         }
@@ -61,6 +62,15 @@ public class UsersService
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             return user;
         }
-       return null;
+        return null;
+    }
+    public async Task<int?> GetAuthenicatedUserId()
+    {
+        if (_httpContextAccessor.HttpContext.User is not null)
+        {
+            var userId= _httpContextAccessor.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            return Int32.Parse(userId);
+        }
+        return null;
     }
 }

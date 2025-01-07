@@ -1,0 +1,1 @@
+public record ChannelResponse(int Id, string Name);

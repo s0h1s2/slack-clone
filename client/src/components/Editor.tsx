@@ -54,7 +54,13 @@ const Editor = ({ variant = "create", onSubmit, onCancel, onSave, innerRef, plac
             enter: {
               key: "Enter",
               handler: () => {
-                return;
+                const text=quill.getText();
+                const addedImage=imageElRef.current?.files?.[0] || null;
+                const isEmpty=!addedImage && text.trim().length===0;
+                if(isEmpty){
+                  return;
+                }
+
               }
             },
             shift_enter: {

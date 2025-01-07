@@ -9,12 +9,23 @@ namespace server.Services;
 public class ChannelService
 {
     private readonly AppDbContext _context;
+    private readonly UsersService _usersService;
 
-    public ChannelService(AppDbContext context)
+    public ChannelService(AppDbContext context,UsersService usersService)
     {
         _context = context;
+        _usersService = usersService;
     }
-
+    public async Task<ChannelResponse?> GetChannel(int channelId)
+    {
+        var uid=await _usersService.GetAuthenicatedUserId();
+        if(uid==null) throw new PermmissionException("Only authenticated user can see this channel.");
+        var channel = await _context.WorkspaceChannels.FindAsync(channelId);
+        if(channel==null) return null;
+        var member=await _context.WorkspaceMembers.FirstOrDefaultAsync(m=>m.WorkspaceId==channel.WorkspaceId && m.UserId==uid);
+        if(member==null) throw new PermmissionException("Only members of this workspace can see this channel.");
+        return new ChannelResponse(channel.Id, channel.Name);
+    }
     public async Task<GetChannelsResponse> GetWorkspaceChannels(int workspaceId,User user)
     {
         var workspace = await _context.Workspaces.FindAsync(workspaceId);
