@@ -31,7 +31,7 @@ public class UsersService
         if (user == null) throw new InvalidCredentialsException();
         if (!_passwordHasher.VerifyPassword(request.Password, user.Password)) throw new InvalidCredentialsException();
 
-        var token = _tokenProvider.GenerateToken(new User() { Email = user.Email });
+        var token = _tokenProvider.GenerateToken(user);
         return new LoginResponse(token);
     }
     public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
@@ -69,6 +69,7 @@ public class UsersService
         if (_httpContextAccessor.HttpContext.User is not null)
         {
             var userId= _httpContextAccessor.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            if(userId==null) return null;
             return Int32.Parse(userId);
         }
         return null;

@@ -16,7 +16,7 @@ namespace server.Controllers
         }
 
         [HttpGet("{id}"), Authorize]
-        [ProducesResponseType(typeof(WorkspaceChannel), 200)]
+        [ProducesResponseType(typeof(ChannelResponse), 200)]
         public async Task<IActionResult> GetChannel(int id)
         {
             var channel = await _channelService.GetChannel(id);
