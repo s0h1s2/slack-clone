@@ -19,6 +19,7 @@ public class ChannelService
     public async Task<ChannelResponse?> GetChannel(int channelId)
     {
         var uid=await _usersService.GetAuthenicatedUserId();
+
         if(uid==null) throw new PermmissionException("Only authenticated user can see this channel.");
         var channel = await _context.WorkspaceChannels.FindAsync(channelId);
         if(channel==null) return null;
