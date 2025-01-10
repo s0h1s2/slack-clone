@@ -54,13 +54,13 @@ const Editor = ({ variant = "create", onSubmit, onCancel, onSave, innerRef, plac
             enter: {
               key: "Enter",
               handler: () => {
-                const text=quill.getText();
-                const addedImage=imageElRef.current?.files?.[0] || null;
-                const isEmpty=!addedImage && text.trim().length===0;
-                if(isEmpty){
+                const text = quill.getText();
+                const addedImage = imageElRef.current?.files?.[0] || null;
+                const isEmpty = !addedImage && text.trim().length === 0;
+                if (isEmpty) {
                   return;
                 }
-
+                submitRef.current?.({ text: text, image: addedImage });
               }
             },
             shift_enter: {
@@ -110,31 +110,31 @@ const Editor = ({ variant = "create", onSubmit, onCancel, onSave, innerRef, plac
       quill.insertText(quill.getSelection()?.index || 0, emoji!.native)
     }
   }
-  
-  const isMessageBoxEmpty = message.trim().length === 0;
+
+  const isMessageBoxEmpty = !image && message.trim().length === 0;
   return (
 
     <div className="flex flex-col">
-      <input type="file"  ref={imageElRef} onChange={(event) => setImage(event.target.files![0])} className="hidden" />
-            <div className="flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-300 focus-within:shadow-sm transition bg-white">
+      <input type="file" ref={imageElRef} onChange={(event) => setImage(event.target.files![0])} className="hidden" />
+      <div className="flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-300 focus-within:shadow-sm transition bg-white">
         <div ref={containerRef} className="h-full ql-custom" />
-      {!!image && (
-        <div className="p-2">
-          <div className="relative size-[62px] flex items-center justify-center group/image">
+        {!!image && (
+          <div className="p-2">
+            <div className="relative size-[62px] flex items-center justify-center group/image">
               <Hint label="Remove image">
-            <button className="hidden group-hover/image:flex rounded-full bg-black/70 hover:bg-black absolute -top-2.5 -right-2.5 text-white size-6 z-[4] border-2 border-white items-center justify-center" onClick={()=>{
-                setImage(null)
-                imageElRef.current!.value=''
-              }}>
-                <XIcon className="size-3.5" />
-            </button>
-            </Hint>
-              <img src={URL.createObjectURL(image)} alt="Uploaded" className="w-full h-full rounded-xl overflow-hidden border object-cover"/>
+                <button className="hidden group-hover/image:flex rounded-full bg-black/70 hover:bg-black absolute -top-2.5 -right-2.5 text-white size-6 z-[4] border-2 border-white items-center justify-center" onClick={() => {
+                  setImage(null)
+                  imageElRef.current!.value = ''
+                }}>
+                  <XIcon className="size-3.5" />
+                </button>
+              </Hint>
+              <img src={URL.createObjectURL(image)} alt="Uploaded" className="w-full h-full rounded-xl overflow-hidden border object-cover" />
 
+            </div>
           </div>
-        </div>
-      )}
-  <div className="flex px-2 pb-2 z-[5]">
+        )}
+        <div className="flex px-2 pb-2 z-[5]">
           <Hint label={isToolbarVisable ? "Hide formatting" : "Show formatting"}>
             <Button size="iconSm" disabled={disabled} variant="ghost" onClick={toggleToolbar}>
               <PiTextAa className="size-4" />
@@ -155,15 +155,15 @@ const Editor = ({ variant = "create", onSubmit, onCancel, onSave, innerRef, plac
           {variant == "update" && (<div className="ml-auto flex items-center gap-x-2">
             <Button disabled={disabled} variant="outline" size="sm" onClick={onCancel} >Cancel</Button>
             <Button disabled={disabled || isMessageBoxEmpty} variant="outline" className="bg-[#007a5a] hover:bg-[#007a5a]/80 text-white" size="sm" onClick={
-()=>onSubmit({
-              image:image,
-              text:JSON.stringify(quillRef.current?.getContents())
-            })} >Save</Button>
+              () => onSubmit({
+                image: image,
+                text: JSON.stringify(quillRef.current?.getContents())
+              })} >Save</Button>
           </div>)}
           {variant == "create" &&
-            <Button disabled={isMessageBoxEmpty || disabled} className={cn("ml-auto mt-1", isMessageBoxEmpty ? "bg-white hover:bg-white text-muted-foreground" : "bg-[#007a5a] hover:bg-[#007a5a]/80 text-white")} size="iconSm" onClick={()=>onSubmit({
-              image:image,
-              text:JSON.stringify(quillRef.current?.getContents())
+            <Button disabled={isMessageBoxEmpty || disabled} className={cn("ml-auto mt-1", isMessageBoxEmpty ? "bg-white hover:bg-white text-muted-foreground" : "bg-[#007a5a] hover:bg-[#007a5a]/80 text-white")} size="iconSm" onClick={() => onSubmit({
+              image: image,
+              text: JSON.stringify(quillRef.current?.getContents())
             })}>
 
               <MdSend />

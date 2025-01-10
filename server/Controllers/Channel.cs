@@ -22,5 +22,13 @@ namespace server.Controllers
             var channel = await _channelService.GetChannel(id);
             return Ok(channel);
         }
+        [HttpPost("{id}/chat"), Authorize]
+        // [ProducesResponseType(200)]
+        public async Task<IActionResult> ChatChannel(int id,[FromForm] ChatMessageRequest chatRequest)
+        {
+          return Ok();
+        }
+
+
     }
 }
