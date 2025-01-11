@@ -1,5 +1,5 @@
 public interface IFileService
 {
-    public async Task<string> UploadFileAsync(IFormFile file);
-
+    public Task<string> UploadFileAsync(IFormFile file);
+    public Task<string> GetFileUrlAsync(string fileId);
 }

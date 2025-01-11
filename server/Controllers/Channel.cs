@@ -26,6 +26,7 @@ namespace server.Controllers
         // [ProducesResponseType(200)]
         public async Task<IActionResult> ChatChannel(int id,[FromForm] ChatMessageRequest chatRequest)
         {
+            await _channelService.ChatChannel(id, chatRequest);
           return Ok();
         }
 

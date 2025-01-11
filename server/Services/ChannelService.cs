@@ -10,11 +10,13 @@ public class ChannelService
 {
     private readonly AppDbContext _context;
     private readonly UsersService _usersService;
-
-    public ChannelService(AppDbContext context, UsersService usersService)
+    private readonly IFileService _fileService;
+    
+    public ChannelService(AppDbContext context, UsersService usersService,IFileService fileService)
     {
         _context = context;
         _usersService = usersService;
+        _fileService = fileService;
     }
     public async Task<ChannelResponse?> GetChannel(int channelId)
     {
@@ -54,7 +56,12 @@ public class ChannelService
     }
     public async Task<bool> ChatChannel(int channelId, ChatMessageRequest chat)
     {
-        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId });
+        string? fileId=String.Empty;
+        if (chat.Attachment!=null)
+        {
+            fileId=await _fileService.UploadFileAsync(chat.Attachment);
+        }
+        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId,AttachmentName = fileId });
         await _context.SaveChangesAsync();
         return true;
     }
