@@ -73,10 +73,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+builder.Services.AddScoped<IFileService,FileService>();
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<WorkspaceService>();
 builder.Services.AddScoped<ChannelService>();
-builder.Services.AddScoped<IFileService,FileService>();
 builder.Services.AddSingleton<PasswordHasher>();
 
 builder.Services.AddCors(c =>
