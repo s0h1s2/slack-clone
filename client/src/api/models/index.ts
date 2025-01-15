@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './ChannelResponse';
 export * from './CreateChannelResponse';
 export * from './CreateUserRequest';
 export * from './CreateUserResponse';

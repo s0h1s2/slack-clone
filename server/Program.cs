@@ -55,6 +55,7 @@ builder.Services.AddFluentValidationAutoValidation(c =>
 });
 
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(c =>
 {
     c.RequireHttpsMetadata = false;

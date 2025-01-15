@@ -5,7 +5,7 @@ using server.Services;
 namespace server.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    //[ApiController]
     public class Channel : ControllerBase
     {
         private readonly ChannelService _channelService;
@@ -23,8 +23,9 @@ namespace server.Controllers
             return Ok(channel);
         }
         [HttpPost("{id}/chat"), Authorize]
+        [Consumes("multipart/form-data")]
         // [ProducesResponseType(200)]
-        public async Task<IActionResult> ChatChannel(int id,[FromForm] ChatMessageRequest chatRequest)
+        public async Task<IActionResult> ChatChannel([FromRoute]int id,[FromForm] ChatMessageRequest chatRequest)
         {
             await _channelService.ChatChannel(id, chatRequest);
           return Ok();
