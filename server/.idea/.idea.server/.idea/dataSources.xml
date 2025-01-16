@@ -40,5 +40,21 @@
       <jdbc-url>jdbc:postgresql://royal-kudu-9809.7tc.aws-eu-central-1.cockroachlabs.cloud:26257/mr_slack?password=JSSYhFuIvIusAIsA-XqqYA&amp;user=slack_clone</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="mr_slack@royal-kudu-9809.7tc.aws-eu-central-1.cockroachlabs.cloud [2]" uuid="9763a31b-7f44-462e-a47d-988beda00c02">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://royal-kudu-9809.7tc.aws-eu-central-1.cockroachlabs.cloud:26257/mr_slack?password=JSSYhFuIvIusAIsA-XqqYA&amp;user=slack_clone</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="mr_slack@royal-kudu-9809.7tc.aws-eu-central-1.cockroachlabs.cloud [3]" uuid="874b80a0-4173-4b4e-90fc-64db41a768af">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://royal-kudu-9809.7tc.aws-eu-central-1.cockroachlabs.cloud:26257/mr_slack?password=JSSYhFuIvIusAIsA-XqqYA&amp;user=slack_clone</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

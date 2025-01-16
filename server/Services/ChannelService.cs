@@ -61,8 +61,16 @@ public class ChannelService
         {
             fileId=await _fileService.UploadFileAsync(chat.Attachment);
         }
-        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId,AttachmentName = fileId });
+        var userId=await _usersService.GetAuthenicatedUserId();
+        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId,AttachmentName = fileId, UserId = userId??0 });
         await _context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<GetChannelMessagesResponse> GetChannelMessages(int channelId)
+    {
+        var messages= await _context.Chats.Include((chat)=>chat.User).Where((chat =>chat.ChannelId==channelId)).ToListAsync();
+        return new GetChannelMessagesResponse(messages.Select((message)=>new ChannelMessageResponse(message.Message,message.AttachmentName,message.User.Name,"nothing-yet.jpg")).ToList());
+    }
+    
 }

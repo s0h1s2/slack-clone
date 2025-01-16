@@ -7,4 +7,7 @@ public class Chat
     public string AttachmentName { get; set; }
     public WorkspaceChannel Channel { get; set; }
     public int ChannelId { get; set; }
+    
+    public User User { get; set; }
+    public int UserId { get; set; }
 }

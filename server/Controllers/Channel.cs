@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using server.Dto.Response;
 using server.Services;
 
 namespace server.Controllers
@@ -16,7 +17,7 @@ namespace server.Controllers
         }
 
         [HttpGet("{id}"), Authorize]
-        [ProducesResponseType(typeof(ChannelResponse), 200)]
+        [ProducesResponseType(typeof(ChannelResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetChannel(int id)
         {
             var channel = await _channelService.GetChannel(id);
@@ -31,6 +32,12 @@ namespace server.Controllers
           return Ok();
         }
 
+        [HttpGet("{id}/messages"), Authorize]
+        [ProducesResponseType(typeof(GetChannelMessagesResponse),StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetChannelMessages(int channelId)
+        {
+            return Ok(await _channelService.GetChannelMessages(channelId));
+        }
 
     }
 }
