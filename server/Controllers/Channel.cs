@@ -34,9 +34,9 @@ namespace server.Controllers
 
         [HttpGet("{id}/messages"), Authorize]
         [ProducesResponseType(typeof(GetChannelMessagesResponse),StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetChannelMessages(int channelId)
+        public async Task<IActionResult> GetChannelMessages(int id)
         {
-            return Ok(await _channelService.GetChannelMessages(channelId));
+            return Ok(await _channelService.GetChannelMessages(id));
         }
 
     }

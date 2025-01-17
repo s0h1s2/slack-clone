@@ -20,8 +20,7 @@ public class ChannelService
     }
     public async Task<ChannelResponse?> GetChannel(int channelId)
     {
-        var uid = await _usersService.GetAuthenicatedUserId();
-
+        var uid = _usersService.GetAuthenicatedUserId();
         if (uid == null) throw new PermmissionException("Only authenticated user can see this channel.");
         var channel = await _context.WorkspaceChannels.FindAsync(channelId);
         if (channel == null) return null;
@@ -61,8 +60,8 @@ public class ChannelService
         {
             fileId=await _fileService.UploadFileAsync(chat.Attachment);
         }
-        var userId=await _usersService.GetAuthenicatedUserId();
-        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId,AttachmentName = fileId, UserId = userId??0 });
+        var userId=_usersService.GetAuthenicatedUserId();
+        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId,AttachmentName = fileId, UserId = userId });
         await _context.SaveChangesAsync();
         return true;
     }
@@ -70,7 +69,17 @@ public class ChannelService
     public async Task<GetChannelMessagesResponse> GetChannelMessages(int channelId)
     {
         var messages= await _context.Chats.Include((chat)=>chat.User).Where((chat =>chat.ChannelId==channelId)).ToListAsync();
-        return new GetChannelMessagesResponse(messages.Select((message)=>new ChannelMessageResponse(message.Message,message.AttachmentName,message.User.Name,"nothing-yet.jpg")).ToList());
+        var messagesResult= new List<ChannelMessageResponse>(); 
+        foreach (var message in messages)
+        {
+            var result = new ChannelMessageResponse(message.Message,string.Empty,message.User.Name,"")
+                {
+                    Attachment = await _fileService.GetFileUrlAsync(message.AttachmentName)
+                };
+            messagesResult.Add(result);
+        }
+        
+        return new GetChannelMessagesResponse(messagesResult);
     }
     
 }

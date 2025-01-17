@@ -64,14 +64,15 @@ public class UsersService
         }
         return null;
     }
-    public async Task<int?> GetAuthenicatedUserId()
+    public int GetAuthenicatedUserId()
     {
         if (_httpContextAccessor.HttpContext.User is not null)
         {
             var userId= _httpContextAccessor.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-            if(userId==null) return null;
+            if(userId==null) throw new Exception("Invalid user id");
             return Int32.Parse(userId);
         }
-        return null;
+        throw new Exception("Invalid user id");
+        
     }
 }
