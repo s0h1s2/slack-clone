@@ -16,16 +16,19 @@ function RouteComponent() {
   const { messages, isMessagesLoading } = useGetChannelMessages(
     Number(channelId)
   );
-  if (isMessagesLoading) {
-    return <div>Loading...</div>;
-  }
   return (
     <WorkspaceLayout workspaceId={Number(workspaceId)}>
       <div className="flex flex-col h-full">
-        <ChannelHeader title="My Channel" />
-        <MessagesList data={messages} />
-        <div className="flex-1" />
-        <ChatInput />
+        {isMessagesLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <>
+            <ChannelHeader title="My Channel" />
+            <MessagesList data={messages} />
+            <div className="flex-1" />
+            <ChatInput />
+          </>
+        )}
       </div>
     </WorkspaceLayout>
   );
