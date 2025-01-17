@@ -7,6 +7,7 @@ using server.Dto.Request;
 using server.Dto.Response;
 using server.Exceptions;
 using server.Util;
+using Util;
 using LoginRequest = server.Dto.Request.LoginRequest;
 
 namespace server.Services;
@@ -68,11 +69,11 @@ public class UsersService
     {
         if (_httpContextAccessor.HttpContext.User is not null)
         {
-            var userId= _httpContextAccessor.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-            if(userId==null) throw new Exception("Invalid user id");
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(CustomClaims.UserId);
+            if (userId is null) throw new Exception("Invalid user id");
             return Int32.Parse(userId);
         }
         throw new Exception("Invalid user id");
-        
+
     }
 }

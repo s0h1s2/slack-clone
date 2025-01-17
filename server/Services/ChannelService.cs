@@ -11,8 +11,8 @@ public class ChannelService
     private readonly AppDbContext _context;
     private readonly UsersService _usersService;
     private readonly IFileService _fileService;
-    
-    public ChannelService(AppDbContext context, UsersService usersService,IFileService fileService)
+
+    public ChannelService(AppDbContext context, UsersService usersService, IFileService fileService)
     {
         _context = context;
         _usersService = usersService;
@@ -55,31 +55,32 @@ public class ChannelService
     }
     public async Task<bool> ChatChannel(int channelId, ChatMessageRequest chat)
     {
-        string? fileId=String.Empty;
-        if (chat.Attachment!=null)
+        string? fileId = String.Empty;
+        if (chat.Attachment != null)
         {
-            fileId=await _fileService.UploadFileAsync(chat.Attachment);
+            fileId = await _fileService.UploadFileAsync(chat.Attachment);
         }
-        var userId=_usersService.GetAuthenicatedUserId();
-        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId,AttachmentName = fileId, UserId = userId });
+        var userId = _usersService.GetAuthenicatedUserId();
+        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId, AttachmentName = fileId, UserId = userId });
         await _context.SaveChangesAsync();
         return true;
     }
 
     public async Task<GetChannelMessagesResponse> GetChannelMessages(int channelId)
     {
-        var messages= await _context.Chats.Include((chat)=>chat.User).Where((chat =>chat.ChannelId==channelId)).ToListAsync();
-        var messagesResult= new List<ChannelMessageResponse>(); 
+        // TODO: check if user is member of this workspace or channel
+        var messages = await _context.Chats.Include((chat) => chat.User).Where((chat) => chat.ChannelId == channelId).ToListAsync();
+        var messagesResult = new List<ChannelMessageResponse>();
         foreach (var message in messages)
         {
-            var result = new ChannelMessageResponse(message.Message,string.Empty,message.User.Name,"")
-                {
-                    Attachment = await _fileService.GetFileUrlAsync(message.AttachmentName)
-                };
+            var result = new ChannelMessageResponse(message.Message, string.Empty, message.User.Name, "")
+            {
+                Attachment = await _fileService.GetFileUrlAsync(message.AttachmentName) ?? string.Empty
+            };
             messagesResult.Add(result);
         }
-        
+
         return new GetChannelMessagesResponse(messagesResult);
     }
-    
+
 }

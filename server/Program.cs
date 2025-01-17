@@ -63,7 +63,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Jwt:Key") ?? throw new InvalidOperationException())),
         ValidateAudience = false,
-        ValidateIssuer = false,
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration.GetValue<string>("Jwt:Issuer") ?? throw new InvalidOperationException(),
 
     };
 });
@@ -74,17 +75,17 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-builder.Services.AddScoped<IFileService,FileService>();
+builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<WorkspaceService>();
 builder.Services.AddScoped<ChannelService>();
 builder.Services.AddSingleton<PasswordHasher>();
+builder.Services.AddSingleton<TokenProvider>();
 
 builder.Services.AddCors(c =>
 {
     c.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
 });
-builder.Services.AddSingleton<TokenProvider>();
 
 var app = builder.Build();
 
