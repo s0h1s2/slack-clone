@@ -62,3 +62,18 @@ export const useGetChannels = (workspaceId: number) => {
     isChannelsLoading,
   };
 };
+export const useGetChannelMessages = (channelId: number) => {
+  const { data: messages, isLoading: isMessagesLoading } = useQuery({
+    queryKey: ["channelMessages", channelId],
+    queryFn: async () => {
+      const result = await apiClient.channelsApi.apiChannelIdMessagesGet({
+        id: channelId,
+      });
+      return result;
+    },
+  });
+  return {
+    messages,
+    isMessagesLoading,
+  };
+};

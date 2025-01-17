@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './ChannelMessageResponse';
 export * from './ChannelResponse';
 export * from './CreateChannelResponse';
 export * from './CreateUserRequest';
@@ -7,6 +8,7 @@ export * from './CreateUserResponse';
 export * from './CreateWorkspaceChannelRequest';
 export * from './CreateWorkspaceRequest';
 export * from './CreateWorkspaceResponse';
+export * from './GetChannelMessagesResponse';
 export * from './GetChannelResponse';
 export * from './GetChannelsResponse';
 export * from './GetMember';

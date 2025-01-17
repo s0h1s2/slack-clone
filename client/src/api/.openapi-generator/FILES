@@ -3,6 +3,7 @@ apis/UsersApi.ts
 apis/WorkspacesApi.ts
 apis/index.ts
 index.ts
+models/ChannelMessageResponse.ts
 models/ChannelResponse.ts
 models/CreateChannelResponse.ts
 models/CreateUserRequest.ts
@@ -10,6 +11,7 @@ models/CreateUserResponse.ts
 models/CreateWorkspaceChannelRequest.ts
 models/CreateWorkspaceRequest.ts
 models/CreateWorkspaceResponse.ts
+models/GetChannelMessagesResponse.ts
 models/GetChannelResponse.ts
 models/GetChannelsResponse.ts
 models/GetMember.ts

@@ -16,10 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   ChannelResponse,
+  GetChannelMessagesResponse,
 } from '../models/index';
 import {
     ChannelResponseFromJSON,
     ChannelResponseToJSON,
+    GetChannelMessagesResponseFromJSON,
+    GetChannelMessagesResponseToJSON,
 } from '../models/index';
 
 export interface ApiChannelIdChatPostRequest {
@@ -29,6 +32,10 @@ export interface ApiChannelIdChatPostRequest {
 }
 
 export interface ApiChannelIdGetRequest {
+    id: number;
+}
+
+export interface ApiChannelIdMessagesGetRequest {
     id: number;
 }
 
@@ -136,6 +143,45 @@ export class ChannelApi extends runtime.BaseAPI {
      */
     async apiChannelIdGet(requestParameters: ApiChannelIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChannelResponse> {
         const response = await this.apiChannelIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiChannelIdMessagesGetRaw(requestParameters: ApiChannelIdMessagesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetChannelMessagesResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiChannelIdMessagesGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/Channel/{id}/messages`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetChannelMessagesResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiChannelIdMessagesGet(requestParameters: ApiChannelIdMessagesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetChannelMessagesResponse> {
+        const response = await this.apiChannelIdMessagesGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
