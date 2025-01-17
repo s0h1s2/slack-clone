@@ -61,7 +61,7 @@ public class ChannelService
             fileId = await _fileService.UploadFileAsync(chat.Attachment);
         }
         var userId = _usersService.GetAuthenicatedUserId();
-        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId, AttachmentName = fileId, UserId = userId });
+        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId, AttachmentName = fileId, UserId = userId, CreatedAt = DateTime.UtcNow });
         await _context.SaveChangesAsync();
         return true;
     }
@@ -73,7 +73,7 @@ public class ChannelService
         var messagesResult = new List<ChannelMessageResponse>();
         foreach (var message in messages)
         {
-            var result = new ChannelMessageResponse(message.Message, string.Empty, message.User.Name, "")
+            var result = new ChannelMessageResponse(message.Message, string.Empty, message.User.Name, "", message.CreatedAt)
             {
                 Attachment = await _fileService.GetFileUrlAsync(message.AttachmentName) ?? string.Empty
             };

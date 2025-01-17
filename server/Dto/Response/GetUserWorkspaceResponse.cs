@@ -1,5 +1,3 @@
-using server.Database;
-
 namespace server.Dto.Response;
 
 public record GetUserWorkspaceResponse(int Id, string Name);
