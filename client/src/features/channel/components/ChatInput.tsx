@@ -1,7 +1,7 @@
 import { ResponseError } from "@/api";
 import { apiClient } from "@/api/client";
 import Editor, { ChatMessage } from "@/components/Editor";
-import { useParams, useRouter } from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 import { useState } from "react";
 
 const ChatInput = () => {
