@@ -4,6 +4,8 @@ namespace server.Dto.Response;
 
 public class ChannelMessageResponse
 {
+    public int Id { get; }
+
     public string Message { get; }
     public string Attachment { get; set; }
     public string Username { get; }
@@ -11,8 +13,9 @@ public class ChannelMessageResponse
     public DateTime CreatedAt { get; }
     public DateTime UpdateAt { get; }
 
-    public ChannelMessageResponse(string message, string attachment, string username, string? avatar, DateTime createdAt, DateTime updateAt)
+    public ChannelMessageResponse(int id, string message, string attachment, string username, string? avatar, DateTime createdAt, DateTime updateAt)
     {
+        Id = id;
         Message = message;
         Attachment = attachment;
         Username = username;
