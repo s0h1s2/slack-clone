@@ -55,7 +55,7 @@ public class ChannelService
     }
     public async Task<bool> ChatChannel(int channelId, ChatMessageRequest chat)
     {
-        string? fileId = String.Empty;
+        string? fileId = null;
         if (chat.Attachment != null)
         {
             fileId = await _fileService.UploadFileAsync(chat.Attachment);
@@ -75,7 +75,7 @@ public class ChannelService
         {
             var result = new ChannelMessageResponse(message.Message, string.Empty, message.User.Name, "", message.CreatedAt)
             {
-                Attachment = await _fileService.GetFileUrlAsync(message.AttachmentName) ?? string.Empty
+                Attachment = message.AttachmentName == string.Empty ? string.Empty : await _fileService.GetFileUrlAsync(message.AttachmentName)
             };
             messagesResult.Add(result);
         }

@@ -43,6 +43,12 @@ export interface ChannelMessageResponse {
      * @memberof ChannelMessageResponse
      */
     avatar?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof ChannelMessageResponse
+     */
+    createdAt: Date;
 }
 
 /**
@@ -52,6 +58,7 @@ export function instanceOfChannelMessageResponse(value: object): value is Channe
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('attachment' in value) || value['attachment'] === undefined) return false;
     if (!('username' in value) || value['username'] === undefined) return false;
+    if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     return true;
 }
 
@@ -69,6 +76,7 @@ export function ChannelMessageResponseFromJSONTyped(json: any, ignoreDiscriminat
         'attachment': json['attachment'],
         'username': json['username'],
         'avatar': json['avatar'] == null ? undefined : json['avatar'],
+        'createdAt': (new Date(json['createdAt'])),
     };
 }
 
@@ -82,6 +90,7 @@ export function ChannelMessageResponseToJSON(value?: ChannelMessageResponse | nu
         'attachment': value['attachment'],
         'username': value['username'],
         'avatar': value['avatar'],
+        'createdAt': ((value['createdAt']).toISOString()),
     };
 }
 
