@@ -40,6 +40,8 @@ const MessagesList = ({ data, variant }: Props) => {
               <div>
                 <Message
                   id={message.id}
+                  authorImage={message?.avatar ?? undefined}
+                  authorName={message.username}
                   memberId="string"
                   isAuthor={false}
                   body={message.message}
