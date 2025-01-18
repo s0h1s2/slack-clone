@@ -69,7 +69,8 @@ public class ChannelService
     public async Task<GetChannelMessagesResponse> GetChannelMessages(int channelId)
     {
         // TODO: check if user is member of this workspace or channel
-        var messages = await _context.Chats.Include((chat) => chat.User).Where((chat) => chat.ChannelId == channelId).ToListAsync();
+        var messages = await _context.Chats.Include((chat) => chat.User).Where((chat) => chat.ChannelId == channelId).OrderByDescending(chat=>chat.CreatedAt).ToListAsync();
+        
         var messagesResult = new List<ChannelMessageResponse>();
         foreach (var message in messages)
         {
