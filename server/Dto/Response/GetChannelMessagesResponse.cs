@@ -9,11 +9,12 @@ public class ChannelMessageResponse
     public string Message { get; }
     public string Attachment { get; set; }
     public string Username { get; }
+    public int SenderId { get; }
     public string? Avatar { get; }
     public DateTime CreatedAt { get; }
     public DateTime UpdateAt { get; }
 
-    public ChannelMessageResponse(int id, string message, string attachment, string username, string? avatar, DateTime createdAt, DateTime updateAt)
+    public ChannelMessageResponse(int id, string message, string attachment, string username, string? avatar, DateTime createdAt, DateTime updateAt, int senderId)
     {
         Id = id;
         Message = message;
@@ -22,6 +23,7 @@ public class ChannelMessageResponse
         Avatar = avatar;
         CreatedAt = createdAt;
         UpdateAt = updateAt;
+        SenderId = senderId;
     }
 
 };
