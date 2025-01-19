@@ -61,7 +61,7 @@ public class ChannelService
             fileId = await _fileService.UploadFileAsync(chat.Attachment);
         }
         var userId = _usersService.GetAuthenicatedUserId();
-        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId, AttachmentName = fileId, UserId = userId, CreatedAt = DateTime.UtcNow, UpdateAt = DateTime.UtcNow });
+        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId, AttachmentName = fileId, UserId = userId, CreatedAt = DateTime.UtcNow, UpdateAt = null });
         await _context.SaveChangesAsync();
         return true;
     }
