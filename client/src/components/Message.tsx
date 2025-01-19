@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { spawn } from "child_process";
 
 type Props = {
-  id: string;
+  id: number | string;
   memberId: string;
   authorImage?: string;
   authorName?: string;

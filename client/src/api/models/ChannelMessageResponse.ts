@@ -21,6 +21,12 @@ import { mapValues } from '../runtime';
 export interface ChannelMessageResponse {
     /**
      * 
+     * @type {number}
+     * @memberof ChannelMessageResponse
+     */
+    id: number;
+    /**
+     * 
      * @type {string}
      * @memberof ChannelMessageResponse
      */
@@ -39,6 +45,12 @@ export interface ChannelMessageResponse {
     username: string;
     /**
      * 
+     * @type {number}
+     * @memberof ChannelMessageResponse
+     */
+    senderId: number;
+    /**
+     * 
      * @type {string}
      * @memberof ChannelMessageResponse
      */
@@ -49,16 +61,25 @@ export interface ChannelMessageResponse {
      * @memberof ChannelMessageResponse
      */
     createdAt: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof ChannelMessageResponse
+     */
+    updateAt: Date;
 }
 
 /**
  * Check if a given object implements the ChannelMessageResponse interface.
  */
 export function instanceOfChannelMessageResponse(value: object): value is ChannelMessageResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('attachment' in value) || value['attachment'] === undefined) return false;
     if (!('username' in value) || value['username'] === undefined) return false;
+    if (!('senderId' in value) || value['senderId'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
+    if (!('updateAt' in value) || value['updateAt'] === undefined) return false;
     return true;
 }
 
@@ -72,11 +93,14 @@ export function ChannelMessageResponseFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
+        'id': json['id'],
         'message': json['message'],
         'attachment': json['attachment'],
         'username': json['username'],
+        'senderId': json['senderId'],
         'avatar': json['avatar'] == null ? undefined : json['avatar'],
         'createdAt': (new Date(json['createdAt'])),
+        'updateAt': (new Date(json['updateAt'])),
     };
 }
 
@@ -86,11 +110,14 @@ export function ChannelMessageResponseToJSON(value?: ChannelMessageResponse | nu
     }
     return {
         
+        'id': value['id'],
         'message': value['message'],
         'attachment': value['attachment'],
         'username': value['username'],
+        'senderId': value['senderId'],
         'avatar': value['avatar'],
         'createdAt': ((value['createdAt']).toISOString()),
+        'updateAt': ((value['updateAt']).toISOString()),
     };
 }
 

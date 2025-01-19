@@ -44,7 +44,7 @@ const MessagesList = ({ data, variant }: Props) => {
               // TODO: change username to user id
               const isCompact =
                 prevMessage &&
-                prevMessage.username === message.username &&
+                prevMessage.senderId === message.senderId &&
                 differenceInMinutes(
                   new Date(message.createdAt),
                   new Date(prevMessage.createdAt)
@@ -60,7 +60,7 @@ const MessagesList = ({ data, variant }: Props) => {
                   body={message.message}
                   image={message.username}
                   createdAt={message.createdAt.toDateString()}
-                  updatedAt={message.createdAt.toDateString()}
+                  updatedAt={message.updateAt.toDateString()}
                   isEditing={false}
                   setEditingId={function (id: string | null): void {
                     throw new Error("Function not implemented.");
