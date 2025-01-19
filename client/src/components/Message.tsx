@@ -13,7 +13,7 @@ type Props = {
   body: string;
   image: string | null | undefined;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
   isEditing: boolean;
   isCompact?: boolean;
   setEditingId: (id: string | null) => void;

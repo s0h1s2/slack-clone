@@ -60,7 +60,7 @@ const MessagesList = ({ data, variant }: Props) => {
                   body={message.message}
                   image={message.username}
                   createdAt={message.createdAt.toDateString()}
-                  updatedAt={message.updateAt.toDateString()}
+                  updatedAt={message.updateAt?.toDateString()}
                   isEditing={false}
                   setEditingId={function (id: string | null): void {
                     throw new Error("Function not implemented.");
