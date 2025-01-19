@@ -74,7 +74,7 @@ public class ChannelService
         var messagesResult = new List<ChannelMessageResponse>();
         foreach (var message in messages)
         {
-            var result = new ChannelMessageResponse(message.Id, message.Message, string.Empty, message.User.Name, "", message.CreatedAt, message.UpdateAt, message.UserId)
+            var result = new ChannelMessageResponse(message.Id, message.Message, string.Empty, message.User.Name, "", message.CreatedAt, message.UpdateAt??null, message.UserId)
             {
                 Attachment = message.AttachmentName == string.Empty ? string.Empty : await _fileService.GetFileUrlAsync(message.AttachmentName)
             };

@@ -12,9 +12,9 @@ public class ChannelMessageResponse
     public int SenderId { get; }
     public string? Avatar { get; }
     public DateTime CreatedAt { get; }
-    public DateTime UpdateAt { get; }
+    public DateTime? UpdateAt { get; }
 
-    public ChannelMessageResponse(int id, string message, string attachment, string username, string? avatar, DateTime createdAt, DateTime updateAt, int senderId)
+    public ChannelMessageResponse(int id, string message, string attachment, string username, string? avatar, DateTime createdAt, DateTime? updateAt, int senderId)
     {
         Id = id;
         Message = message;
