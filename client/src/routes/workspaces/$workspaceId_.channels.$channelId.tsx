@@ -25,7 +25,6 @@ function RouteComponent() {
           <>
             <ChannelHeader title="My Channel" />
             <MessagesList data={messages} />
-            <div className="flex-1" />
             <ChatInput />
           </>
         )}

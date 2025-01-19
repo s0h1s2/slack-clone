@@ -1,11 +1,13 @@
 import { GetChannelMessagesResponse } from "@/api";
-import { format, isToday, isYesterday } from "date-fns";
+import { differenceInMinutes, format, isToday, isYesterday } from "date-fns";
 import Message from "./Message";
 
 type Props = {
   data: GetChannelMessagesResponse;
   variant?: "channel" | "thread" | "conversation";
 };
+const TIME_THRESHOLD = 5; // Define the time threshold in minutes
+
 const formatDateLabel = (dateStr: string) => {
   const date = new Date(dateStr);
   if (isToday(date)) return "Today";
@@ -36,12 +38,23 @@ const MessagesList = ({ data, variant }: Props) => {
                 {formatDateLabel(dateKey)}
               </span>
             </div>
-            {messages.messages.map((message) => (
-              <div>
+            {messages.messages.map((message) => {
+              const prevMessage =
+                messages.messages[messages.messages.indexOf(message) - 1];
+              // TODO: change username to user id
+              const isCompact =
+                prevMessage &&
+                prevMessage.username === message.username &&
+                differenceInMinutes(
+                  new Date(message.createdAt),
+                  new Date(prevMessage.createdAt)
+                ) < TIME_THRESHOLD;
+              return (
                 <Message
                   id={message.id}
                   authorImage={message?.avatar ?? undefined}
                   authorName={message.username}
+                  isCompact={isCompact}
                   memberId="string"
                   isAuthor={false}
                   body={message.message}
@@ -53,8 +66,8 @@ const MessagesList = ({ data, variant }: Props) => {
                     throw new Error("Function not implemented.");
                   }}
                 />
-              </div>
-            ))}
+              );
+            })}
           </div>
         );
       })}
