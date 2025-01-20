@@ -3,7 +3,12 @@ import { useGetChannelMessages } from "@/features/channel/channel-service";
 import ChannelHeader from "@/features/channel/components/ChannelHeader";
 import ChatInput from "@/features/channel/components/ChatInput";
 import WorkspaceLayout from "@/features/workspace/components/Layout";
-import { createFileRoute } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useElementScrollRestoration,
+} from "@tanstack/react-router";
+import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute(
   "/workspaces/$workspaceId_/channels/$channelId"
@@ -12,6 +17,22 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
+  const [connection, setConnetion] = useState<HubConnection | null>(null);
+  useEffect(() => {
+    const conn = new HubConnectionBuilder()
+      .withUrl("http://localhost:8000/channels", { withCredentials: false })
+      .build();
+    setConnetion(conn);
+  }, []);
+  useEffect(() => {
+    connection
+      ?.start()
+      .then(() => {
+        console.log("CONNECTION ESTABLISHED");
+      })
+      .catch((err) => console.error(err));
+  }, [connection]);
+
   const { workspaceId, channelId } = Route.useParams();
   const { messages, isMessagesLoading } = useGetChannelMessages(
     Number(channelId)

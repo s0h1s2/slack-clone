@@ -11,6 +11,7 @@ using server.Database;
 using server.Filters;
 using server.Services;
 using server.Util;
+using server.Hubs;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -81,6 +82,7 @@ builder.Services.AddScoped<WorkspaceService>();
 builder.Services.AddScoped<ChannelService>();
 builder.Services.AddSingleton<PasswordHasher>();
 builder.Services.AddSingleton<TokenProvider>();
+builder.Services.AddSignalR();
 
 builder.Services.AddCors(c =>
 {
@@ -98,7 +100,9 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 app.UseCors();
+app.MapHub<ChannelHub>("/channels");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();
