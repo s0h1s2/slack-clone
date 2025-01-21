@@ -27,12 +27,20 @@ function RouteComponent() {
   useEffect(() => {
     connection
       ?.start()
-      .then(() => {
-        console.log("CONNECTION ESTABLISHED");
+      .then(async () => {
+        try{
+          await connection?.invoke("JoinChannel", parseInt(channelId));
+          console.info("Connected to channel");
+        }catch (e:Error|unknown) {
+         console.error("Error: error while joining channel",e);
+        }
       })
       .catch((err) => console.error(err));
+      connection?.on("ReceiveMessage", (message:string) => {
+          console.log(message);
+      }) 
   }, [connection]);
-
+  
   const { workspaceId, channelId } = Route.useParams();
   const { messages, isMessagesLoading } = useGetChannelMessages(
     Number(channelId)

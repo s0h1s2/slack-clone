@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using server.Database;
 using server.Dto.Request;
 using server.Dto.Response;
 using server.Exceptions;
+using server.Hubs;
 
 namespace server.Services;
 
@@ -11,12 +13,14 @@ public class ChannelService
     private readonly AppDbContext _context;
     private readonly UsersService _usersService;
     private readonly IFileService _fileService;
+    private readonly IHubContext<ChannelHub,IChannelHub> _channelHub;
 
-    public ChannelService(AppDbContext context, UsersService usersService, IFileService fileService)
+    public ChannelService(AppDbContext context, UsersService usersService, IFileService fileService,IHubContext<ChannelHub,IChannelHub> channelHub)
     {
         _context = context;
         _usersService = usersService;
         _fileService = fileService;
+        _channelHub = channelHub;
     }
     public async Task<ChannelResponse?> GetChannel(int channelId)
     {
@@ -61,8 +65,14 @@ public class ChannelService
             fileId = await _fileService.UploadFileAsync(chat.Attachment);
         }
         var userId = _usersService.GetAuthenicatedUserId();
-        _context.Add(new Chat { Message = chat.Chat, ChannelId = channelId, AttachmentName = fileId, UserId = userId, CreatedAt = DateTime.UtcNow, UpdateAt = null });
+        var newMessage= new Chat
+        {
+            Message = chat.Chat, ChannelId = channelId, AttachmentName = fileId, UserId = userId,
+            CreatedAt = DateTime.UtcNow, UpdateAt = null
+        };
+        _context.Add(newMessage);
         await _context.SaveChangesAsync();
+        await _channelHub.Clients.Group(channelId.ToString()).ReceiveMessage(newMessage);
         return true;
     }
 

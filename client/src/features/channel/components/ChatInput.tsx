@@ -8,12 +8,13 @@ const ChatInput = () => {
   const { channelId } = useParams({
     from: "/workspaces/$workspaceId_/channels/$channelId",
   });
+  
   const [key, setKey] = useState(1);
   const handleSubmit = async ({ text, image }: ChatMessage) => {
     try {
       await apiClient.channelsApi.apiChannelIdChatPostRaw({
         id: Number(channelId),
-        chat: text,
+        chat: JSON.stringify(text),
         attachment: image ?? undefined,
       });
       setKey((prev) => prev + 1);
