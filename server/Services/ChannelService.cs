@@ -71,8 +71,12 @@ public class ChannelService
             CreatedAt = DateTime.UtcNow, UpdateAt = null
         };
         _context.Add(newMessage);
+        
         await _context.SaveChangesAsync();
-        await _channelHub.Clients.Group(channelId.ToString()).ReceiveMessage(newMessage);
+        await _context.Entry(newMessage).Reference((chat) => chat.User).LoadAsync();
+        var mappedResult = new ChannelMessageResponse(newMessage.Id, newMessage.Message, newMessage.AttachmentName,newMessage.User.Name,"Not YET",newMessage.CreatedAt,null,userId);
+        
+        await _channelHub.Clients.Group(channelId.ToString()).ReceiveMessage(mappedResult);
         return true;
     }
 

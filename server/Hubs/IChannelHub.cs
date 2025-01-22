@@ -1,8 +1,8 @@
-using server.Database;
+using server.Dto.Response;
 
 namespace server.Hubs;
 
 public interface IChannelHub
 {
-    Task ReceiveMessage(Chat message);
+    Task ReceiveMessage(ChannelMessageResponse message);
 }
