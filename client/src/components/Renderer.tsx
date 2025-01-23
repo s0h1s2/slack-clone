@@ -14,8 +14,6 @@ const Renderer = ({ value }: Props) => {
     const quill = new Quill(document.createElement("div"), { theme: "snow" });
     quill.enable(false);
     quill.setContents(JSON.parse(value));
-    console.log(quill.root.innerHTML);
-    console.log(quill.getContents(), value);
     const isEmpty = quill.getText()?.length === 0;
     setIsImageAlone(isEmpty);
     container.innerHTML = quill.root.innerHTML;

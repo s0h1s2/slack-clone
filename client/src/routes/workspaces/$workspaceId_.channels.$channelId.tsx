@@ -52,8 +52,6 @@ function RouteComponent() {
     });
   }, [connection]);
 
-  console.log("MESSAGES", messages);
-
   return (
     <WorkspaceLayout workspaceId={Number(workspaceId)}>
       <div className="flex flex-col h-full">
