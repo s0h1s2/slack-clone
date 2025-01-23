@@ -28,4 +28,4 @@ public class ChannelMessageResponse
 
 };
 
-public record GetChannelMessagesResponse(List<ChannelMessageResponse> Messages);
+public record GetChannelMessagesResponse(List<ChannelMessageResponse> Messages, int? LastMessageId);

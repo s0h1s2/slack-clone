@@ -99,7 +99,7 @@ public class ChannelService
             messagesResult.Add(result);
         }
 
-        return new GetChannelMessagesResponse(messagesResult);
+        return new GetChannelMessagesResponse(messagesResult, messagesResult.Count > 0 ? messagesResult.Last().Id : null);
     }
 
 }
