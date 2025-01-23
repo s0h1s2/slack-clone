@@ -3,6 +3,7 @@ import Renderer from "./Renderer";
 import Hint from "./Hint";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { spawn } from "child_process";
+import Thumbnail from "./Thumbnail";
 
 type Props = {
   id: number | string;
@@ -56,6 +57,7 @@ const Message = ({
           </Hint>
           <div className="flex flex-col w-full">
             <Renderer value={body} />
+            <Thumbnail url={image} />
             {updatedAt && (
               <span className="text-xs text-muted-foreground">(edited)</span>
             )}
@@ -91,6 +93,7 @@ const Message = ({
             </Hint>
           </div>
           <Renderer value={body} />
+          <Thumbnail url={image} />
           {updatedAt !== null && (
             <span className="text-xs text-muted-foreground">(edited)</span>
           )}
