@@ -23,22 +23,6 @@ import type {
   ProblemDetails,
   ValidationProblemDetails,
 } from '../models/index';
-import {
-    CreateUserRequestFromJSON,
-    CreateUserRequestToJSON,
-    CreateUserResponseFromJSON,
-    CreateUserResponseToJSON,
-    LoginRequestFromJSON,
-    LoginRequestToJSON,
-    LoginResponseFromJSON,
-    LoginResponseToJSON,
-    MeResponseFromJSON,
-    MeResponseToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    ValidationProblemDetailsFromJSON,
-    ValidationProblemDetailsToJSON,
-} from '../models/index';
 
 export interface ApiUsersAuthPostRequest {
     loginRequest?: LoginRequest;
@@ -75,10 +59,10 @@ export class UsersApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: LoginRequestToJSON(requestParameters['loginRequest']),
+            body: requestParameters['loginRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => LoginResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -110,7 +94,7 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => MeResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -142,10 +126,10 @@ export class UsersApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateUserRequestToJSON(requestParameters['createUserRequest']),
+            body: requestParameters['createUserRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreateUserResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

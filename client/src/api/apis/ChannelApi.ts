@@ -18,12 +18,6 @@ import type {
   ChannelResponse,
   GetChannelMessagesResponse,
 } from '../models/index';
-import {
-    ChannelResponseFromJSON,
-    ChannelResponseToJSON,
-    GetChannelMessagesResponseFromJSON,
-    GetChannelMessagesResponseToJSON,
-} from '../models/index';
 
 export interface ApiChannelIdChatPostRequest {
     id: number;
@@ -136,7 +130,7 @@ export class ChannelApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ChannelResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -175,7 +169,7 @@ export class ChannelApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetChannelMessagesResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

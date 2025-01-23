@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-api": "npx openapi-generator-cli generate -i http://localhost:8000/swagger/v1/swagger.json -o ./src/api -g typescript-fetch"
+    "generate-api": "npx openapi-generator-cli generate -i http://localhost:8000/swagger/v1/swagger.json -o ./src/api -g typescript-fetch --additional-properties=withoutRuntimeChecks=true"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",

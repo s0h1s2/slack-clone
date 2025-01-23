@@ -28,32 +28,6 @@ import type {
   ProblemDetails,
   ValidationProblemDetails,
 } from '../models/index';
-import {
-    CreateChannelResponseFromJSON,
-    CreateChannelResponseToJSON,
-    CreateWorkspaceChannelRequestFromJSON,
-    CreateWorkspaceChannelRequestToJSON,
-    CreateWorkspaceRequestFromJSON,
-    CreateWorkspaceRequestToJSON,
-    CreateWorkspaceResponseFromJSON,
-    CreateWorkspaceResponseToJSON,
-    GetChannelsResponseFromJSON,
-    GetChannelsResponseToJSON,
-    GetUserWorkspacesResponseFromJSON,
-    GetUserWorkspacesResponseToJSON,
-    GetWorkspacePublicInfoResponseFromJSON,
-    GetWorkspacePublicInfoResponseToJSON,
-    GetWorkspaceResponseFromJSON,
-    GetWorkspaceResponseToJSON,
-    JoinCodeResponseFromJSON,
-    JoinCodeResponseToJSON,
-    JoinWorkspaceRequestFromJSON,
-    JoinWorkspaceRequestToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    ValidationProblemDetailsFromJSON,
-    ValidationProblemDetailsToJSON,
-} from '../models/index';
 
 export interface ApiWorkspacesIdChannelsGetRequest {
     id: number;
@@ -123,7 +97,7 @@ export class WorkspacesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetChannelsResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -162,10 +136,10 @@ export class WorkspacesApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateWorkspaceChannelRequestToJSON(requestParameters['createWorkspaceChannelRequest']),
+            body: requestParameters['createWorkspaceChannelRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreateChannelResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -242,7 +216,7 @@ export class WorkspacesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetWorkspaceResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -281,7 +255,7 @@ export class WorkspacesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => JoinCodeResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -320,7 +294,7 @@ export class WorkspacesApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: JoinWorkspaceRequestToJSON(requestParameters['joinWorkspaceRequest']),
+            body: requestParameters['joinWorkspaceRequest'],
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -361,7 +335,7 @@ export class WorkspacesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetWorkspacePublicInfoResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -393,7 +367,7 @@ export class WorkspacesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetUserWorkspacesResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -425,10 +399,10 @@ export class WorkspacesApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateWorkspaceRequestToJSON(requestParameters['createWorkspaceRequest']),
+            body: requestParameters['createWorkspaceRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreateWorkspaceResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

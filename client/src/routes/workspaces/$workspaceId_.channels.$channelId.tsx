@@ -18,11 +18,11 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const [connection, setConnetion] = useState<HubConnection | null>(null);
-    const { workspaceId, channelId } = Route.useParams();
-    const { messages, isMessagesLoading } = useGetChannelMessages(
-        Number(channelId)
-    );
-    useEffect(() => {
+  const { workspaceId, channelId } = Route.useParams();
+  const { messages, isMessagesLoading } = useGetChannelMessages(
+    Number(channelId)
+  );
+  useEffect(() => {
     const conn = new HubConnectionBuilder()
       .withUrl("http://localhost:8000/channels", { withCredentials: false })
       .build();
@@ -32,20 +32,21 @@ function RouteComponent() {
     connection
       ?.start()
       .then(async () => {
-        try{
+        try {
           await connection?.invoke("JoinChannel", parseInt(channelId));
           console.info("Connected to channel");
-        }catch (e:Error|unknown) {
-         console.error("Error: error while joining channel",e);
+        } catch (e: Error | unknown) {
+          console.error("Error: error while joining channel", e);
         }
       })
       .catch((err) => console.error(err));
-      connection?.on("ReceiveMessage", (message:string) => {
-          console.log(message);
-      }) 
+    connection?.on("ReceiveMessage", (message: string) => {
+      console.log(message);
+    });
   }, [connection]);
-  
- 
+
+  console.log("MESSAGES", messages);
+
   return (
     <WorkspaceLayout workspaceId={Number(workspaceId)}>
       <div className="flex flex-col h-full">

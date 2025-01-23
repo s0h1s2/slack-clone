@@ -39,6 +39,11 @@ const MessagesList = ({ data, variant }: Props) => {
               </span>
             </div>
             {messages.messages.map((message) => {
+              console.log(
+                "MESSAGE",
+                message.updateAt == null,
+                message.updateAt
+              );
               const prevMessage =
                 messages.messages[messages.messages.indexOf(message) - 1];
               // TODO: change username to user id
@@ -59,8 +64,8 @@ const MessagesList = ({ data, variant }: Props) => {
                   isAuthor={false}
                   body={message.message}
                   image={message.username}
-                  createdAt={message.createdAt.toDateString()}
-                  updatedAt={message.updateAt?.toDateString()}
+                  createdAt={message.createdAt}
+                  updatedAt={message.updateAt == null ? null : message.updateAt}
                   isEditing={false}
                   setEditingId={function (id: string | null): void {
                     throw new Error("Function not implemented.");
