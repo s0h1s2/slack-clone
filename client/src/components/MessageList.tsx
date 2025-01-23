@@ -1,9 +1,9 @@
-import { GetChannelMessagesResponse } from "@/api";
+import { ChannelMessageResponse, GetChannelMessagesResponse } from "@/api";
 import { differenceInMinutes, format, isToday, isYesterday } from "date-fns";
 import Message from "./Message";
 
 type Props = {
-  data: GetChannelMessagesResponse;
+  messages: Array<ChannelMessageResponse>;
   variant?: "channel" | "thread" | "conversation";
 };
 const TIME_THRESHOLD = 5; // Define the time threshold in minutes
@@ -14,18 +14,18 @@ const formatDateLabel = (dateStr: string) => {
   if (isYesterday(date)) return "Yesterday";
   return format(date, "EEEE,MMMM d");
 };
-const MessagesList = ({ data, variant }: Props) => {
-  const groupedMessages: Record<string, typeof data> = data?.messages?.reduce(
+const MessagesList = ({ messages, variant }: Props) => {
+  const groupedMessages: Record<string, typeof messages> = messages?.reduce(
     (groups, message) => {
       const msgDate = new Date(message.createdAt);
       const dateKey = format(msgDate, "yyyy-MM-dd");
       if (!groups[dateKey]) {
-        groups[dateKey] = { messages: [] };
+        groups[dateKey] = [];
       }
-      groups[dateKey].messages.unshift(message);
+      groups[dateKey].unshift(message);
       return groups;
     },
-    {} as Record<string, typeof data>
+    {} as Record<string, typeof messages>
   );
   return (
     <div className="flex-1 flex flex-col-reverse pb-4 overflow-y-auto messages-scrollbar">
@@ -38,14 +38,13 @@ const MessagesList = ({ data, variant }: Props) => {
                 {formatDateLabel(dateKey)}
               </span>
             </div>
-            {messages.messages.map((message) => {
+            {messages.map((message) => {
               console.log(
                 "MESSAGE",
                 message.updateAt == null,
                 message.updateAt
               );
-              const prevMessage =
-                messages.messages[messages.messages.indexOf(message) - 1];
+              const prevMessage = messages[messages.indexOf(message) - 1];
               // TODO: change username to user id
               const isCompact =
                 prevMessage &&

@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
+import { ChannelMessageResponse } from "@/api";
 
 export const Route = createFileRoute(
   "/workspaces/$workspaceId_/channels/$channelId"
@@ -19,9 +20,15 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const [connection, setConnetion] = useState<HubConnection | null>(null);
   const { workspaceId, channelId } = Route.useParams();
-  const { messages, isMessagesLoading } = useGetChannelMessages(
+  const { messages: loadedMessages, isMessagesLoading } = useGetChannelMessages(
     Number(channelId)
   );
+
+  const [messages, setMessages] = useState<Array<ChannelMessageResponse>>([]);
+  useEffect(() => {
+    if (!loadedMessages) return;
+    setMessages((prev) => [...prev, ...loadedMessages?.messages]);
+  }, [loadedMessages]);
   useEffect(() => {
     const conn = new HubConnectionBuilder()
       .withUrl("http://localhost:8000/channels", { withCredentials: false })
@@ -40,8 +47,8 @@ function RouteComponent() {
         }
       })
       .catch((err) => console.error(err));
-    connection?.on("ReceiveMessage", (message: string) => {
-      console.log(message);
+    connection?.on("ReceiveMessage", (message: ChannelMessageResponse) => {
+      setMessages((prev) => [message, ...prev]);
     });
   }, [connection]);
 
@@ -55,7 +62,7 @@ function RouteComponent() {
         ) : (
           <>
             <ChannelHeader title="My Channel" />
-            <MessagesList data={messages} />
+            <MessagesList messages={messages} />
             <ChatInput />
           </>
         )}
