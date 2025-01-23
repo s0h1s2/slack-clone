@@ -18,7 +18,11 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const [connection, setConnetion] = useState<HubConnection | null>(null);
-  useEffect(() => {
+    const { workspaceId, channelId } = Route.useParams();
+    const { messages, isMessagesLoading } = useGetChannelMessages(
+        Number(channelId)
+    );
+    useEffect(() => {
     const conn = new HubConnectionBuilder()
       .withUrl("http://localhost:8000/channels", { withCredentials: false })
       .build();
@@ -41,10 +45,7 @@ function RouteComponent() {
       }) 
   }, [connection]);
   
-  const { workspaceId, channelId } = Route.useParams();
-  const { messages, isMessagesLoading } = useGetChannelMessages(
-    Number(channelId)
-  );
+ 
   return (
     <WorkspaceLayout workspaceId={Number(workspaceId)}>
       <div className="flex flex-col h-full">
