@@ -26,18 +26,18 @@ namespace server.Controllers
         [HttpPost("{id}/chat"), Authorize]
         [Consumes("multipart/form-data")]
         // [ProducesResponseType(200)]
-        public async Task<IActionResult> ChatChannel([FromRoute]int id,[FromForm] ChatMessageRequest chatRequest)
+        public async Task<IActionResult> ChatChannel([FromRoute] int id, [FromForm] ChatMessageRequest chatRequest)
         {
             await _channelService.ChatChannel(id, chatRequest);
-            
-          return Ok();
+
+            return Ok();
         }
 
         [HttpGet("{id}/messages"), Authorize]
-        [ProducesResponseType(typeof(GetChannelMessagesResponse),StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetChannelMessages(int id)
+        [ProducesResponseType(typeof(GetChannelMessagesResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetChannelMessages(int id, [FromQuery] int? lastMessageId)
         {
-            return Ok(await _channelService.GetChannelMessages(id));
+            return Ok(await _channelService.GetChannelMessages(id, lastMessageId));
         }
 
     }

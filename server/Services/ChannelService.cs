@@ -13,9 +13,9 @@ public class ChannelService
     private readonly AppDbContext _context;
     private readonly UsersService _usersService;
     private readonly IFileService _fileService;
-    private readonly IHubContext<ChannelHub,IChannelHub> _channelHub;
+    private readonly IHubContext<ChannelHub, IChannelHub> _channelHub;
 
-    public ChannelService(AppDbContext context, UsersService usersService, IFileService fileService,IHubContext<ChannelHub,IChannelHub> channelHub)
+    public ChannelService(AppDbContext context, UsersService usersService, IFileService fileService, IHubContext<ChannelHub, IChannelHub> channelHub)
     {
         _context = context;
         _usersService = usersService;
@@ -65,30 +65,34 @@ public class ChannelService
             fileId = await _fileService.UploadFileAsync(chat.Attachment);
         }
         var userId = _usersService.GetAuthenicatedUserId();
-        var newMessage= new Chat
+        var newMessage = new Chat
         {
-            Message = chat.Chat, ChannelId = channelId, AttachmentName = fileId, UserId = userId,
-            CreatedAt = DateTime.UtcNow, UpdateAt = null
+            Message = chat.Chat,
+            ChannelId = channelId,
+            AttachmentName = fileId,
+            UserId = userId,
+            CreatedAt = DateTime.UtcNow,
+            UpdateAt = null
         };
         _context.Add(newMessage);
-        
+
         await _context.SaveChangesAsync();
         await _context.Entry(newMessage).Reference((chat) => chat.User).LoadAsync();
-        var mappedResult = new ChannelMessageResponse(newMessage.Id, newMessage.Message, newMessage.AttachmentName,newMessage.User.Name,"Not YET",newMessage.CreatedAt,null,userId);
-        
+        var mappedResult = new ChannelMessageResponse(newMessage.Id, newMessage.Message, newMessage.AttachmentName, newMessage.User.Name, "Not YET", newMessage.CreatedAt, null, userId);
+
         await _channelHub.Clients.Group(channelId.ToString()).ReceiveMessage(mappedResult);
         return true;
     }
 
-    public async Task<GetChannelMessagesResponse> GetChannelMessages(int channelId)
+    public async Task<GetChannelMessagesResponse> GetChannelMessages(int channelId, int? lastMessageId)
     {
         // TODO: check if user is member of this workspace or channel
-        var messages = await _context.Chats.Include((chat) => chat.User).Where((chat) => chat.ChannelId == channelId).OrderByDescending(chat => chat.CreatedAt).ToListAsync();
+        var messages = await _context.Chats.Include((chat) => chat.User).Where((chat) => chat.ChannelId == channelId && (lastMessageId == null || chat.Id > lastMessageId)).Take(12).OrderByDescending(chat => chat.CreatedAt).ToListAsync();
 
         var messagesResult = new List<ChannelMessageResponse>();
         foreach (var message in messages)
         {
-            var result = new ChannelMessageResponse(message.Id, message.Message, string.Empty, message.User.Name, "", message.CreatedAt, message.UpdateAt??null, message.UserId)
+            var result = new ChannelMessageResponse(message.Id, message.Message, string.Empty, message.User.Name, "", message.CreatedAt, message.UpdateAt ?? null, message.UserId)
             {
                 Attachment = message.AttachmentName == string.Empty ? string.Empty : await _fileService.GetFileUrlAsync(message.AttachmentName)
             };
