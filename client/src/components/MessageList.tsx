@@ -1,10 +1,14 @@
-import { ChannelMessageResponse, GetChannelMessagesResponse } from "@/api";
+import { ChannelMessageResponse } from "@/api";
 import { differenceInMinutes, format, isToday, isYesterday } from "date-fns";
 import Message from "./Message";
+import { channel } from "diagnostics_channel";
+import ChannelHero from "@/features/channel/components/ChannelHero";
 
 type Props = {
   messages: Array<ChannelMessageResponse>;
   variant?: "channel" | "thread" | "conversation";
+  channelName?: string;
+  channelCreationDate?: string;
 };
 const TIME_THRESHOLD = 5; // Define the time threshold in minutes
 
@@ -14,7 +18,12 @@ const formatDateLabel = (dateStr: string) => {
   if (isYesterday(date)) return "Yesterday";
   return format(date, "EEEE,MMMM d");
 };
-const MessagesList = ({ messages, variant }: Props) => {
+const MessagesList = ({
+  messages,
+  variant,
+  channelCreationDate,
+  channelName,
+}: Props) => {
   const groupedMessages: Record<string, typeof messages> = messages?.reduce(
     (groups, message) => {
       const msgDate = new Date(message.createdAt);
@@ -39,13 +48,7 @@ const MessagesList = ({ messages, variant }: Props) => {
               </span>
             </div>
             {messages.map((message) => {
-              console.log(
-                "MESSAGE",
-                message.updateAt == null,
-                message.updateAt
-              );
               const prevMessage = messages[messages.indexOf(message) - 1];
-              // TODO: change username to user id
               const isCompact =
                 prevMessage &&
                 prevMessage.senderId === message.senderId &&
@@ -75,6 +78,9 @@ const MessagesList = ({ messages, variant }: Props) => {
           </div>
         );
       })}
+      {variant === "channel" && channelName && channelCreationDate && (
+        <ChannelHero title={channelName} creationDate={channelCreationDate} />
+      )}
     </div>
   );
 };

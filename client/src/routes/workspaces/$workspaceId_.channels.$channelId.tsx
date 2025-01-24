@@ -27,11 +27,15 @@ function RouteComponent() {
   const [messages, setMessages] = useState<Array<ChannelMessageResponse>>([]);
   useEffect(() => {
     if (!loadedMessages) return;
-    setMessages((prev) => [...prev, ...loadedMessages?.messages]);
+    setMessages((prev) => [
+      ...prev,
+      ...loadedMessages?.pages.flatMap((p) => p!.messages),
+    ]);
   }, [loadedMessages]);
   useEffect(() => {
     const conn = new HubConnectionBuilder()
       .withUrl("http://localhost:8000/channels", { withCredentials: false })
+      .withAutomaticReconnect()
       .build();
     setConnetion(conn);
   }, []);
@@ -60,7 +64,12 @@ function RouteComponent() {
         ) : (
           <>
             <ChannelHeader title="My Channel" />
-            <MessagesList messages={messages} />
+            <MessagesList
+              variant="channel"
+              messages={messages}
+              channelName="Oh life is bigger"
+              channelCreationDate={new Date().toISOString()}
+            />
             <ChatInput />
           </>
         )}
