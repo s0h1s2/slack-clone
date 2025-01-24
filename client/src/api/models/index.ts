@@ -206,6 +206,12 @@ export interface GetChannelMessagesResponse {
      * @memberof GetChannelMessagesResponse
      */
     messages: Array<ChannelMessageResponse>;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetChannelMessagesResponse
+     */
+    lastMessageId?: number | null;
 }
 /**
  * 

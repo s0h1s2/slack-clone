@@ -31,6 +31,7 @@ export interface ApiChannelIdGetRequest {
 
 export interface ApiChannelIdMessagesGetRequest {
     id: number;
+    lastMessageId?: number;
 }
 
 /**
@@ -151,6 +152,10 @@ export class ChannelApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['lastMessageId'] != null) {
+            queryParameters['lastMessageId'] = requestParameters['lastMessageId'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
