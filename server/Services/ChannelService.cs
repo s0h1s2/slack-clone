@@ -87,14 +87,14 @@ public class ChannelService
     public async Task<GetChannelMessagesResponse> GetChannelMessages(int channelId, int? lastMessageId)
     {
         // TODO: check if user is member of this workspace or channel
-        var messages = await _context.Chats.Include((chat) => chat.User).Where((chat) => chat.ChannelId == channelId && (lastMessageId == null || chat.Id > lastMessageId)).Take(12).OrderByDescending(chat => chat.CreatedAt).ToListAsync();
+        var messages = await _context.Chats.Include((chat) => chat.User).Where((chat) => chat.ChannelId == channelId && (lastMessageId == null || lastMessageId > chat.Id)).Take(12).OrderByDescending(chat => chat.Id).ToListAsync();
 
         var messagesResult = new List<ChannelMessageResponse>();
         foreach (var message in messages)
         {
             var result = new ChannelMessageResponse(message.Id, message.Message, string.Empty, message.User.Name, "", message.CreatedAt, message.UpdateAt ?? null, message.UserId)
             {
-                Attachment = message.AttachmentName == string.Empty ? string.Empty : await _fileService.GetFileUrlAsync(message.AttachmentName)
+                Attachment = message.AttachmentName == null ? null : await _fileService.GetFileUrlAsync(message.AttachmentName)
             };
             messagesResult.Add(result);
         }
