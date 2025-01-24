@@ -1,7 +1,12 @@
 import { ResponseError, ValidationProblemDetails } from "@/api";
 import { apiClient } from "@/api/client";
 import { ApiValidationErrors, NetworkError } from "@/lib/errors";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 const CHANNELS_QUERY_KEY = "channels";
 
 export const useCreateChannel = () => {
@@ -63,17 +68,28 @@ export const useGetChannels = (workspaceId: number) => {
   };
 };
 export const useGetChannelMessages = (channelId: number) => {
-  const { data: messages, isLoading: isMessagesLoading } = useQuery({
-    queryKey: ["channelMessages", channelId],
-    queryFn: async () => {
-      const result = await apiClient.channelsApi.apiChannelIdMessagesGet({
-        id: channelId,
-      });
-      return result;
+  const {
+    data: messages,
+    fetchNextPage: loadNextPage,
+    isLoading: isMessagesLoading,
+  } = useInfiniteQuery({
+    queryKey: ["messages", channelId],
+    initialPageParam: null,
+    queryFn: async ({ pageParam }) => {
+      try {
+        const response = await apiClient.channelsApi.apiChannelIdMessagesGet({
+          id: channelId,
+          lastMessageId: pageParam,
+        });
+        return response;
+      } catch (e: ResponseError | Error | unknown) {}
     },
+    getNextPageParam: () => {},
   });
+
   return {
     messages,
     isMessagesLoading,
+    loadNextPage,
   };
 };
