@@ -20,9 +20,13 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const [connection, setConnetion] = useState<HubConnection | null>(null);
   const { workspaceId, channelId } = Route.useParams();
-  const { messages: loadedMessages, isMessagesLoading } = useGetChannelMessages(
-    Number(channelId)
-  );
+  const {
+    messages: loadedMessages,
+    isMessagesLoading,
+    isLoadingMore,
+    loadNextPage,
+    canLoadMore,
+  } = useGetChannelMessages(Number(channelId));
 
   const [messages, setMessages] = useState<Array<ChannelMessageResponse>>([]);
   useEffect(() => {
@@ -68,6 +72,9 @@ function RouteComponent() {
               variant="channel"
               messages={messages}
               channelName="Oh life is bigger"
+              loadMore={loadNextPage}
+              canLoadMore={canLoadMore}
+              isLoadingMore={isLoadingMore}
               channelCreationDate={new Date().toISOString()}
             />
             <ChatInput />

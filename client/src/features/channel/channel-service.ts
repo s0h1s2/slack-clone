@@ -71,7 +71,9 @@ export const useGetChannelMessages = (channelId: number) => {
   const {
     data: messages,
     fetchNextPage: loadNextPage,
+    isFetchingNextPage: isLoadingMore,
     isLoading: isMessagesLoading,
+    hasNextPage: canLoadMore,
   } = useInfiniteQuery({
     queryKey: ["messages", channelId],
     initialPageParam: null,
@@ -84,12 +86,14 @@ export const useGetChannelMessages = (channelId: number) => {
         return response;
       } catch (e: ResponseError | Error | unknown) {}
     },
-    getNextPageParam: () => {},
+    getNextPageParam: (page) => page?.lastMessageId,
   });
 
   return {
     messages,
     isMessagesLoading,
     loadNextPage,
+    isLoadingMore,
+    canLoadMore,
   };
 };
