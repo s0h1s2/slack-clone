@@ -1,9 +1,11 @@
 import { ChannelMessageResponse } from "@/api";
 import { differenceInMinutes, format, isToday, isYesterday } from "date-fns";
 import Message from "./Message";
-import { channel } from "diagnostics_channel";
 import ChannelHero from "@/features/channel/components/ChannelHero";
+import { useInView } from "react-intersection-observer";
+
 import { Loader } from "lucide-react";
+import { useEffect } from "react";
 
 type Props = {
   messages: Array<ChannelMessageResponse>;
@@ -33,6 +35,14 @@ const LoadMoreMessages = ({
   loadMore,
   isLoadingMore,
 }: LoadMoreMessagesProps) => {
+  const { ref, inView } = useInView({
+    threshold: 1,
+  });
+  useEffect(() => {
+    if (inView && canLoadMore) {
+      loadMore();
+    }
+  }, [loadMore, inView, canLoadMore]);
   return (
     <>
       {isLoadingMore && (
@@ -43,23 +53,7 @@ const LoadMoreMessages = ({
           </span>
         </div>
       )}
-      <div
-        className="h-10 border border-red-800"
-        ref={(el) => {
-          if (el) {
-            const observer = new IntersectionObserver(
-              ([entry]) => {
-                if (entry.isIntersecting && canLoadMore && !isLoadingMore) {
-                  loadMore();
-                }
-              },
-              { threshold: 1.0 }
-            );
-            observer.observe(el);
-            return () => observer.unobserve(el);
-          }
-        }}
-      ></div>
+      <div ref={ref} />
     </>
   );
 };
@@ -85,10 +79,10 @@ const MessagesList = ({
     {} as Record<string, typeof messages>
   );
   return (
-    <div className="flex-1 flex flex-col-reverse pb-4 overflow-y-auto messages-scrollbar">
+    <div className="flex-1 flex flex-col-reverse pb-4 overflow-y-auto md:[overflow-anchor:none] messages-scrollbar">
       {Object.entries(groupedMessages).map(([dateKey, messages]) => {
         return (
-          <div key={dateKey}>
+          <div key={dateKey} className="border border-blue-200">
             <div className="text-center my-2 relative">
               <hr className="absolute top-1/2 left-0 right-0 border-t border-gray-300" />
               <span className="relative inline-block bg-white px-4 py-1 rounded-full text-xs border border-gray-300 shadow-sm ">
