@@ -122,7 +122,12 @@ const SignUpCard = ({ setScreenState }: Props) => {
               name="confirmPassword"
             />
 
-            <Button type="submit" className="w-full" size="lg">
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={form.formState.isSubmitting}
+            >
               Continue
             </Button>
           </form>
