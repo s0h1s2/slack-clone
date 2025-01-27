@@ -53,7 +53,17 @@ function RouteComponent() {
       setMessages((prev) => [message, ...prev]);
     });
   }, [connection]);
-
+  useEffect(() => {
+    const connectToChannel = async () => {
+      try {
+        await connection?.invoke("JoinChannel", parseInt(channelId));
+        console.info("Connected to channel");
+      } catch (e: Error | unknown) {
+        console.error("Error: error while joining channel", e);
+      }
+    };
+    connectToChannel();
+  }, [channelId]);
   return (
     <WorkspaceLayout workspaceId={Number(workspaceId)}>
       <div className="flex flex-col h-full">
