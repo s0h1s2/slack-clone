@@ -43,6 +43,11 @@ const SignUpCard = ({ setScreenState }: Props) => {
           name: data.name,
         },
       });
+      toast({
+        description: "Account created successfully",
+        variant: "success",
+      });
+      setScreenState("login");
     } catch (e: ResponseError | Error | unknown) {
       console.log(e);
       if (e instanceof ResponseError) {
