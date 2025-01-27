@@ -36,10 +36,10 @@ const LoadMoreMessages = ({
   isLoadingMore,
 }: LoadMoreMessagesProps) => {
   const { ref, inView } = useInView({
-    threshold: 1,
+    threshold: 0,
   });
   useEffect(() => {
-    if (inView && canLoadMore) {
+    if (inView && canLoadMore && !isLoadingMore) {
       loadMore();
     }
   }, [loadMore, inView, canLoadMore]);
@@ -82,13 +82,15 @@ const MessagesList = ({
     <div className="flex-1 flex flex-col-reverse pb-4 overflow-y-auto md:[overflow-anchor:none] messages-scrollbar">
       {Object.entries(groupedMessages).map(([dateKey, messages]) => {
         return (
-          <div key={dateKey} className="border border-blue-200">
-            <div className="text-center my-2 relative">
-              <hr className="absolute top-1/2 left-0 right-0 border-t border-gray-300" />
-              <span className="relative inline-block bg-white px-4 py-1 rounded-full text-xs border border-gray-300 shadow-sm ">
-                {formatDateLabel(dateKey)}
-              </span>
-            </div>
+          <div key={dateKey}>
+            {!isLoadingMore && (
+              <div className="text-center my-2 relative">
+                <hr className="absolute top-1/2 left-0 right-0 border-t border-gray-300" />
+                <span className="relative inline-block bg-white px-4 py-1 rounded-full text-xs border border-gray-300 shadow-sm ">
+                  {formatDateLabel(dateKey)}
+                </span>
+              </div>
+            )}
             {messages.map((message) => {
               const prevMessage = messages[messages.indexOf(message) - 1];
               const isCompact =
@@ -100,6 +102,7 @@ const MessagesList = ({
                 ) < TIME_THRESHOLD;
               return (
                 <Message
+                  key={message.id}
                   id={message.id}
                   authorImage={message?.avatar ?? undefined}
                   authorName={message.username}

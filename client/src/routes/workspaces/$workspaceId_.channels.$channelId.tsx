@@ -3,10 +3,7 @@ import { useGetChannelMessages } from "@/features/channel/channel-service";
 import ChannelHeader from "@/features/channel/components/ChannelHeader";
 import ChatInput from "@/features/channel/components/ChatInput";
 import WorkspaceLayout from "@/features/workspace/components/Layout";
-import {
-  createFileRoute,
-  useElementScrollRestoration,
-} from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
 import { ChannelMessageResponse } from "@/api";
@@ -31,10 +28,7 @@ function RouteComponent() {
   const [messages, setMessages] = useState<Array<ChannelMessageResponse>>([]);
   useEffect(() => {
     if (!loadedMessages) return;
-    setMessages((prev) => [
-      ...prev,
-      ...loadedMessages?.pages.flatMap((p) => p!.messages),
-    ]);
+    setMessages(() => [...loadedMessages?.pages.flatMap((p) => p!.messages)]);
   }, [loadedMessages]);
   useEffect(() => {
     const conn = new HubConnectionBuilder()
