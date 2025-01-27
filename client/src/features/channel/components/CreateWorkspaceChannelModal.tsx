@@ -12,7 +12,12 @@ import { useForm } from "react-hook-form";
 import { object, string } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCreateChannel } from "../channel-service";
-import { useMatch } from "@tanstack/react-router";
+import {
+  useLocation,
+  useMatch,
+  useParams,
+  useRouterState,
+} from "@tanstack/react-router";
 import { ApiValidationErrors } from "@/lib/errors";
 
 const CreateWorkspaceChannelModal = () => {
@@ -29,16 +34,13 @@ const CreateWorkspaceChannelModal = () => {
       name: "",
     },
   });
-  const workspaceId = useMatch({
-    from: "/workspaces/$workspaceId",
-    shouldThrow: false,
-  });
+  const { workspaceId } = useParams({ strict: false });
 
   const { createChannel } = useCreateChannel();
   const onSubmit = handleSubmit(async (data) => {
     try {
       await createChannel({
-        workspaceId: Number(workspaceId?.params.workspaceId),
+        workspaceId: Number(workspaceId),
         channelName: data.name,
       });
       reset();
