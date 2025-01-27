@@ -29,13 +29,13 @@ function WorkspaceCard({ name, id }: { name: string; id: number }) {
     <div className="flex items-center justify-between bg-white text-[#5E2C5F] p-4 rounded-lg shadow hover:bg-slate-50">
       <div className="flex items-center gap-3">
         {/* Workspace Icon */}
-        <div className="w-10 h-10 bg-purple-200 rounded-md flex items-center justify-center font-bold">
+        <div className="shrink-0 size-9 relative overflow-hidden bg-[#978D99] text-white font-semibold text-xl rounded-md flex items-center justify-center mr-2">
           {name.charAt(0)}
         </div>
         {/* Workspace Name */}
         <div>
           <p className="font-semibold">{name}</p>
-          <p className="text-sm text-gray-500">1 member</p>
+          {/* <p className="text-sm text-gray-500">1 member</p> */}
         </div>
       </div>
       {/* Launch Button */}
