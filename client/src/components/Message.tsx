@@ -45,7 +45,6 @@ const Message = ({
   threadImage,
   threadTimestamp,
 }: Props) => {
-  console.log("UPDATE AT:", updatedAt);
   if (isCompact) {
     return (
       <div className="flex flex-col gap-2 p-1.5 px-0.5 hover:bg-gray-100/60 group relative">
