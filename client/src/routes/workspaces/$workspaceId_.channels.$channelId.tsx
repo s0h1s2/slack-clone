@@ -7,6 +7,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
 import { ChannelMessageResponse } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@/api/client";
+import { NetworkError } from "@/lib/errors";
 
 export const Route = createFileRoute(
   "/workspaces/$workspaceId_/channels/$channelId"
@@ -24,7 +27,24 @@ function RouteComponent() {
     loadNextPage,
     canLoadMore,
   } = useGetChannelMessages(Number(channelId));
-
+  const {
+    data: channelInfo,
+    isLoading: isChannelLoading,
+    error,
+  } = useQuery({
+    queryKey: ["channel", channelId],
+    queryFn: async () => {
+      try {
+        return apiClient.channelsApi.apiChannelIdGet({
+          id: Number(channelId),
+        });
+      } catch (error: Error | unknown) {
+        if (error instanceof Error) {
+          throw new NetworkError(error?.message);
+        }
+      }
+    },
+  });
   const [messages, setMessages] = useState<Array<ChannelMessageResponse>>([]);
   useEffect(() => {
     if (!loadedMessages) return;
@@ -64,14 +84,17 @@ function RouteComponent() {
     };
     connectToChannel();
   }, [channelId]);
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
   return (
     <WorkspaceLayout workspaceId={Number(workspaceId)}>
       <div className="flex flex-col h-full">
-        {isMessagesLoading ? (
+        {isMessagesLoading || isChannelLoading ? (
           <div>Loading...</div>
         ) : (
           <>
-            <ChannelHeader title="My Channel" />
+            <ChannelHeader title={channelInfo!.name} />
             <MessagesList
               variant="channel"
               messages={messages}
