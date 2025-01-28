@@ -73,6 +73,18 @@ export interface ChannelResponse {
      * @memberof ChannelResponse
      */
     name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChannelResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {Array<ChannelMessageResponse>}
+     * @memberof ChannelResponse
+     */
+    messages: Array<ChannelMessageResponse>;
 }
 /**
  * 

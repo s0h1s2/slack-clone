@@ -87,6 +87,7 @@ export const useGetChannelMessages = (channelId: number) => {
       } catch (e: ResponseError | Error | unknown) {}
     },
     getNextPageParam: (page) => page?.lastMessageId,
+    enabled: () => !!channelId,
   });
 
   return {

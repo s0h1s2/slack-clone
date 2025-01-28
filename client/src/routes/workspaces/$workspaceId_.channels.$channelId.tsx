@@ -47,6 +47,10 @@ function RouteComponent() {
   });
   const [messages, setMessages] = useState<Array<ChannelMessageResponse>>([]);
   useEffect(() => {
+    if (isChannelLoading) return;
+    setMessages(() => [...channelInfo!.messages]);
+  }, [channelInfo, isChannelLoading]);
+  useEffect(() => {
     if (!loadedMessages) return;
     setMessages(() => [...loadedMessages?.pages.flatMap((p) => p!.messages)]);
   }, [loadedMessages]);
