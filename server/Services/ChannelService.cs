@@ -34,24 +34,28 @@ public class ChannelService
         return new ChannelResponse(channel.Id, channel.Name, channel.CreatedAt, channel.Chats.Select((chat) => new ChannelMessageResponse(chat.Id, chat.Message, chat.AttachmentName, chat.User.Name, "Not YET", chat.CreatedAt, chat.UpdateAt, chat.UserId)).ToList());
 
     }
-    public async Task<GetChannelsResponse> GetWorkspaceChannels(int workspaceId, User user)
+    public async Task<GetChannelsResponse> GetWorkspaceChannels(int workspaceId)
     {
+        var userId= _usersService.GetAuthenicatedUserId();
+        
         var workspace = await _context.Workspaces.FindAsync(workspaceId);
         if (workspace == null) throw new ResourceNotFound();
         var workspaceMember =
             await _context.WorkspaceMembers.FirstOrDefaultAsync(
-                m => m.WorkspaceId == workspaceId && m.UserId == user.Id);
+                m => m.WorkspaceId == workspaceId && m.UserId == userId);
         if (workspaceMember == null) throw new PermmissionException("Only members of this workspace can see this channel.");
         var channels = await _context.WorkspaceChannels.Where(m => m.WorkspaceId == workspaceId).ToListAsync();
 
         return new GetChannelsResponse(channels.Select((channel) => new GetChannelResponse(channel.Id, channel.Name)).ToList());
     }
 
-    public async Task<CreateChannelResponse> CreateChannel(CreateWorkspaceChannelRequest channelRequest, int workspaceId, User user)
+    public async Task<CreateChannelResponse> CreateChannel(CreateWorkspaceChannelRequest channelRequest, int workspaceId)
     {
+        var userId=_usersService.GetAuthenicatedUserId();
+        
         var workspace = await _context.Workspaces.FindAsync(workspaceId);
         if (workspace == null) throw new ResourceNotFound();
-        var workspaceMember = await _context.WorkspaceMembers.FirstOrDefaultAsync(m => m.WorkspaceId == workspaceId && m.UserId == user.Id);
+        var workspaceMember = await _context.WorkspaceMembers.FirstOrDefaultAsync(m => m.WorkspaceId == workspaceId && m.UserId == userId);
         if (workspaceMember == null) throw new ResourceNotFound();
         if (workspaceMember.Role != WorkspaceUserRole.Admin) throw new PermmissionException("Only admin channel can create channel");
         var channel = new WorkspaceChannel() { Name = channelRequest.Name, WorkspaceId = workspaceId };

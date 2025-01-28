@@ -27,10 +27,7 @@ public class Workspaces : Controller
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IResult> GetWorkspaceById(int id)
     {
-
-        var user = await _usersService.GetAuthenicatedUser();
-        if (user == null) return TypedResults.Unauthorized();
-        var worksapce = await _workspaceService.GetWorkspace(id, user);
+        var worksapce = await _workspaceService.GetWorkspace(id);
         if (worksapce == null) return TypedResults.NotFound();
         return TypedResults.Ok(worksapce);
     }
@@ -39,8 +36,6 @@ public class Workspaces : Controller
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IResult> GetWorkspacePublicInfo(int id)
     {
-        var user = await _usersService.GetAuthenicatedUser();
-        if (user == null) return TypedResults.Unauthorized();
         var workspace = await _workspaceService.GetWorkspacePublicInfo(id);
         if (workspace== null) return TypedResults.NotFound();
         return TypedResults.Ok(workspace);
@@ -52,9 +47,7 @@ public class Workspaces : Controller
     {
         try
         {
-            var user = await _usersService.GetAuthenicatedUser();
-            if (user == null) return TypedResults.Unauthorized();
-            var result = await _workspaceService.CreateWorkspaceWithGeneralChannel(request, user);
+            var result = await _workspaceService.CreateWorkspaceWithGeneralChannel(request);
             return TypedResults.Created("/", result);
         }
         catch (Exception ex)
@@ -68,9 +61,7 @@ public class Workspaces : Controller
     [ProducesResponseType(typeof(GetUserWorkspacesResponse), StatusCodes.Status200OK)]
     public async Task<IResult> GetUserWorkspaces()
     {
-        var user = await _usersService.GetAuthenicatedUser();
-        var workspaces = await _workspaceService.GetUserWorkspaces(user);
-
+        var workspaces = await _workspaceService.GetUserWorkspaces();
         return TypedResults.Ok(workspaces);
     }
     [HttpDelete("{id}"), Authorize]
@@ -79,10 +70,9 @@ public class Workspaces : Controller
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteWorkspace(int id)
     {
-        var user = await _usersService.GetAuthenicatedUser();
         try
         {
-            _workspaceService.DeleteWorkspace(id, user);
+            _workspaceService.DeleteWorkspace(id);
             return Ok();
         }
         catch (ResourceNotFound)
@@ -102,10 +92,9 @@ public class Workspaces : Controller
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateWorkspaceChannel(int id, [FromBody] CreateWorkspaceChannelRequest request)
     {
-        var user = await _usersService.GetAuthenicatedUser();
         try
         {
-            var channel = await _channelService.CreateChannel(request, id, user!);
+            var channel = await _channelService.CreateChannel(request, id);
             return Created($"/channels/{id}", channel);
         }
         catch (PermmissionException exception)
@@ -118,10 +107,9 @@ public class Workspaces : Controller
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetWorkspaceChannels(int id)
     {
-        var user = await _usersService.GetAuthenicatedUser();
         try
         {
-            var channels = await _channelService.GetWorkspaceChannels(id, user!);
+            var channels = await _channelService.GetWorkspaceChannels(id);
             return Ok(channels);
         }
         catch (PermmissionException exception)
@@ -137,7 +125,7 @@ public class Workspaces : Controller
         var user = await _usersService.GetAuthenicatedUser();
         try
         {
-            var result = await _workspaceService.GenerateWorkspaceNewJoinCode(id, user);
+            var result = await _workspaceService.GenerateWorkspaceNewJoinCode(id);
             return Ok(result);
         }
         catch (ResourceNotFound)
@@ -157,7 +145,7 @@ public class Workspaces : Controller
         try
         {
             var user = await _usersService.GetAuthenicatedUser();
-            _workspaceService.JoinWorkspace(id,joinCodeRequest, user);
+            _workspaceService.JoinWorkspace(id,joinCodeRequest);
             return Ok();
         }
         catch (AlreadyMemberException) {
