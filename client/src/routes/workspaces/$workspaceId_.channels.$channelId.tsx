@@ -46,6 +46,7 @@ function RouteComponent() {
     },
   });
   const [messages, setMessages] = useState<Array<ChannelMessageResponse>>([]);
+
   useEffect(() => {
     if (isChannelLoading) return;
     setMessages(() => [...channelInfo!.messages]);
