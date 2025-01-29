@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Database;
+using server.Dto.Request;
 using server.Exceptions;
 using server.Services;
 
@@ -30,13 +31,13 @@ public class Messages : Controller
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateMessage(int id, [FromBody] string body)
+    public async Task<IActionResult> UpdateMessage(int id, [FromBody] UpdateChatRequest request)
     {
         var userId = _usersService.GetAuthenicatedUserId();
         var message = await _dbContext.Chats.FindAsync(id);
         if (message == null) return NotFound(); 
         if (message.UserId != userId) return Forbid();
-        message.Message= body;
+        message.Message= request.Message;
         await _dbContext.SaveChangesAsync();
         return Ok();
     }
