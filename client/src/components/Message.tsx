@@ -4,6 +4,7 @@ import Hint from "./Hint";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { spawn } from "child_process";
 import Thumbnail from "./Thumbnail";
+import MessageToolbar from "./MessageToolbar";
 
 type Props = {
   id: number | string;
@@ -17,7 +18,7 @@ type Props = {
   updatedAt?: string | null;
   isEditing: boolean;
   isCompact?: boolean;
-  setEditingId: (id: string | null) => void;
+  setEditingId: (id: string) => void;
   hideThreadButton?: boolean;
   threadCount?: number;
   threadImage?: string;
@@ -98,6 +99,22 @@ const Message = ({
           )}
         </div>
       </div>
+      {!isEditing && (
+        <MessageToolbar
+          isAuthor={isAuthor}
+          isPending={false}
+          handleEdit={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+          handleThread={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+          handleDelete={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+          hideThreadButton={false}
+        />
+      )}
     </div>
   );
 };

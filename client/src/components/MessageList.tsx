@@ -5,7 +5,8 @@ import ChannelHero from "@/features/channel/components/ChannelHero";
 import { useInView } from "react-intersection-observer";
 
 import { Loader } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/features/auth/context";
 
 type Props = {
   messages: Array<ChannelMessageResponse>;
@@ -66,6 +67,9 @@ const MessagesList = ({
   isLoadingMore,
   loadMore,
 }: Props) => {
+  const { user } = useAuth();
+  const [editingId, setEditingId] = useState<number | null>(null);
+
   const groupedMessages: Record<string, typeof messages> = messages?.reduce(
     (groups, message) => {
       const msgDate = new Date(message.createdAt);
@@ -108,15 +112,13 @@ const MessagesList = ({
                   authorName={message.username}
                   isCompact={isCompact}
                   memberId="string"
-                  isAuthor={false}
+                  isAuthor={message.senderId == user?.id}
                   body={message.message}
                   image={message.username}
                   createdAt={message.createdAt}
                   updatedAt={message.updateAt == null ? null : message.updateAt}
-                  isEditing={false}
-                  setEditingId={function (id: string | null): void {
-                    throw new Error("Function not implemented.");
-                  }}
+                  isEditing={editingId === message.id}
+                  setEditingId={(id) => setEditingId(id)}
                 />
               );
             })}
