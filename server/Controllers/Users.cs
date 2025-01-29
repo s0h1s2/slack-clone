@@ -56,7 +56,7 @@ namespace server.Controllers
         public async Task<IActionResult> Me()
         {
             var user=await _usersService.GetAuthenicatedUser();
-            return Ok(new MeResponse(user.Name,user.Email));
+            return Ok(new MeResponse(user.Id,user.Name,user.Email));
         }
     }
 
