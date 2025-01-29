@@ -440,6 +440,12 @@ export interface MeResponse {
      * @memberof MeResponse
      */
     email: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MeResponse
+     */
+    id: number;
 }
 /**
  * 
