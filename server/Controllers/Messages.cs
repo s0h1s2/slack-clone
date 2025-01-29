@@ -23,15 +23,21 @@ public class Messages : Controller
         var userId = _usersService.GetAuthenicatedUserId();
         var message = await _dbContext.Chats.FindAsync(id);
         if (message == null) return NotFound();
-        if (message.UserId == userId) return Forbid();
+        if (message.UserId != userId) return Forbid();
         _dbContext.Chats.Remove(message);
         await _dbContext.SaveChangesAsync();
         return Ok();
     }
 
     [HttpPatch("{id}")]
-    public void PatchMessage(int id, [FromBody] string body)
+    public async Task<IActionResult> UpdateMessage(int id, [FromBody] string body)
     {
-        
+        var userId = _usersService.GetAuthenicatedUserId();
+        var message = await _dbContext.Chats.FindAsync(id);
+        if (message == null) return NotFound(); 
+        if (message.UserId != userId) return Forbid();
+        message.Message= body;
+        await _dbContext.SaveChangesAsync();
+        return Ok();
     }
 }
