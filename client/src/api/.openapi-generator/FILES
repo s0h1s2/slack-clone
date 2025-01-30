@@ -1,4 +1,5 @@
 apis/ChannelApi.ts
+apis/MessagesApi.ts
 apis/UsersApi.ts
 apis/WorkspacesApi.ts
 apis/index.ts

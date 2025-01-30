@@ -430,6 +430,12 @@ export interface LoginResponse {
 export interface MeResponse {
     /**
      * 
+     * @type {number}
+     * @memberof MeResponse
+     */
+    id: number;
+    /**
+     * 
      * @type {string}
      * @memberof MeResponse
      */
@@ -440,12 +446,6 @@ export interface MeResponse {
      * @memberof MeResponse
      */
     email: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof MeResponse
-     */
-    id: number;
 }
 /**
  * 
@@ -484,6 +484,19 @@ export interface ProblemDetails {
      * @memberof ProblemDetails
      */
     instance?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateChatRequest
+ */
+export interface UpdateChatRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateChatRequest
+     */
+    message: string;
 }
 /**
  * 
