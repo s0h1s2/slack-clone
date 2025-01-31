@@ -75,7 +75,7 @@ const Message = ({
             isPending={isDeleteMessageLoading}
             handleEdit={() => {}}
             handleThread={() => {}}
-            handleDelete={() => deleteMessage({ messageId: id, channelId })}
+            handleDelete={() => deleteMessage({ messageId: id })}
             hideThreadButton={false}
           />
         )}
@@ -138,7 +138,7 @@ const Message = ({
           isPending={isDeleteMessageLoading}
           handleEdit={() => setEditingId(id)}
           handleThread={() => {}}
-          handleDelete={() => deleteMessage({ messageId: id, channelId })}
+          handleDelete={() => deleteMessage({ messageId: id })}
           hideThreadButton={false}
         />
       )}
