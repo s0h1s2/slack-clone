@@ -22,7 +22,7 @@ type Props = {
   isEditing: boolean;
   isCompact?: boolean;
   channelId?: number;
-  setEditingId: (id: number) => void;
+  setEditingId: (id: number | null) => void;
   hideThreadButton?: boolean;
   threadCount?: number;
   threadImage?: string;
