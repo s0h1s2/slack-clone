@@ -5,6 +5,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Thumbnail from "./Thumbnail";
 import MessageToolbar from "./MessageToolbar";
 import { useDeleteMessage } from "@/features/messages/service";
+import { cn } from "@/lib/utils";
+import React from "react";
+import Editor from "./Editor";
 
 type Props = {
   id: number;
@@ -19,7 +22,7 @@ type Props = {
   isEditing: boolean;
   isCompact?: boolean;
   channelId?: number;
-  setEditingId: (id: string) => void;
+  setEditingId: (id: number) => void;
   hideThreadButton?: boolean;
   threadCount?: number;
   threadImage?: string;
@@ -80,7 +83,12 @@ const Message = ({
     );
   }
   return (
-    <div className="flex flex-col gap-2 p-1.5 px-0.5 hover:bg-gray-100/60 group relative">
+    <div
+      className={cn(
+        "flex flex-col gap-2 p-1.5 px-0.5 hover:bg-gray-100/60 group relative",
+        isEditing && "bg-[#f2c74433] hover:bg-[#f2c74433]"
+      )}
+    >
       <div className="flex items-start gap-2">
         <button>
           <Avatar>
@@ -90,33 +98,45 @@ const Message = ({
             </AvatarFallback>
           </Avatar>
         </button>
-        <div className="flex flex-col w-full overflow-hidden">
-          <div className="text-sm">
-            <button
-              className="font-bold text-primary hover:underline"
-              onClick={() => {}}
-            >
-              {authorName}
-            </button>
-            <span>&nbsp;</span>
-            <Hint label={formatFullTime(new Date(createdAt))}>
-              <button className="text-xs text-muted-foreground hover:underline">
-                {format(new Date(createdAt), "h:mm a")}
-              </button>
-            </Hint>
+        {isEditing ? (
+          <div className="w-full h-full">
+            <Editor
+              onSubmit={() => {}}
+              disabled={false}
+              defaultValue={JSON.parse(body)}
+              onCancel={() => setEditingId(null)}
+              variant="update"
+            />
           </div>
-          <Renderer value={body} />
-          <Thumbnail url={image} />
-          {updatedAt !== null && (
-            <span className="text-xs text-muted-foreground">(edited)</span>
-          )}
-        </div>
+        ) : (
+          <div className="flex flex-col w-full overflow-hidden">
+            <div className="text-sm">
+              <button
+                className="font-bold text-primary hover:underline"
+                onClick={() => {}}
+              >
+                {authorName}
+              </button>
+              <span>&nbsp;</span>
+              <Hint label={formatFullTime(new Date(createdAt))}>
+                <button className="text-xs text-muted-foreground hover:underline">
+                  {format(new Date(createdAt), "h:mm a")}
+                </button>
+              </Hint>
+            </div>
+            <Renderer value={body} />
+            <Thumbnail url={image} />
+            {updatedAt !== null && (
+              <span className="text-xs text-muted-foreground">(edited)</span>
+            )}
+          </div>
+        )}
       </div>
       {!isEditing && (
         <MessageToolbar
           isAuthor={isAuthor}
           isPending={isDeleteMessageLoading}
-          handleEdit={() => {}}
+          handleEdit={() => setEditingId(id)}
           handleThread={() => {}}
           handleDelete={() => deleteMessage({ messageId: id, channelId })}
           hideThreadButton={false}
