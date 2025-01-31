@@ -26,18 +26,18 @@ public class ChannelService
     {
         var uid = _usersService.GetAuthenicatedUserId();
         if (uid == null) throw new PermmissionException("Only authenticated user can see this channel.");
-        var channel = await _context.WorkspaceChannels.Include((ch) => ch.Chats.OrderByDescending((chat)=>chat.Id).Take(10)).ThenInclude((chat)=>chat.User).FirstOrDefaultAsync((channel) => channel.Id == channelId);
+        var channel = await _context.WorkspaceChannels.Include((ch) => ch.Chats.OrderByDescending((chat) => chat.Id).Take(10)).ThenInclude((chat) => chat.User).FirstOrDefaultAsync((channel) => channel.Id == channelId);
         if (channel == null) return null;
         var member = await _context.WorkspaceMembers.FirstOrDefaultAsync(m => m.WorkspaceId == channel.WorkspaceId && m.UserId == uid);
         if (member == null) throw new PermmissionException("Only members of this workspace can see this channel.");
-        
+
         return new ChannelResponse(channel.Id, channel.Name, channel.CreatedAt, channel.Chats.Select((chat) => new ChannelMessageResponse(chat.Id, chat.Message, chat.AttachmentName, chat.User.Name, "Not YET", chat.CreatedAt, chat.UpdateAt, chat.UserId)).ToList());
 
     }
     public async Task<GetChannelsResponse> GetWorkspaceChannels(int workspaceId)
     {
-        var userId= _usersService.GetAuthenicatedUserId();
-        
+        var userId = _usersService.GetAuthenicatedUserId();
+
         var workspace = await _context.Workspaces.FindAsync(workspaceId);
         if (workspace == null) throw new ResourceNotFound();
         var workspaceMember =
@@ -51,8 +51,8 @@ public class ChannelService
 
     public async Task<CreateChannelResponse> CreateChannel(CreateWorkspaceChannelRequest channelRequest, int workspaceId)
     {
-        var userId=_usersService.GetAuthenicatedUserId();
-        
+        var userId = _usersService.GetAuthenicatedUserId();
+
         var workspace = await _context.Workspaces.FindAsync(workspaceId);
         if (workspace == null) throw new ResourceNotFound();
         var workspaceMember = await _context.WorkspaceMembers.FirstOrDefaultAsync(m => m.WorkspaceId == workspaceId && m.UserId == userId);

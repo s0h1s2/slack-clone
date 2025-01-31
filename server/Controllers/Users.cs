@@ -50,13 +50,13 @@ namespace server.Controllers
             }
 
         }
-        [HttpGet("me"),Authorize]
-        [ProducesResponseType(typeof(MeResponse),StatusCodes.Status200OK)]
+        [HttpGet("me"), Authorize]
+        [ProducesResponseType(typeof(MeResponse), StatusCodes.Status200OK)]
 
         public async Task<IActionResult> Me()
         {
-            var user=await _usersService.GetAuthenicatedUser();
-            return Ok(new MeResponse(user.Id,user.Name,user.Email));
+            var user = await _usersService.GetAuthenicatedUser();
+            return Ok(new MeResponse(user.Id, user.Name, user.Email));
         }
     }
 

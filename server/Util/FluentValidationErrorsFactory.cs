@@ -6,11 +6,11 @@ using SharpGrip.FluentValidation.AutoValidation.Mvc.Results;
 
 namespace server.Util;
 
-public class FluentValidationErrorsFactory:IFluentValidationAutoValidationResultFactory
+public class FluentValidationErrorsFactory : IFluentValidationAutoValidationResultFactory
 {
     public IActionResult CreateActionResult(ActionExecutingContext context, ValidationProblemDetails? validationProblemDetails)
     {
-        var errors=validationProblemDetails.Errors.Select(pair => new KeyValuePair<string, string[]>(pair.Key.ToLower(),pair.Value))
+        var errors = validationProblemDetails.Errors.Select(pair => new KeyValuePair<string, string[]>(pair.Key.ToLower(), pair.Value))
             .ToDictionary(t => t.Key.ToLower(), t => t.Value);
         var validationResult = new ValidationProblemDetails
         {

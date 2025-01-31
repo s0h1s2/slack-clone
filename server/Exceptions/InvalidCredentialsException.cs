@@ -1,6 +1,6 @@
 namespace server.Exceptions;
 
-public class InvalidCredentialsException:Exception
+public class InvalidCredentialsException : Exception
 {
-    
+
 }

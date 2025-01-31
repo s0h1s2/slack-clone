@@ -1,1 +1,1 @@
-public record MeResponse(int Id,string Name,string Email);
+public record MeResponse(int Id, string Name, string Email);

@@ -1,6 +1,6 @@
 namespace server.Exceptions;
 
-public class UserAlreadyExistException:Exception
+public class UserAlreadyExistException : Exception
 {
-    
+
 }

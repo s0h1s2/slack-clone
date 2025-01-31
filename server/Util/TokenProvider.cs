@@ -19,9 +19,9 @@ public class TokenProvider(IConfiguration configuration)
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity([
-                new Claim(JwtRegisteredClaimNames.Email,user.Email),
-                new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
-                new Claim(CustomClaims.UserId,user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(CustomClaims.UserId, user.Id.ToString()),
             ]),
             Expires = DateTime.UtcNow.AddMinutes(60),
             Issuer = configuration.GetValue<string>("Jwt:Issuer"),

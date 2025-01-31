@@ -1,1 +1,1 @@
-public class InvalidJoinCodeException:Exception{}
+public class InvalidJoinCodeException : Exception { }

@@ -7,8 +7,8 @@ public class ChannelHub : Hub<IChannelHub>
     public async Task JoinChannel(int channelId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, channelId.ToString());
-        
+
     }
-    
+
 
 }
