@@ -37,7 +37,7 @@ public class Workspaces : Controller
     public async Task<IResult> GetWorkspacePublicInfo(int id)
     {
         var workspace = await _workspaceService.GetWorkspacePublicInfo(id);
-        if (workspace== null) return TypedResults.NotFound();
+        if (workspace == null) return TypedResults.NotFound();
         return TypedResults.Ok(workspace);
     }
     [HttpPost, Authorize]
@@ -140,22 +140,24 @@ public class Workspaces : Controller
     [HttpPost("{id}/join"), Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> JoinWorkspaceForCurrentUser(int id,[FromBody] JoinWorkspaceRequest joinCodeRequest)
+    public async Task<IActionResult> JoinWorkspaceForCurrentUser(int id, [FromBody] JoinWorkspaceRequest joinCodeRequest)
     {
         try
         {
-            var user = await _usersService.GetAuthenicatedUser();
-            _workspaceService.JoinWorkspace(id,joinCodeRequest);
+            await _workspaceService.JoinWorkspace(id, joinCodeRequest);
             return Ok();
         }
-        catch (AlreadyMemberException) {
-           return BadRequest(new ValidationProblemDetails{Errors=new Dictionary<string,string[]>{{"joinCode",new string[]{"You already member of this workspace"}}}});
+        catch (AlreadyMemberException)
+        {
+            return BadRequest(new ValidationProblemDetails { Errors = new Dictionary<string, string[]> { { "joinCode", new string[] { "You already member of this workspace" } } } });
         }
-        catch(InvalidJoinCodeException){
-           return BadRequest(new ValidationProblemDetails{Errors=new Dictionary<string,string[]>{{"joinCode",new string[]{"Invalid join code"}}}});
+        catch (InvalidJoinCodeException)
+        {
+            return BadRequest(new ValidationProblemDetails { Errors = new Dictionary<string, string[]> { { "joinCode", new string[] { "Invalid join code" } } } });
         }
-        catch (ResourceNotFound) {
-          return NotFound();
+        catch (ResourceNotFound)
+        {
+            return NotFound();
         }
     }
 }
