@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using server.Database;
 using server.Dto.Request;
@@ -13,7 +14,7 @@ public class WorkspaceService
     private readonly AppDbContext _dbContext;
     private readonly UsersService _usersService;
 
-    public WorkspaceService(AppDbContext dbContext,UsersService usersService)
+    public WorkspaceService(AppDbContext dbContext, UsersService usersService)
     {
         _dbContext = dbContext;
         _usersService = usersService;
@@ -44,7 +45,7 @@ public class WorkspaceService
 
         return new GetWorkspaceResponse(workspace.Id, workspace.Name, workspace.JoinCode, userHasAccess.Role == WorkspaceUserRole.Admin, members.Select(member => new GetMember(member.UserId, member.User.Name, null)).ToList());
     }
-  public async Task<GetWorkspacePublicInfoResponse?> GetWorkspacePublicInfo(int id)
+    public async Task<GetWorkspacePublicInfoResponse?> GetWorkspacePublicInfo(int id)
     {
         var workspace = await _dbContext.Workspaces.FindAsync(id);
         if (workspace == null) return null;
@@ -79,8 +80,8 @@ public class WorkspaceService
     }
     public void DeleteWorkspace(int id)
     {
-        var userId= _usersService.GetAuthenicatedUserId();
-        
+        var userId = _usersService.GetAuthenicatedUserId();
+
         var workspace = _dbContext.Workspaces.Find(id);
         if (workspace == null) throw new ResourceNotFound();
 
@@ -94,8 +95,8 @@ public class WorkspaceService
     }
     public async Task<JoinCodeResponse> GenerateWorkspaceNewJoinCode(int workspaceId)
     {
-        var userId= _usersService.GetAuthenicatedUserId();
-        
+        var userId = _usersService.GetAuthenicatedUserId();
+
         var workspace = await _dbContext.Workspaces.FindAsync(workspaceId);
         if (workspace == null) throw new ResourceNotFound();
         var member = await _dbContext.WorkspaceMembers.SingleOrDefaultAsync((member) => member.UserId == userId && member.WorkspaceId == workspaceId);
@@ -107,19 +108,21 @@ public class WorkspaceService
         await _dbContext.SaveChangesAsync();
         return new JoinCodeResponse(joiningCode);
     }
-    public void JoinWorkspace(int workspaceId,JoinWorkspaceRequest joinRequest){
+    public async Task JoinWorkspace(int workspaceId, JoinWorkspaceRequest joinRequest)
+    {
         var userId = _usersService.GetAuthenicatedUserId();
         var workspace = _dbContext.Workspaces.Find(workspaceId);
         if (workspace == null) throw new ResourceNotFound();
-        if(workspace.JoinCode!=joinRequest.JoinCode) throw new InvalidJoinCodeException();
+        if (workspace.JoinCode != joinRequest.JoinCode) throw new InvalidJoinCodeException();
         // check if current user is member
-        var member=_dbContext.WorkspaceMembers.Where(member=>member.WorkspaceId==workspace.Id && member.UserId==userId).FirstOrDefaultAsync();
-        
-        if (member!=null) throw new AlreadyMemberException();
-        var newMember=new WorkspaceMembers(){
-            Role=WorkspaceUserRole.User,
-            WorkspaceId=workspace.Id,
-            UserId=userId
+        var member = await _dbContext.WorkspaceMembers.Where(member => member.WorkspaceId == workspace.Id && member.UserId == userId).FirstOrDefaultAsync();
+
+        if (member != null) throw new AlreadyMemberException();
+        var newMember = new WorkspaceMembers()
+        {
+            Role = WorkspaceUserRole.User,
+            WorkspaceId = workspace.Id,
+            UserId = userId
         };
         _dbContext.Add(newMember);
         _dbContext.SaveChanges();
