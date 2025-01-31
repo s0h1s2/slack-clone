@@ -1,4 +1,4 @@
-import { UsersApi, WorkspacesApi, ChannelApi } from "@/api/apis";
+import { UsersApi, WorkspacesApi, ChannelApi, MessagesApi } from "@/api/apis";
 import {
   Configuration,
   ConfigurationParameters,
@@ -9,8 +9,8 @@ import {
 const authMiddleware: Middleware = {
   pre(context: RequestContext): Promise<FetchParams | void> {
     const token = localStorage.getItem("token");
-    context.init.headers['Authorization'] = `Bearer ${token}`;
-    
+    context.init.headers["Authorization"] = `Bearer ${token}`;
+
     return Promise.resolve({
       url: context.url,
       init: context.init,
@@ -28,5 +28,6 @@ export const apiClient = {
   usersApi: new UsersApi(apiConfig),
   workspaceApi: new WorkspacesApi(apiConfig),
   channelsApi: new ChannelApi(apiConfig),
+  messagesApi: new MessagesApi(apiConfig),
 };
 export type ApiClient = typeof apiClient;

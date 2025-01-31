@@ -2,12 +2,12 @@ import { format, isToday, isYesterday } from "date-fns";
 import Renderer from "./Renderer";
 import Hint from "./Hint";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { spawn } from "child_process";
 import Thumbnail from "./Thumbnail";
 import MessageToolbar from "./MessageToolbar";
+import { useDeleteMessage } from "@/features/messages/service";
 
 type Props = {
-  id: number | string;
+  id: number;
   memberId: string;
   authorImage?: string;
   authorName?: string;
@@ -46,6 +46,7 @@ const Message = ({
   threadImage,
   threadTimestamp,
 }: Props) => {
+  const { deleteMessage, isDeleteMessageLoading } = useDeleteMessage();
   if (isCompact) {
     return (
       <div className="flex flex-col gap-2 p-1.5 px-0.5 hover:bg-gray-100/60 group relative">
@@ -63,6 +64,16 @@ const Message = ({
             )}
           </div>
         </div>
+        {!isEditing && (
+          <MessageToolbar
+            isAuthor={isAuthor}
+            isPending={isDeleteMessageLoading}
+            handleEdit={() => {}}
+            handleThread={() => {}}
+            handleDelete={() => deleteMessage(id)}
+            hideThreadButton={false}
+          />
+        )}
       </div>
     );
   }
@@ -102,16 +113,10 @@ const Message = ({
       {!isEditing && (
         <MessageToolbar
           isAuthor={isAuthor}
-          isPending={false}
-          handleEdit={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-          handleThread={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-          handleDelete={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          isPending={isDeleteMessageLoading}
+          handleEdit={() => {}}
+          handleThread={() => {}}
+          handleDelete={() => deleteMessage(id)}
           hideThreadButton={false}
         />
       )}
