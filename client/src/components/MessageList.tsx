@@ -14,7 +14,7 @@ type Props = {
   loadMore: () => void;
   isLoadingMore: boolean;
   canLoadMore: boolean;
-
+  channelId?: number;
   channelName?: string;
   channelCreationDate?: string;
 };
@@ -65,6 +65,7 @@ const MessagesList = ({
   channelName,
   canLoadMore,
   isLoadingMore,
+  channelId,
   loadMore,
 }: Props) => {
   const { user } = useAuth();
@@ -119,6 +120,7 @@ const MessagesList = ({
                   updatedAt={message.updateAt == null ? null : message.updateAt}
                   isEditing={editingId === message.id}
                   setEditingId={(id) => setEditingId(id)}
+                  channelId={channelId}
                 />
               );
             })}

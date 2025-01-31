@@ -77,6 +77,9 @@ function RouteComponent() {
     connection?.on("ReceiveMessage", (message: ChannelMessageResponse) => {
       setMessages((prev) => [message, ...prev]);
     });
+    connection?.on("DeleteMessage", (id) => {
+      setMessages((prev) => prev.filter((chat) => chat.id !== id));
+    });
   }, [connection]);
   useEffect(() => {
     const connectToChannel = async () => {
@@ -103,11 +106,12 @@ function RouteComponent() {
             <MessagesList
               variant="channel"
               messages={messages}
-              channelName="Oh life is bigger"
+              channelName={channelInfo?.name}
+              channelId={channelInfo?.id}
               loadMore={loadNextPage}
               canLoadMore={canLoadMore}
               isLoadingMore={isLoadingMore}
-              channelCreationDate={new Date().toISOString()}
+              channelCreationDate={channelInfo?.createdAt}
             />
             <ChatInput />
           </>

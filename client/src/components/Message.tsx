@@ -18,6 +18,7 @@ type Props = {
   updatedAt?: string | null;
   isEditing: boolean;
   isCompact?: boolean;
+  channelId?: number;
   setEditingId: (id: string) => void;
   hideThreadButton?: boolean;
   threadCount?: number;
@@ -35,6 +36,7 @@ const Message = ({
   createdAt,
   isAuthor,
   isEditing,
+  channelId,
   memberId,
   setEditingId,
   updatedAt,
@@ -70,7 +72,7 @@ const Message = ({
             isPending={isDeleteMessageLoading}
             handleEdit={() => {}}
             handleThread={() => {}}
-            handleDelete={() => deleteMessage(id)}
+            handleDelete={() => deleteMessage({ messageId: id, channelId })}
             hideThreadButton={false}
           />
         )}
@@ -116,7 +118,7 @@ const Message = ({
           isPending={isDeleteMessageLoading}
           handleEdit={() => {}}
           handleThread={() => {}}
-          handleDelete={() => deleteMessage(id)}
+          handleDelete={() => deleteMessage({ messageId: id, channelId })}
           hideThreadButton={false}
         />
       )}
