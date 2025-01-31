@@ -6,7 +6,6 @@ import Thumbnail from "./Thumbnail";
 import MessageToolbar from "./MessageToolbar";
 import { useDeleteMessage } from "@/features/messages/service";
 import { cn } from "@/lib/utils";
-import React from "react";
 import Editor from "./Editor";
 
 type Props = {
