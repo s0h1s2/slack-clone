@@ -10,6 +10,7 @@ import { ChannelMessageResponse } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/api/client";
 import { NetworkError } from "@/lib/errors";
+import PageLoading from "@/components/PageLoading";
 
 export const Route = createFileRoute(
   "/workspaces/$workspaceId_/channels/$channelId"
@@ -99,7 +100,7 @@ function RouteComponent() {
     <WorkspaceLayout workspaceId={Number(workspaceId)}>
       <div className="flex flex-col h-full">
         {isMessagesLoading || isChannelLoading ? (
-          <div>Loading...</div>
+          <PageLoading />
         ) : (
           <>
             <ChannelHeader title={channelInfo!.name} />
