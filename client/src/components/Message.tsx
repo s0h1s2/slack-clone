@@ -4,7 +4,10 @@ import Hint from "./Hint";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Thumbnail from "./Thumbnail";
 import MessageToolbar from "./MessageToolbar";
-import { useDeleteMessage } from "@/features/messages/service";
+import {
+  useDeleteMessage,
+  useUpdateMessage,
+} from "@/features/messages/service";
 import { cn } from "@/lib/utils";
 import Editor from "./Editor";
 
@@ -51,6 +54,7 @@ const Message = ({
   threadTimestamp,
 }: Props) => {
   const { deleteMessage, isDeleteMessageLoading } = useDeleteMessage();
+  const { updateMessage, isMessageUpdating } = useUpdateMessage();
   if (isCompact) {
     return (
       <div className="flex flex-col gap-2 p-1.5 px-0.5 hover:bg-gray-100/60 group relative">
@@ -100,8 +104,13 @@ const Message = ({
         {isEditing ? (
           <div className="w-full h-full">
             <Editor
-              onSubmit={() => {}}
-              disabled={false}
+              onSubmit={(body) =>
+                updateMessage({
+                  messageId: id,
+                  body: body.text,
+                })
+              }
+              disabled={isMessageUpdating}
               defaultValue={JSON.parse(body)}
               onCancel={() => setEditingId(null)}
               variant="update"

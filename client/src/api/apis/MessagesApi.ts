@@ -22,7 +22,7 @@ export interface MessagesIdDeleteRequest {
     id: number;
 }
 
-export interface MessagesIdPatchRequest {
+export interface MessagesIdPutRequest {
     id: number;
     updateChatRequest?: UpdateChatRequest;
 }
@@ -72,11 +72,11 @@ export class MessagesApi extends runtime.BaseAPI {
 
     /**
      */
-    async messagesIdPatchRaw(requestParameters: MessagesIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async messagesIdPutRaw(requestParameters: MessagesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling messagesIdPatch().'
+                'Required parameter "id" was null or undefined when calling messagesIdPut().'
             );
         }
 
@@ -96,7 +96,7 @@ export class MessagesApi extends runtime.BaseAPI {
         }
         const response = await this.request({
             path: `/Messages/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'PATCH',
+            method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['updateChatRequest'],
@@ -107,8 +107,8 @@ export class MessagesApi extends runtime.BaseAPI {
 
     /**
      */
-    async messagesIdPatch(requestParameters: MessagesIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.messagesIdPatchRaw(requestParameters, initOverrides);
+    async messagesIdPut(requestParameters: MessagesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.messagesIdPutRaw(requestParameters, initOverrides);
     }
 
 }

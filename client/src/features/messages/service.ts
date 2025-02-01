@@ -26,10 +26,31 @@ export const useDeleteMessage = () => {
     isDeleteMessageLoading,
   };
 };
-export const useUpdateMessage = ({
-  messageId,
-  body,
-}: {
-  messageId: number;
-  body: string;
-}) => {};
+export const useUpdateMessage = () => {
+  const toast = useToast();
+  const { mutate: updateMessage, isPending: isMessageUpdating } = useMutation({
+    mutationFn: async ({
+      messageId,
+      body,
+    }: {
+      messageId: number;
+      body: string;
+    }) => {
+      try {
+        await apiClient.messagesApi.messagesIdPut({
+          id: messageId,
+          updateChatRequest: { message: body },
+        });
+      } catch (error) {
+        toast.toast({
+          description: "Unable to upadate message",
+          variant: "destructive",
+        });
+      }
+    },
+  });
+  return {
+    updateMessage,
+    isMessageUpdating,
+  };
+};

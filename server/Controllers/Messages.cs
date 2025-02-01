@@ -36,15 +36,24 @@ public class Messages : Controller
         return Ok();
     }
 
-    [HttpPatch("{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMessage(int id, [FromBody] UpdateChatRequest request)
     {
         var userId = _usersService.GetAuthenicatedUserId();
-        var message = await _dbContext.Chats.FindAsync(id);
+        var message = await _dbContext.Chats.FirstOrDefaultAsync(chat => chat.Id == id);
         if (message == null) return NotFound();
         if (message.UserId != userId) return Forbid();
+
         message.Message = request.Message;
-        await _dbContext.SaveChangesAsync();
-        return Ok();
+        message.UpdateAt = DateTime.UtcNow;
+        try
+        {
+            var updateResult = _dbContext.SaveChanges();
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 }
