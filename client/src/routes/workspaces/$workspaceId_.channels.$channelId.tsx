@@ -78,6 +78,19 @@ function RouteComponent() {
     connection?.on("ReceiveMessage", (message: ChannelMessageResponse) => {
       setMessages((prev) => [message, ...prev]);
     });
+    connection?.on(
+      "UpdateMessage",
+      (messageId: number, newBody: string, updateTime: Date) => {
+        setMessages((prev) => {
+          let newMessages = [...prev];
+          let newMessage = newMessages.find((msg) => msg.id == messageId);
+          newMessage!.message = newBody;
+          newMessage!.updateAt = updateTime.toString();
+
+          return newMessages;
+        });
+      }
+    );
     connection?.on("DeleteMessage", (id) => {
       setMessages((prev) => prev.filter((chat) => chat.id !== id));
     });

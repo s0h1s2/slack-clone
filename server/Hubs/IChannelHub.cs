@@ -6,5 +6,5 @@ public interface IChannelHub
 {
     Task ReceiveMessage(ChannelMessageResponse message);
     Task DeleteMessage(int messageId);
-    Task UpdateMessage(int messageId, string body);
+    Task UpdateMessage(int messageId, string body, DateTime updateTime);
 }

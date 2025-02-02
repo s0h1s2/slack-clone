@@ -104,12 +104,13 @@ const Message = ({
         {isEditing ? (
           <div className="w-full h-full">
             <Editor
-              onSubmit={(body) =>
+              onSubmit={(body) => {
+                setEditingId(null);
                 updateMessage({
                   messageId: id,
                   body: body.text,
-                })
-              }
+                });
+              }}
               disabled={isMessageUpdating}
               defaultValue={JSON.parse(body)}
               onCancel={() => setEditingId(null)}
