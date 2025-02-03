@@ -32,7 +32,8 @@ public class Messages : Controller
         if (message.UserId != userId) return Forbid();
         _dbContext.Chats.Remove(message);
         await _dbContext.SaveChangesAsync();
-        await _channelHub.Clients.All.DeleteMessage(id);
+        await _channelHub.Clients.Group(message.ChannelId.ToString()).DeleteMessage(message.Id);
+
         return Ok();
     }
 
