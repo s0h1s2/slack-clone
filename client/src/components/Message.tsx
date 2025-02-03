@@ -174,4 +174,4 @@ const Message = ({
   );
 };
 
-export default React.memo(Message);
+export default Message;
