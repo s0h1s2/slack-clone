@@ -18,7 +18,7 @@ type Props = {
   channelName?: string;
   channelCreationDate?: string;
 };
-const TIME_THRESHOLD = 5; // Define the time threshold in minutes
+const TIME_THRESHOLD_IN_MINUTE = 5; // Define the time threshold in minutes
 
 const formatDateLabel = (dateStr: string) => {
   const date = new Date(dateStr);
@@ -104,7 +104,7 @@ const MessagesList = ({
                 differenceInMinutes(
                   new Date(message.createdAt),
                   new Date(prevMessage.createdAt)
-                ) < TIME_THRESHOLD;
+                ) < TIME_THRESHOLD_IN_MINUTE;
               return (
                 <Message
                   key={message.id}
