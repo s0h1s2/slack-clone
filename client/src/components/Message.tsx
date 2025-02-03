@@ -10,6 +10,7 @@ import {
 } from "@/features/messages/service";
 import { cn } from "@/lib/utils";
 import Editor from "./Editor";
+import React from "react";
 
 type Props = {
   id: number;
@@ -64,19 +65,37 @@ const Message = ({
               {format(new Date(createdAt), "hh:mm")}
             </button>
           </Hint>
-          <div className="flex flex-col w-full">
-            <Renderer value={body} />
-            <Thumbnail url={image} />
-            {updatedAt && (
-              <span className="text-xs text-muted-foreground">(edited)</span>
-            )}
-          </div>
+          {isEditing ? (
+            <div className="w-full h-full">
+              <Editor
+                onSubmit={(body) => {
+                  setEditingId(null);
+                  updateMessage({
+                    messageId: id,
+                    body: body.text,
+                  });
+                }}
+                disabled={isMessageUpdating}
+                defaultValue={JSON.parse(body)}
+                onCancel={() => setEditingId(null)}
+                variant="update"
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col w-full">
+              <Renderer value={body} />
+              <Thumbnail url={image} />
+              {updatedAt && (
+                <span className="text-xs text-muted-foreground">(edited)</span>
+              )}
+            </div>
+          )}
         </div>
         {!isEditing && (
           <MessageToolbar
             isAuthor={isAuthor}
             isPending={isDeleteMessageLoading}
-            handleEdit={() => {}}
+            handleEdit={() => setEditingId(id)}
             handleThread={() => {}}
             handleDelete={() => deleteMessage({ messageId: id })}
             hideThreadButton={false}
@@ -155,4 +174,4 @@ const Message = ({
   );
 };
 
-export default Message;
+export default React.memo(Message);
