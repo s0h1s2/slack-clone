@@ -11,5 +11,6 @@ export const usePanel = () => {
   return {
     parentMsgId,
     onCloseMessage,
+    onOpenMessage,
   };
 };

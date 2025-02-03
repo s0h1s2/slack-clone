@@ -10,7 +10,7 @@ import {
 } from "@/features/messages/service";
 import { cn } from "@/lib/utils";
 import Editor from "./Editor";
-import React from "react";
+import { usePanel } from "@/hooks/use-panel";
 
 type Props = {
   id: number;
@@ -54,8 +54,10 @@ const Message = ({
   threadImage,
   threadTimestamp,
 }: Props) => {
+  const { onOpenMessage, onCloseMessage } = usePanel();
   const { deleteMessage, isDeleteMessageLoading } = useDeleteMessage();
   const { updateMessage, isMessageUpdating } = useUpdateMessage();
+
   if (isCompact) {
     return (
       <div className="flex flex-col gap-2 p-1.5 px-0.5 hover:bg-gray-100/60 group relative">
@@ -96,7 +98,7 @@ const Message = ({
             isAuthor={isAuthor}
             isPending={isDeleteMessageLoading}
             handleEdit={() => setEditingId(id)}
-            handleThread={() => {}}
+            handleThread={() => onOpenMessage(id)}
             handleDelete={() => deleteMessage({ messageId: id })}
             hideThreadButton={false}
           />
@@ -165,7 +167,7 @@ const Message = ({
           isAuthor={isAuthor}
           isPending={isDeleteMessageLoading}
           handleEdit={() => setEditingId(id)}
-          handleThread={() => {}}
+          handleThread={() => onOpenMessage(id)}
           handleDelete={() => deleteMessage({ messageId: id })}
           hideThreadButton={false}
         />
