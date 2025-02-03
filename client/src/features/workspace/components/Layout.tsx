@@ -12,15 +12,25 @@ import {
 import WorkspaceSidebar from "./WorkspaceSidebar";
 import { CurrentWorkspaceContext } from "../hooks/context";
 import { useGetChannels } from "@/features/channel/channel-service";
+import { usePanel } from "@/hooks/use-panel";
 
-const WorkspaceLayout = ({ workspaceId,children }: { workspaceId:number,children: React.ReactNode }) => {
+const WorkspaceLayout = ({
+  workspaceId,
+  children,
+}: {
+  workspaceId: number;
+  children: React.ReactNode;
+}) => {
   const { workspace, isWorkspaceLoading } = useGetWorkspace(
     parseInt(workspaceId)
   );
+
+  const { parentMsgId, onCloseMessage } = usePanel();
   const { channels, isChannelsLoading } = useGetChannels(parseInt(workspaceId));
   if (isWorkspaceLoading || isChannelsLoading) return <PageLoading />;
   if (!workspace) return <div>No workspace found!</div>;
   if (!channels) return <div>Channels error</div>;
+  const showPanel = !!parentMsgId;
   return (
     <div className="h-full ">
       <Toolbar workspaceName={workspace.name} />
@@ -43,6 +53,14 @@ const WorkspaceLayout = ({ workspaceId,children }: { workspaceId:number,children
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel minSize={20}>{children}</ResizablePanel>
+            {showPanel && (
+              <>
+                <ResizableHandle withHandle />
+                <ResizablePanel minSize={20} defaultSize={29}>
+                  Load thread!
+                </ResizablePanel>
+              </>
+            )}
           </ResizablePanelGroup>
         </CurrentWorkspaceContext.Provider>
       </div>

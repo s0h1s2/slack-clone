@@ -10,7 +10,6 @@ export const usePanel = () => {
 
   return {
     parentMsgId,
-    onOpenMessage,
     onCloseMessage,
   };
 };
