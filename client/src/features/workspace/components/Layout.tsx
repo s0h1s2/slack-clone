@@ -13,6 +13,7 @@ import WorkspaceSidebar from "./WorkspaceSidebar";
 import { CurrentWorkspaceContext } from "../hooks/context";
 import { useGetChannels } from "@/features/channel/channel-service";
 import { usePanel } from "@/hooks/use-panel";
+import Thread from "@/features/messages/components/Thread";
 
 const WorkspaceLayout = ({
   workspaceId,
@@ -57,7 +58,13 @@ const WorkspaceLayout = ({
               <>
                 <ResizableHandle withHandle />
                 <ResizablePanel minSize={20} defaultSize={29}>
-                  Load thread!
+                  {parentMsgId ? (
+                    <Thread messageId={parentMsgId} onClose={onCloseMessage} />
+                  ) : (
+                    <div className="h-full flex items-center justify-center">
+                      <PageLoading />
+                    </div>
+                  )}
                 </ResizablePanel>
               </>
             )}
