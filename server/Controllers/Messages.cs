@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using server.Database;
 using server.Dto.Request;
+using server.Dto.Response;
 using server.Exceptions;
 using server.Hubs;
 using server.Services;
@@ -15,12 +16,14 @@ public class Messages : Controller
     private readonly AppDbContext _dbContext;
     private readonly UsersService _usersService;
     private readonly IHubContext<ChannelHub, IChannelHub> _channelHub;
+    private readonly MemberService _memberService;
 
-    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub)
+    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub,MemberService memberService)
     {
         _dbContext = dbContext;
         _usersService = usersService;
         _channelHub = channelHub;
+        _memberService = memberService;
     }
 
     [HttpDelete("{id}")]
@@ -58,5 +61,21 @@ public class Messages : Controller
         {
             return NotFound();
         }
+    }
+
+    [HttpGet("{id}/thread/{workspaceId}")]
+    public async Task<IActionResult> GetThreadMessages(int id,int workspaceId)
+    {
+        var isMember = await _memberService.IsUserAWorkspaceMember(workspaceId);
+        if (!isMember) return Forbid();
+        
+        // load message whose parents are id
+        var messages=await _dbContext.Chats
+            .Include((ch)=>ch.User)
+            .Include((ch)=>ch.Channel)
+            .Where(ch => ch.ParentId== id)
+            .ToListAsync();
+        
+        return Ok(messages);
     }
 }
