@@ -70,7 +70,7 @@ public class ChannelService
         await _context.SaveChangesAsync();
         return new CreateChannelResponse(channel.Id, channel.Name);
     }
-    public async Task<bool> ChatChannel(int channelId, ChatMessageRequest chat)
+    public async Task ChatChannel(int channelId, ChatMessageRequest chat)
     {
         string? fileId = null;
         if (chat.Attachment != null)
@@ -91,15 +91,18 @@ public class ChannelService
         await _context.SaveChangesAsync();
         await _context.Entry(newMessage).Reference((chat) => chat.User).LoadAsync();
         var mappedResult = await ChannelMessageResponse.FromChat(newMessage, _fileService);
-
         await _channelHub.Clients.Group(channelId.ToString()).ReceiveMessage(mappedResult);
-        return true;
     }
 
     public async Task<GetChannelMessagesResponse> GetChannelMessages(int channelId, int? lastMessageId)
     {
         // TODO: check if user is member of this workspace or channel
-        var messages = await _context.Chats.Include((chat) => chat.User).Where((chat) => chat.ChannelId == channelId && (lastMessageId == null || lastMessageId > chat.Id)).Take(12).OrderByDescending(chat => chat.Id).ToListAsync();
+        var messages = await _context.Chats
+            .Include((chat) => chat.User)
+            .Where((chat) => chat.ChannelId == channelId && chat.ParentId == 0 && (lastMessageId == null || lastMessageId > chat.Id))
+            .Take(12)
+            .OrderByDescending(chat => chat.Id)
+            .ToListAsync();
 
         var messagesResult = new List<ChannelMessageResponse>();
         foreach (var message in messages)

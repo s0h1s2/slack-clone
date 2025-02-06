@@ -7,7 +7,7 @@ namespace server.Dto.Response;
 public record ChannelMessageResponse(
     int Id,
     string Message,
-    string Attachment,
+    string? Attachment,
     string Username,
     int SenderId,
     string? Avatar,
@@ -16,14 +16,14 @@ public record ChannelMessageResponse(
 {
     public static async Task<ChannelMessageResponse> FromChat(Chat chat, IFileService fileService)
     {
-        var attachmentUrl = chat.AttachmentName == null 
-            ? null 
+        var attachmentUrl = chat.AttachmentName == null
+            ? null
             : await fileService.GetFileUrlAsync(chat.AttachmentName);
 
         return new ChannelMessageResponse(
             Id: chat.Id,
             Message: chat.Message,
-            Attachment: attachmentUrl ?? string.Empty,
+            Attachment: attachmentUrl,
             Username: chat.User.Name,
             SenderId: chat.UserId,
             Avatar: "not-implemented",
