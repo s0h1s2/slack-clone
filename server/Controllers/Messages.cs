@@ -19,7 +19,7 @@ public class Messages : Controller
     private readonly MemberService _memberService;
     private readonly IFileService _fileService;
 
-    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub,MemberService memberService,IFileService fileService)
+    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub, MemberService memberService, IFileService fileService)
     {
         _dbContext = dbContext;
         _usersService = usersService;
@@ -65,16 +65,17 @@ public class Messages : Controller
     }
 
     [HttpGet("{id}/thread/{workspaceId}")]
-    public async Task<IActionResult> GetThreadMessages(int id,int workspaceId)
+    [ProducesResponseType(typeof(GetChannelMessagesResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetThreadMessages(int id, int workspaceId)
     {
         var isMember = await _memberService.IsUserAWorkspaceMember(workspaceId);
         if (!isMember) return Forbid();
-        
+
         // load message whose parents are id
-        var messages=await _dbContext.Chats
-            .Include((ch)=>ch.User)
-            .Include((ch)=>ch.Channel)
-            .Where(ch => ch.ParentId== id)
+        var messages = await _dbContext.Chats
+            .Include((ch) => ch.User)
+            .Include((ch) => ch.Channel)
+            .Where(ch => ch.ParentId == id)
             .ToListAsync();
         var messagesResult = new List<ChannelMessageResponse>();
         foreach (var message in messages)
@@ -84,7 +85,7 @@ public class Messages : Controller
         }
 
         return Ok(new GetChannelMessagesResponse(messagesResult,
-            messagesResult.Count > 0 ? messagesResult.Last().Id : null)); 
-        
+            messagesResult.Count > 0 ? messagesResult.Last().Id : null));
+
     }
 }
