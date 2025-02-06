@@ -3,12 +3,12 @@ namespace server.Database;
 public class Chat
 {
     public int Id { get; set; }
-    
-    public int ParentId { get; set; }
-    
+
+    public int? ParentId { get; set; }
+
     public int TotalReplies { get; set; }
-    
-    
+
+
     public string Message { get; set; }
     public string? AttachmentName { get; set; }
     public WorkspaceChannel Channel { get; set; }

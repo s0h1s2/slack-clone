@@ -87,6 +87,7 @@ public class ChannelService
             ChannelId = channelId,
             AttachmentName = fileId,
             UserId = userId,
+            ParentId = chat.ParentId,
             CreatedAt = DateTime.UtcNow,
             UpdateAt = null
         };
