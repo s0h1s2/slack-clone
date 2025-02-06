@@ -239,12 +239,12 @@ const Editor = ({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  onSave?.({
+                onClick={() => {
+                  onSubmit?.({
                     text: JSON.stringify(quillRef.current?.getContents()),
                     image,
-                  })
-                }
+                  });
+                }}
                 disabled={disabled || isEmpty}
                 className="bg-[#007a5a] hover:bg-[#007a5a]/80 text-white"
               >
