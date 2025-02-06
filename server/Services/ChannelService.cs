@@ -31,7 +31,14 @@ public class ChannelService
         var member = await _context.WorkspaceMembers.FirstOrDefaultAsync(m => m.WorkspaceId == channel.WorkspaceId && m.UserId == uid);
         if (member == null) throw new PermmissionException("Only members of this workspace can see this channel.");
 
-        return new ChannelResponse(channel.Id, channel.Name, channel.CreatedAt, channel.Chats.Select((chat) => new ChannelMessageResponse(chat.Id, chat.Message, chat.AttachmentName, chat.User.Name, "Not YET", chat.CreatedAt, chat.UpdateAt, chat.UserId)).ToList());
+        return new ChannelResponse(
+            channel.Id,
+            channel.Name,
+            channel.CreatedAt,
+            (await Task.WhenAll(channel.Chats.Select(async chat =>
+                await ChannelMessageResponse.FromChat(chat, _fileService))))
+            .ToList()
+        );
 
     }
     public async Task<GetChannelsResponse> GetWorkspaceChannels(int workspaceId)
@@ -81,10 +88,9 @@ public class ChannelService
             UpdateAt = null
         };
         _context.Add(newMessage);
-
         await _context.SaveChangesAsync();
         await _context.Entry(newMessage).Reference((chat) => chat.User).LoadAsync();
-        var mappedResult = new ChannelMessageResponse(newMessage.Id, newMessage.Message, newMessage.AttachmentName, newMessage.User.Name, "Not YET", newMessage.CreatedAt, null, userId);
+        var mappedResult = await ChannelMessageResponse.FromChat(newMessage, _fileService);
 
         await _channelHub.Clients.Group(channelId.ToString()).ReceiveMessage(mappedResult);
         return true;
@@ -98,10 +104,7 @@ public class ChannelService
         var messagesResult = new List<ChannelMessageResponse>();
         foreach (var message in messages)
         {
-            var result = new ChannelMessageResponse(message.Id, message.Message, string.Empty, message.User.Name, "", message.CreatedAt, message.UpdateAt ?? null, message.UserId)
-            {
-                Attachment = message.AttachmentName == null ? null : await _fileService.GetFileUrlAsync(message.AttachmentName)
-            };
+            var result = await ChannelMessageResponse.FromChat(message, _fileService);
             messagesResult.Add(result);
         }
 

@@ -1,31 +1,37 @@
 using System.Reflection.Metadata;
+using server.Database;
+using server.Services;
 
 namespace server.Dto.Response;
 
-public class ChannelMessageResponse
+public record ChannelMessageResponse(
+    int Id,
+    string Message,
+    string Attachment,
+    string Username,
+    int SenderId,
+    string? Avatar,
+    DateTime CreatedAt,
+    DateTime? UpdateAt)
 {
-    public int Id { get; }
-
-    public string Message { get; }
-    public string Attachment { get; set; }
-    public string Username { get; }
-    public int SenderId { get; }
-    public string? Avatar { get; }
-    public DateTime CreatedAt { get; }
-    public DateTime? UpdateAt { get; }
-
-    public ChannelMessageResponse(int id, string message, string attachment, string username, string? avatar, DateTime createdAt, DateTime? updateAt, int senderId)
+    public static async Task<ChannelMessageResponse> FromChat(Chat chat, IFileService fileService)
     {
-        Id = id;
-        Message = message;
-        Attachment = attachment;
-        Username = username;
-        Avatar = avatar;
-        CreatedAt = createdAt;
-        UpdateAt = updateAt;
-        SenderId = senderId;
-    }
+        var attachmentUrl = chat.AttachmentName == null 
+            ? null 
+            : await fileService.GetFileUrlAsync(chat.AttachmentName);
 
-};
+        return new ChannelMessageResponse(
+            Id: chat.Id,
+            Message: chat.Message,
+            Attachment: attachmentUrl ?? string.Empty,
+            Username: chat.User.Name,
+            SenderId: chat.UserId,
+            Avatar: "not-implemented",
+            CreatedAt: chat.CreatedAt,
+            UpdateAt: chat.UpdateAt
+        );
+    }
+}
 
 public record GetChannelMessagesResponse(List<ChannelMessageResponse> Messages, int? LastMessageId);
+

@@ -17,13 +17,15 @@ public class Messages : Controller
     private readonly UsersService _usersService;
     private readonly IHubContext<ChannelHub, IChannelHub> _channelHub;
     private readonly MemberService _memberService;
+    private readonly IFileService _fileService;
 
-    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub,MemberService memberService)
+    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub,MemberService memberService,IFileService fileService)
     {
         _dbContext = dbContext;
         _usersService = usersService;
         _channelHub = channelHub;
         _memberService = memberService;
+        _fileService = fileService;
     }
 
     [HttpDelete("{id}")]
@@ -75,7 +77,15 @@ public class Messages : Controller
             .Include((ch)=>ch.Channel)
             .Where(ch => ch.ParentId== id)
             .ToListAsync();
+        var messagesResult = new List<ChannelMessageResponse>();
+        foreach (var message in messages)
+        {
+            var result = await ChannelMessageResponse.FromChat(message, _fileService);
+            messagesResult.Add(result);
+        }
+
+        return Ok(new GetChannelMessagesResponse(messagesResult,
+            messagesResult.Count > 0 ? messagesResult.Last().Id : null)); 
         
-        return Ok(messages);
     }
 }

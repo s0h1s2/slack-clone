@@ -80,6 +80,8 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<WorkspaceService>();
 builder.Services.AddScoped<ChannelService>();
+builder.Services.AddScoped<MemberService>();
+
 builder.Services.AddSingleton<PasswordHasher>();
 builder.Services.AddSingleton<TokenProvider>();
 builder.Services.AddSignalR();
