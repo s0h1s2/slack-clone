@@ -1,8 +1,4 @@
-import { ResponseError } from "@/api";
-import { apiClient } from "@/api/client";
-import Editor, { ChatMessage } from "@/components/Editor";
-import { useParams } from "@tanstack/react-router";
-import { useState } from "react";
+import Editor from "@/components/Editor";
 import { useCreateChannelMessage } from "../channel-service";
 
 const ChatInput = () => {
