@@ -54,9 +54,8 @@ public class Messages : Controller
         message.UpdateAt = DateTime.UtcNow;
         try
         {
-            await _channelHub.Clients.Group(message.ChannelId.ToString()).UpdateMessage(message.Id, message.Message, DateTime.UtcNow);
-
             await _dbContext.SaveChangesAsync();
+            await _channelHub.Clients.Group(message.ChannelId.ToString()).UpdateMessage(message.Id, message.Message, DateTime.UtcNow);
             return Ok();
         }
         catch (Exception)
