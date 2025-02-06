@@ -1,11 +1,10 @@
 import { ResponseError } from "@/api";
 import { apiClient } from "@/api/client";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 export const useDeleteMessage = () => {
   const toast = useToast();
-  const client = useQueryClient();
   const { mutate: deleteMessage, isPending: isDeleteMessageLoading } =
     useMutation({
       mutationFn: async ({ messageId }: { messageId: number }) => {

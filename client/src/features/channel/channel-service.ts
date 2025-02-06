@@ -1,5 +1,6 @@
 import { ResponseError, ValidationProblemDetails } from "@/api";
 import { apiClient } from "@/api/client";
+import { ChatMessage } from "@/components/Editor";
 import { ApiValidationErrors, NetworkError } from "@/lib/errors";
 import {
   useInfiniteQuery,
@@ -7,6 +8,8 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { useParams } from "@tanstack/react-router";
+import { useState } from "react";
 const CHANNELS_QUERY_KEY = "channels";
 
 export const useCreateChannel = () => {
@@ -96,5 +99,38 @@ export const useGetChannelMessages = (channelId: number) => {
     loadNextPage,
     isLoadingMore,
     canLoadMore,
+  };
+};
+export const useCreateChannelMessage = () => {
+  const { channelId } = useParams({
+    from: "/workspaces/$workspaceId_/channels/$channelId",
+  });
+
+  const [key, setKey] = useState(1);
+  const [isCreating, setDisabled] = useState(false);
+  const createMessage = async ({
+    text,
+    image,
+    messageParentId,
+  }: ChatMessage & { messageParentId?: number }) => {
+    setDisabled(true);
+    try {
+      await apiClient.channelsApi.apiChannelIdChatPostRaw({
+        id: Number(channelId),
+        chat: text,
+        attachment: image ?? undefined,
+        parentId: messageParentId,
+      });
+      setKey((prev) => prev + 1);
+    } catch (error: ResponseError | Error | unknown) {
+      console.error(error);
+    } finally {
+      setDisabled(false);
+    }
+  };
+  return {
+    createMessage,
+    isCreating,
+    key,
   };
 };

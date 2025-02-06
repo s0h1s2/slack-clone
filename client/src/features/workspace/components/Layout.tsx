@@ -61,7 +61,7 @@ const WorkspaceLayout = ({
                   {parentMsgId ? (
                     <Thread
                       workspaceId={workspaceId}
-                      messageId={parentMsgId}
+                      parentMessageId={parentMsgId}
                       onClose={onCloseMessage}
                     />
                   ) : (
