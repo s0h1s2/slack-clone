@@ -115,7 +115,7 @@ const MessagesList = ({
                   memberId="string"
                   isAuthor={message.senderId == user?.id}
                   body={message.message}
-                  image={message.username}
+                  image={message.attachment}
                   createdAt={message.createdAt}
                   updatedAt={message.updateAt == null ? null : message.updateAt}
                   isEditing={editingId === message.id}
