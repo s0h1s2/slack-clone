@@ -26,7 +26,10 @@ public class ChannelService
     {
         var uid = _usersService.GetAuthenicatedUserId();
         if (uid == null) throw new PermmissionException("Only authenticated user can see this channel.");
-        var channel = await _context.WorkspaceChannels.Include((ch) => ch.Chats.OrderByDescending((chat) => chat.Id).Take(10)).ThenInclude((chat) => chat.User).FirstOrDefaultAsync((channel) => channel.Id == channelId);
+        var channel = await _context.WorkspaceChannels.
+        Include((ch) => ch.Chats.Where((chat) => chat.ParentId == 0).OrderByDescending((chat) => chat.Id).Take(10)).
+        ThenInclude((chat) => chat.User).
+        FirstOrDefaultAsync((channel) => channel.Id == channelId);
         if (channel == null) return null;
         var member = await _context.WorkspaceMembers.FirstOrDefaultAsync(m => m.WorkspaceId == channel.WorkspaceId && m.UserId == uid);
         if (member == null) throw new PermmissionException("Only members of this workspace can see this channel.");
