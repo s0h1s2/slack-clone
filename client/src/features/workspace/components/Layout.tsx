@@ -59,7 +59,11 @@ const WorkspaceLayout = ({
                 <ResizableHandle withHandle />
                 <ResizablePanel minSize={20} defaultSize={29}>
                   {parentMsgId ? (
-                    <Thread messageId={parentMsgId} onClose={onCloseMessage} />
+                    <Thread
+                      workspaceId={workspaceId}
+                      messageId={parentMsgId}
+                      onClose={onCloseMessage}
+                    />
                   ) : (
                     <div className="h-full flex items-center justify-center">
                       <PageLoading />

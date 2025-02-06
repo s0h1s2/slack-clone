@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  GetChannelMessagesResponse,
   UpdateChatRequest,
 } from '../models/index';
 
@@ -25,6 +26,11 @@ export interface MessagesIdDeleteRequest {
 export interface MessagesIdPutRequest {
     id: number;
     updateChatRequest?: UpdateChatRequest;
+}
+
+export interface MessagesIdThreadWorkspaceIdGetRequest {
+    id: number;
+    workspaceId: number;
 }
 
 /**
@@ -109,6 +115,52 @@ export class MessagesApi extends runtime.BaseAPI {
      */
     async messagesIdPut(requestParameters: MessagesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.messagesIdPutRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async messagesIdThreadWorkspaceIdGetRaw(requestParameters: MessagesIdThreadWorkspaceIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetChannelMessagesResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling messagesIdThreadWorkspaceIdGet().'
+            );
+        }
+
+        if (requestParameters['workspaceId'] == null) {
+            throw new runtime.RequiredError(
+                'workspaceId',
+                'Required parameter "workspaceId" was null or undefined when calling messagesIdThreadWorkspaceIdGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/Messages/{id}/thread/{workspaceId}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"workspaceId"}}`, encodeURIComponent(String(requestParameters['workspaceId']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     */
+    async messagesIdThreadWorkspaceIdGet(requestParameters: MessagesIdThreadWorkspaceIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetChannelMessagesResponse> {
+        const response = await this.messagesIdThreadWorkspaceIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }

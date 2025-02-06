@@ -23,6 +23,7 @@ export interface ApiChannelIdChatPostRequest {
     id: number;
     chat?: string;
     attachment?: Blob;
+    parentId?: number;
 }
 
 export interface ApiChannelIdGetRequest {
@@ -83,6 +84,10 @@ export class ChannelApi extends runtime.BaseAPI {
 
         if (requestParameters['attachment'] != null) {
             formParams.append('Attachment', requestParameters['attachment'] as any);
+        }
+
+        if (requestParameters['parentId'] != null) {
+            formParams.append('ParentId', requestParameters['parentId'] as any);
         }
 
         const response = await this.request({
