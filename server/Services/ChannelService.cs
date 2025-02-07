@@ -95,6 +95,11 @@ public class ChannelService
         await _context.SaveChangesAsync();
         await _context.Entry(newMessage).Reference((chat) => chat.User).LoadAsync();
         var mappedResult = await ChannelMessageResponse.FromChat(newMessage, _fileService);
+        if (chat.ParentId != null)
+        {
+            await _channelHub.Clients.Group(chat.ParentId.ToString()).ThreadMessage(mappedResult);
+            return;
+        }
         await _channelHub.Clients.Group(channelId.ToString()).ReceiveMessage(mappedResult);
     }
 
