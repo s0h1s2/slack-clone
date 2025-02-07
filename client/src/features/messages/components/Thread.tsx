@@ -96,6 +96,7 @@ const Thread = ({
                   }}
                   isLoadingMore={false}
                   canLoadMore={false}
+                  hideThreadButton={true}
                 />
               </>
             ) : (

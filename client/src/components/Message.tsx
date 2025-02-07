@@ -100,7 +100,7 @@ const Message = ({
             handleEdit={() => setEditingId(id)}
             handleThread={() => onOpenMessage(id)}
             handleDelete={() => deleteMessage({ messageId: id })}
-            hideThreadButton={false}
+            hideThreadButton={hideThreadButton}
           />
         )}
       </div>
@@ -169,7 +169,7 @@ const Message = ({
           handleEdit={() => setEditingId(id)}
           handleThread={() => onOpenMessage(id)}
           handleDelete={() => deleteMessage({ messageId: id })}
-          hideThreadButton={false}
+          hideThreadButton={hideThreadButton}
         />
       )}
     </div>

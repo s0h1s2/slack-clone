@@ -9,7 +9,7 @@ type Props = {
   handleEdit: () => void;
   handleThread: () => void;
   handleDelete: () => void;
-  hideThreadButton: boolean;
+  hideThreadButton?: boolean;
 };
 const MessageToolbar = ({
   isAuthor,

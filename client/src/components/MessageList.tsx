@@ -17,6 +17,7 @@ type Props = {
   channelId?: number;
   channelName?: string;
   channelCreationDate?: string;
+  hideThreadButton?: boolean;
 };
 const TIME_THRESHOLD_IN_MINUTE = 5; // Define the time threshold in minutes
 
@@ -66,6 +67,7 @@ const MessagesList = ({
   canLoadMore,
   isLoadingMore,
   channelId,
+  hideThreadButton,
   loadMore,
 }: Props) => {
   const { user } = useAuth();
@@ -107,6 +109,7 @@ const MessagesList = ({
                 ) < TIME_THRESHOLD_IN_MINUTE;
               return (
                 <Message
+                  hideThreadButton={hideThreadButton}
                   key={message.id}
                   id={message.id}
                   authorImage={message?.avatar ?? undefined}
