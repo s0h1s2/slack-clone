@@ -27,7 +27,7 @@ public class ChannelService
         var uid = _usersService.GetAuthenicatedUserId();
         if (uid == null) throw new PermmissionException("Only authenticated user can see this channel.");
         var channel = await _context.WorkspaceChannels.
-        Include((ch) => ch.Chats.Where((chat) => chat.ParentId == 0).OrderByDescending((chat) => chat.Id).Take(10)).
+        Include((ch) => ch.Chats.Where((chat) => chat.ParentId == null).OrderByDescending((chat) => chat.Id).Take(10)).
         ThenInclude((chat) => chat.User).
         FirstOrDefaultAsync((channel) => channel.Id == channelId);
         if (channel == null) return null;
@@ -103,7 +103,7 @@ public class ChannelService
         // TODO: check if user is member of this workspace or channel
         var messages = await _context.Chats
             .Include((chat) => chat.User)
-            .Where((chat) => chat.ChannelId == channelId && chat.ParentId == 0 && (lastMessageId == null || lastMessageId > chat.Id))
+            .Where((chat) => chat.ChannelId == channelId && chat.ParentId == null && (lastMessageId == null || lastMessageId > chat.Id))
             .Take(12)
             .OrderByDescending(chat => chat.Id)
             .ToListAsync();
