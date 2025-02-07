@@ -56,10 +56,6 @@ function RouteComponent() {
     setMessages(() => [...loadedMessages?.pages.flatMap((p) => p!.messages)]);
   }, [loadedMessages]);
 
-  // websocketConnection?.invoke("JoinChannel", parseInt(channelId));
-  // websocketConnection.on("ReceiveMessage", (data) => {
-  //   console.log(data);
-  // });
   const conn = useRealtimeConnection();
   useEffect(() => {
     if (conn) {
