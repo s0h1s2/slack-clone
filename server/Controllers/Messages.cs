@@ -76,6 +76,7 @@ public class Messages : Controller
             .Include((ch) => ch.User)
             .Include((ch) => ch.Channel)
             .Where(ch => ch.ParentId == id)
+            .OrderByDescending((chat) => chat.CreatedAt)
             .ToListAsync();
         var messagesResult = new List<ChannelMessageResponse>();
         foreach (var message in messages)

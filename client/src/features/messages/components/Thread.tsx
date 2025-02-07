@@ -1,13 +1,14 @@
 import { ChannelMessageResponse } from "@/api";
 import { apiClient } from "@/api/client";
 import Editor from "@/components/Editor";
+import MessagesList from "@/components/MessageList";
 import PageLoading from "@/components/PageLoading";
 import { Button } from "@/components/ui/button";
 import { useCreateChannelMessage } from "@/features/channel/channel-service";
 import { useRealtimeConnection } from "@/hooks/use-websocket";
 import { useQuery } from "@tanstack/react-query";
-import { XIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { MessageCircleOff, XIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 type Props = {
   parentMessageId: number;
   workspaceId: number;
@@ -20,6 +21,18 @@ const Thread = ({
   workspaceId,
 }: Props) => {
   const { createMessage, isCreating, key } = useCreateChannelMessage();
+  const messagesScrollbar = useRef<HTMLDivElement | null>(null);
+  const scrollToBottom = () => {
+    if (messagesScrollbar.current) {
+      messagesScrollbar.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
   const { data, isLoading } = useQuery({
     queryKey: ["thread", messageId],
     queryFn: async () => {
@@ -33,12 +46,15 @@ const Thread = ({
       }
     },
   });
-  const [replies, setReplies] = useState<Array<ChannelMessageResponse>>();
+  const [replies, setReplies] = useState<Array<ChannelMessageResponse>>([]);
   useEffect(() => {
     if (data?.messages) {
       setReplies(() => [...data.messages]);
     }
   }, [data]);
+  useEffect(() => {
+    // scrollToBottom();
+  }, [replies]);
   const connection = useRealtimeConnection();
   useEffect(() => {
     connection
@@ -50,8 +66,7 @@ const Thread = ({
         console.log("Unable to connect to thread");
       });
     connection.on("ThreadMessage", (message) => {
-      console.log();
-      setReplies((prev) => [...prev, message]);
+      setReplies((prev) => [message, ...prev]);
     });
     return () => {
       connection.off("ThreadMessage");
@@ -68,9 +83,31 @@ const Thread = ({
       {isLoading ? (
         <PageLoading />
       ) : (
-        <div className="flex flex-col">
-          {JSON.stringify(replies)}
-          <div className="px-4 self-end">
+        <div className="flex flex-col justify-end h-full">
+          <div className="overflow-y-auto messages-scrollbar">
+            {replies.length > 0 ? (
+              <>
+                {/* <div ref={messagesScrollbar} /> */}
+                <MessagesList
+                  messages={replies}
+                  variant="thread"
+                  loadMore={function (): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  isLoadingMore={false}
+                  canLoadMore={false}
+                />
+              </>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center gap-2">
+                <MessageCircleOff className="text-gray-500" />
+                <p className="text-sm text-muted-foreground">
+                  No replies yet. Be the first to start the conversation!
+                </p>
+              </div>
+            )}
+          </div>
+          <div className="px-4">
             <Editor
               key={key}
               onSubmit={({ image, text }) =>
