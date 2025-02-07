@@ -4,13 +4,13 @@ import ChannelHeader from "@/features/channel/components/ChannelHeader";
 import ChatInput from "@/features/channel/components/ChatInput";
 import WorkspaceLayout from "@/features/workspace/components/Layout";
 import { createFileRoute } from "@tanstack/react-router";
-import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
 import { ChannelMessageResponse } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/api/client";
 import { NetworkError } from "@/lib/errors";
 import PageLoading from "@/components/PageLoading";
+import { useRealtimeConnection } from "@/hooks/use-websocket";
 
 export const Route = createFileRoute(
   "/workspaces/$workspaceId_/channels/$channelId"
@@ -19,7 +19,6 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const [connection, setConnetion] = useState<HubConnection | null>(null);
   const { workspaceId, channelId } = Route.useParams();
   const {
     messages: loadedMessages,
@@ -56,49 +55,44 @@ function RouteComponent() {
     if (!loadedMessages) return;
     setMessages(() => [...loadedMessages?.pages.flatMap((p) => p!.messages)]);
   }, [loadedMessages]);
-  useEffect(() => {
-    const conn = new HubConnectionBuilder()
-      .withUrl("http://localhost:8000/channels", { withCredentials: false })
-      .withAutomaticReconnect()
-      .build();
-    setConnetion(conn);
-  }, []);
-  useEffect(() => {
-    connection
-      ?.start()
-      .then(async () => {
-        try {
-          await connection?.invoke("JoinChannel", parseInt(channelId));
-          console.info("Connected to channel");
-        } catch (e: Error | unknown) {
-          console.error("Error: error while joining channel", e);
-        }
-      })
-      .catch((err) => console.error(err));
-    connection?.on("ReceiveMessage", (message: ChannelMessageResponse) => {
-      setMessages((prev) => [message, ...prev]);
-    });
-    connection?.on(
-      "UpdateMessage",
-      (messageId: number, newBody: string, updateTime: Date) => {
-        setMessages((prev) => {
-          let newMessages = [...prev];
-          let newMessage = newMessages.find((msg) => msg.id == messageId);
-          newMessage!.message = newBody;
-          newMessage!.updateAt = updateTime.toString();
 
-          return newMessages;
-        });
-      }
-    );
-    connection?.on("DeleteMessage", (id) => {
-      setMessages((prev) => prev.filter((chat) => chat.id !== id));
-    });
-  }, [connection]);
+  // websocketConnection?.invoke("JoinChannel", parseInt(channelId));
+  // websocketConnection.on("ReceiveMessage", (data) => {
+  //   console.log(data);
+  // });
+  const conn = useRealtimeConnection();
+  useEffect(() => {
+    if (conn) {
+      conn?.on("ReceiveMessage", (message: ChannelMessageResponse) => {
+        setMessages((prev) => [message, ...prev]);
+      });
+      conn?.on(
+        "UpdateMessage",
+        (messageId: number, newBody: string, updateTime: Date) => {
+          setMessages((prev) => {
+            let newMessages = [...prev];
+            let newMessage = newMessages.find((msg) => msg.id == messageId);
+            newMessage!.message = newBody;
+            newMessage!.updateAt = updateTime.toString();
+            return newMessages;
+          });
+        }
+      );
+      conn?.on("DeleteMessage", (id) => {
+        setMessages((prev) => prev.filter((chat) => chat.id !== id));
+      });
+    }
+    return () => {
+      conn.off("ReceiveMessage");
+      conn.off("UpdateMessage");
+      conn.off("DeleteMessage");
+    };
+  }, []);
+
   useEffect(() => {
     const connectToChannel = async () => {
       try {
-        await connection?.invoke("JoinChannel", parseInt(channelId));
+        await conn?.invoke("JoinChannel", parseInt(channelId));
         console.info("Connected to channel");
       } catch (e: Error | unknown) {
         console.error("Error: error while joining channel", e);
@@ -106,6 +100,7 @@ function RouteComponent() {
     };
     connectToChannel();
   }, [channelId]);
+
   if (error) {
     return <div>Error: {error.message}</div>;
   }
