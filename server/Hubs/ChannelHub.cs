@@ -10,5 +10,10 @@ public class ChannelHub : Hub<IChannelHub>
 
     }
 
+    public async Task JoinThread(int threadId)
+    {
+        await Groups.AddToGroupAsync(Context.ConnectionId, threadId.ToString());
+
+    }
 
 }
