@@ -83,8 +83,8 @@ const Thread = ({
       {isLoading ? (
         <PageLoading />
       ) : (
-        <div className="flex flex-col justify-end h-full">
-          <div className="overflow-y-auto messages-scrollbar">
+        <div className="flex flex-col h-full">
+          <div className="h-[600px] flex flex-col justify-end overflow-y-auto messages-scrollbar">
             {replies.length > 0 ? (
               <>
                 {/* <div ref={messagesScrollbar} /> */}
