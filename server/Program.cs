@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using server.Database;
+using server.Extensions;
 using server.Filters;
 using server.Services;
 using server.Util;
@@ -81,6 +82,8 @@ builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<WorkspaceService>();
 builder.Services.AddScoped<ChannelService>();
 builder.Services.AddScoped<MemberService>();
+builder.Services.AddChatHandlers(typeof(Program).Assembly).AddChatHandlerStrategy();
+
 
 builder.Services.AddSingleton<PasswordHasher>();
 builder.Services.AddSingleton<TokenProvider>();

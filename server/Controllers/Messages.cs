@@ -18,14 +18,16 @@ public class Messages : Controller
     private readonly IHubContext<ChannelHub, IChannelHub> _channelHub;
     private readonly MemberService _memberService;
     private readonly IFileService _fileService;
+    private readonly ChatHandlerStrategy _chatHandlerStrategy;
 
-    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub, MemberService memberService, IFileService fileService)
+    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub, MemberService memberService, IFileService fileService,ChatHandlerStrategy chatHandlerStrategy)
     {
         _dbContext = dbContext;
         _usersService = usersService;
         _channelHub = channelHub;
         _memberService = memberService;
         _fileService = fileService;
+        _chatHandlerStrategy = chatHandlerStrategy;
     }
 
     [HttpDelete("{id}")]
@@ -87,6 +89,20 @@ public class Messages : Controller
 
         return Ok(new GetChannelMessagesResponse(messagesResult,
             messagesResult.Count > 0 ? messagesResult.Last().Id : null));
-
     }
+    // [HttpGet("{userId}/conversation")]
+    // public async Task GetMessageConversation()
+    // {
+    // }
+    [HttpPost("{userId}/conversation")]
+    public async Task MessageConversation()
+    {
+        var lol = new ChatMessageRequest
+        {
+            ChatType = ChatHandlerType.Channel,
+            Chat = "Hello World!",
+        };
+        await _chatHandlerStrategy.ChatHandler(lol);
+    }
+    
 }
