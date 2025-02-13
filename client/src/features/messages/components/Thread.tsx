@@ -74,7 +74,7 @@ const Thread = ({
   }, [messageId]);
   return (
     <div className="h-full flex flex-col">
-      <div className="flex justify-between items-center px-4 h-[51px] border-b">
+      <div className="flex justify-between items-center px-4 h-[49px] border-b">
         <p className="text-lg font-bold">Thread</p>
         <Button size="iconSm" variant="ghost" onClick={() => onClose()}>
           <XIcon className="size-5 stroke-[1.5]" />
