@@ -4,22 +4,23 @@ using Microsoft.EntityFrameworkCore;
 using server.Database;
 using server.Dto.Request;
 using server.Dto.Response;
-using server.Exceptions;
 using server.Hubs;
 using server.Services;
 
 namespace server.Controllers;
+
 [ApiController]
 [Route("[controller]")]
 public class Messages : Controller
 {
-    private readonly AppDbContext _dbContext;
-    private readonly UsersService _usersService;
     private readonly IHubContext<ChannelHub, IChannelHub> _channelHub;
-    private readonly MemberService _memberService;
+    private readonly AppDbContext _dbContext;
     private readonly IFileService _fileService;
+    private readonly MemberService _memberService;
+    private readonly UsersService _usersService;
 
-    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub, MemberService memberService, IFileService fileService)
+    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub,
+        MemberService memberService, IFileService fileService)
     {
         _dbContext = dbContext;
         _usersService = usersService;
@@ -55,7 +56,8 @@ public class Messages : Controller
         try
         {
             await _dbContext.SaveChangesAsync();
-            await _channelHub.Clients.Group(message.ChannelId.ToString()).UpdateMessage(message.Id, message.Message, DateTime.UtcNow);
+            await _channelHub.Clients.Group(message.ChannelId.ToString())
+                .UpdateMessage(message.Id, message.Message, DateTime.UtcNow);
             return Ok();
         }
         catch (Exception)
@@ -87,6 +89,14 @@ public class Messages : Controller
 
         return Ok(new GetChannelMessagesResponse(messagesResult,
             messagesResult.Count > 0 ? messagesResult.Last().Id : null));
+    }
 
+    [HttpPost("/direct")]
+    public async Task DirectMessage([FromForm] DirectMessageRequest request)
+    {
+        var userId = _usersService.GetAuthenicatedUserId();
+        var chat = new Chat
+        {
+        };
     }
 }
