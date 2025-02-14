@@ -3,7 +3,6 @@ import Toolbar from "./Toolbar";
 import Sidebar from "./Sidebar";
 import PageLoading from "@/components/PageLoading";
 import { useGetWorkspace } from "../hooks/workspace-queries";
-import { useParams, useParentMatches } from "@tanstack/react-router";
 import {
   ResizableHandle,
   ResizablePanel,

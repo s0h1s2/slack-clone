@@ -28,7 +28,7 @@ type Props = {
   variant?: VariantProps<typeof userItemVariants>["variant"];
 };
 const UserItem = ({ label, icon: Icon, userId, variant, image }: Props) => {
-  const params = useParams({ from: "/workspaces/$workspaceId" });
+  const params = useParams({ strict: false });
 
   return (
     <Button
@@ -38,10 +38,9 @@ const UserItem = ({ label, icon: Icon, userId, variant, image }: Props) => {
       asChild
     >
       <Link
-        to="/workspaces/$workspaceId/channels/$channelId"
+        to="/workspaces/direct-message/$userId"
         params={{
-          workspaceId: params.workspaceId.toString(),
-          channelId: userId.toString(),
+          userId: userId.toString(),
         }}
       >
         <Avatar className="size-5 rounded-md mr-1">
