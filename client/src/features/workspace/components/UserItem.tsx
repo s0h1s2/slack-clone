@@ -28,8 +28,6 @@ type Props = {
   variant?: VariantProps<typeof userItemVariants>["variant"];
 };
 const UserItem = ({ label, icon: Icon, userId, variant, image }: Props) => {
-  const params = useParams({ strict: false });
-
   return (
     <Button
       variant="transparent"
