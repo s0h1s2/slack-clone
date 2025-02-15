@@ -19,4 +19,8 @@ public class Chat
 
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdateAt { get; set; } = null!;
+
+    public int? ConversationId { get; set; }
+    public Conversation? Conversation { get; set; }
+
 }

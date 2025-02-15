@@ -91,12 +91,33 @@ public class Messages : Controller
             messagesResult.Count > 0 ? messagesResult.Last().Id : null));
     }
 
-    [HttpPost("/direct")]
-    public async Task DirectMessage([FromForm] DirectMessageRequest request)
+    [HttpPost("/direct/{conversationId}")]
+    public async Task<IActionResult> DirectMessage(int conversationId, [FromForm] DirectMessageRequest directMessage)
     {
-        var userId = _usersService.GetAuthenicatedUserId();
+        // check for conversation id
+        var currentUserId = _usersService.GetAuthenicatedUserId();
+
+        var conversation = await _dbContext.Conversations.FindAsync(conversationId);
+        if (conversation is null)
+        {
+            return NotFound();
+        }
+        if (conversation.Sender != currentUserId || conversation.Receiver != directMessage.Receiver)
+        {
+            return Forbid();
+        }
+        var file = await _fileService.UploadFileAsync(directMessage.File);
+
         var chat = new Chat
         {
+            ConversationId = conversation.Id,
+            Message = directMessage.Message,
+            AttachmentName = file,
+            UserId = currentUserId
+
         };
+        _dbContext.Add(chat);
+        await _dbContext.SaveChangesAsync();
+        return Ok();
     }
 }
