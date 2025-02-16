@@ -5,6 +5,8 @@ import { AvatarImage } from "@radix-ui/react-avatar";
 import { Link } from "@tanstack/react-router";
 import { cva, VariantProps } from "class-variance-authority";
 import { LucideIcon } from "lucide-react";
+import { CurrentWorkspaceContext } from "../hooks/context";
+import { useContext } from "react";
 
 const userItemVariants = cva(
   "flex items-center justify-start  gap-1.5 font-normal h-7 text-[18px] text-sm overflow-hidden",
@@ -28,6 +30,8 @@ type Props = {
   variant?: VariantProps<typeof userItemVariants>["variant"];
 };
 const UserItem = ({ label, icon: Icon, userId, variant, image }: Props) => {
+  const workspace = useContext(CurrentWorkspaceContext);
+
   return (
     <Button
       variant="transparent"
@@ -36,9 +40,10 @@ const UserItem = ({ label, icon: Icon, userId, variant, image }: Props) => {
       asChild
     >
       <Link
-        to="/workspaces/direct-message/$userId"
+        to="/workspaces/$workspaceId/direct-message/$userId"
         params={{
           userId: userId.toString(),
+          workspaceId: workspace?.id.toString(),
         }}
       >
         <Avatar className="size-5 rounded-md mr-1">

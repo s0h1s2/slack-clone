@@ -15,8 +15,8 @@ import { Route as LoginImport } from './routes/login'
 import { Route as WorkspacesIndexImport } from './routes/workspaces/index'
 import { Route as WorkspacesWorkspaceIdImport } from './routes/workspaces/$workspaceId'
 import { Route as JoinWorkspaceIdImport } from './routes/join/$workspaceId'
-import { Route as WorkspacesDirectMessageUserIdImport } from './routes/workspaces/direct-message.$userId'
 import { Route as WorkspacesWorkspaceIdChannelsChannelIdImport } from './routes/workspaces/$workspaceId_.channels.$channelId'
+import { Route as WorkspacesWorkspaceIdDirectMessageUserIdImport } from './routes/workspaces/$workspaceId.direct-message.$userId'
 
 // Create/Update Routes
 
@@ -44,18 +44,18 @@ const JoinWorkspaceIdRoute = JoinWorkspaceIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const WorkspacesDirectMessageUserIdRoute =
-  WorkspacesDirectMessageUserIdImport.update({
-    id: '/workspaces/direct-message/$userId',
-    path: '/workspaces/direct-message/$userId',
-    getParentRoute: () => rootRoute,
-  } as any)
-
 const WorkspacesWorkspaceIdChannelsChannelIdRoute =
   WorkspacesWorkspaceIdChannelsChannelIdImport.update({
     id: '/workspaces/$workspaceId_/channels/$channelId',
     path: '/workspaces/$workspaceId/channels/$channelId',
     getParentRoute: () => rootRoute,
+  } as any)
+
+const WorkspacesWorkspaceIdDirectMessageUserIdRoute =
+  WorkspacesWorkspaceIdDirectMessageUserIdImport.update({
+    id: '/direct-message/$userId',
+    path: '/direct-message/$userId',
+    getParentRoute: () => WorkspacesWorkspaceIdRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -90,12 +90,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspacesIndexImport
       parentRoute: typeof rootRoute
     }
-    '/workspaces/direct-message/$userId': {
-      id: '/workspaces/direct-message/$userId'
-      path: '/workspaces/direct-message/$userId'
-      fullPath: '/workspaces/direct-message/$userId'
-      preLoaderRoute: typeof WorkspacesDirectMessageUserIdImport
-      parentRoute: typeof rootRoute
+    '/workspaces/$workspaceId/direct-message/$userId': {
+      id: '/workspaces/$workspaceId/direct-message/$userId'
+      path: '/direct-message/$userId'
+      fullPath: '/workspaces/$workspaceId/direct-message/$userId'
+      preLoaderRoute: typeof WorkspacesWorkspaceIdDirectMessageUserIdImport
+      parentRoute: typeof WorkspacesWorkspaceIdImport
     }
     '/workspaces/$workspaceId_/channels/$channelId': {
       id: '/workspaces/$workspaceId_/channels/$channelId'
@@ -109,21 +109,35 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface WorkspacesWorkspaceIdRouteChildren {
+  WorkspacesWorkspaceIdDirectMessageUserIdRoute: typeof WorkspacesWorkspaceIdDirectMessageUserIdRoute
+}
+
+const WorkspacesWorkspaceIdRouteChildren: WorkspacesWorkspaceIdRouteChildren = {
+  WorkspacesWorkspaceIdDirectMessageUserIdRoute:
+    WorkspacesWorkspaceIdDirectMessageUserIdRoute,
+}
+
+const WorkspacesWorkspaceIdRouteWithChildren =
+  WorkspacesWorkspaceIdRoute._addFileChildren(
+    WorkspacesWorkspaceIdRouteChildren,
+  )
+
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/join/$workspaceId': typeof JoinWorkspaceIdRoute
-  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRoute
+  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRouteWithChildren
   '/workspaces': typeof WorkspacesIndexRoute
-  '/workspaces/direct-message/$userId': typeof WorkspacesDirectMessageUserIdRoute
+  '/workspaces/$workspaceId/direct-message/$userId': typeof WorkspacesWorkspaceIdDirectMessageUserIdRoute
   '/workspaces/$workspaceId/channels/$channelId': typeof WorkspacesWorkspaceIdChannelsChannelIdRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/join/$workspaceId': typeof JoinWorkspaceIdRoute
-  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRoute
+  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRouteWithChildren
   '/workspaces': typeof WorkspacesIndexRoute
-  '/workspaces/direct-message/$userId': typeof WorkspacesDirectMessageUserIdRoute
+  '/workspaces/$workspaceId/direct-message/$userId': typeof WorkspacesWorkspaceIdDirectMessageUserIdRoute
   '/workspaces/$workspaceId/channels/$channelId': typeof WorkspacesWorkspaceIdChannelsChannelIdRoute
 }
 
@@ -131,9 +145,9 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/login': typeof LoginRoute
   '/join/$workspaceId': typeof JoinWorkspaceIdRoute
-  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRoute
+  '/workspaces/$workspaceId': typeof WorkspacesWorkspaceIdRouteWithChildren
   '/workspaces/': typeof WorkspacesIndexRoute
-  '/workspaces/direct-message/$userId': typeof WorkspacesDirectMessageUserIdRoute
+  '/workspaces/$workspaceId/direct-message/$userId': typeof WorkspacesWorkspaceIdDirectMessageUserIdRoute
   '/workspaces/$workspaceId_/channels/$channelId': typeof WorkspacesWorkspaceIdChannelsChannelIdRoute
 }
 
@@ -144,7 +158,7 @@ export interface FileRouteTypes {
     | '/join/$workspaceId'
     | '/workspaces/$workspaceId'
     | '/workspaces'
-    | '/workspaces/direct-message/$userId'
+    | '/workspaces/$workspaceId/direct-message/$userId'
     | '/workspaces/$workspaceId/channels/$channelId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -152,7 +166,7 @@ export interface FileRouteTypes {
     | '/join/$workspaceId'
     | '/workspaces/$workspaceId'
     | '/workspaces'
-    | '/workspaces/direct-message/$userId'
+    | '/workspaces/$workspaceId/direct-message/$userId'
     | '/workspaces/$workspaceId/channels/$channelId'
   id:
     | '__root__'
@@ -160,7 +174,7 @@ export interface FileRouteTypes {
     | '/join/$workspaceId'
     | '/workspaces/$workspaceId'
     | '/workspaces/'
-    | '/workspaces/direct-message/$userId'
+    | '/workspaces/$workspaceId/direct-message/$userId'
     | '/workspaces/$workspaceId_/channels/$channelId'
   fileRoutesById: FileRoutesById
 }
@@ -168,18 +182,16 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   JoinWorkspaceIdRoute: typeof JoinWorkspaceIdRoute
-  WorkspacesWorkspaceIdRoute: typeof WorkspacesWorkspaceIdRoute
+  WorkspacesWorkspaceIdRoute: typeof WorkspacesWorkspaceIdRouteWithChildren
   WorkspacesIndexRoute: typeof WorkspacesIndexRoute
-  WorkspacesDirectMessageUserIdRoute: typeof WorkspacesDirectMessageUserIdRoute
   WorkspacesWorkspaceIdChannelsChannelIdRoute: typeof WorkspacesWorkspaceIdChannelsChannelIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   JoinWorkspaceIdRoute: JoinWorkspaceIdRoute,
-  WorkspacesWorkspaceIdRoute: WorkspacesWorkspaceIdRoute,
+  WorkspacesWorkspaceIdRoute: WorkspacesWorkspaceIdRouteWithChildren,
   WorkspacesIndexRoute: WorkspacesIndexRoute,
-  WorkspacesDirectMessageUserIdRoute: WorkspacesDirectMessageUserIdRoute,
   WorkspacesWorkspaceIdChannelsChannelIdRoute:
     WorkspacesWorkspaceIdChannelsChannelIdRoute,
 }
@@ -198,7 +210,6 @@ export const routeTree = rootRoute
         "/join/$workspaceId",
         "/workspaces/$workspaceId",
         "/workspaces/",
-        "/workspaces/direct-message/$userId",
         "/workspaces/$workspaceId_/channels/$channelId"
       ]
     },
@@ -209,13 +220,17 @@ export const routeTree = rootRoute
       "filePath": "join/$workspaceId.tsx"
     },
     "/workspaces/$workspaceId": {
-      "filePath": "workspaces/$workspaceId.tsx"
+      "filePath": "workspaces/$workspaceId.tsx",
+      "children": [
+        "/workspaces/$workspaceId/direct-message/$userId"
+      ]
     },
     "/workspaces/": {
       "filePath": "workspaces/index.tsx"
     },
-    "/workspaces/direct-message/$userId": {
-      "filePath": "workspaces/direct-message.$userId.tsx"
+    "/workspaces/$workspaceId/direct-message/$userId": {
+      "filePath": "workspaces/$workspaceId.direct-message.$userId.tsx",
+      "parent": "/workspaces/$workspaceId"
     },
     "/workspaces/$workspaceId_/channels/$channelId": {
       "filePath": "workspaces/$workspaceId_.channels.$channelId.tsx"

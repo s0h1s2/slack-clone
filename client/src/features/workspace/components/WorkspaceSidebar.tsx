@@ -6,7 +6,6 @@ import { CurrentWorkspaceContext } from "../hooks/context";
 import WorkspaceSection from "./WorkspaceSection";
 import UserItem from "./UserItem";
 import { useCreateChannelModal } from "@/features/channel/store/create-channel-modal";
-import { useGetAuthUser } from "@/features/auth/user-service";
 import { useAuth } from "@/features/auth/context";
 
 const WorkspaceSidebar = () => {
