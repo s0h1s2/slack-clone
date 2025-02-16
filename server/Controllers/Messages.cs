@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using server.Database;
 using server.Dto.Request;
 using server.Dto.Response;
+using server.Exceptions;
 using server.Hubs;
 using server.Services;
 
@@ -17,17 +18,19 @@ public class Messages : Controller
     private readonly IHubContext<ConversationHub, IConversationHub> _conversationHub;
     private readonly AppDbContext _dbContext;
     private readonly IFileService _fileService;
+    private readonly ConversationService _conversationService;
     private readonly MemberService _memberService;
     private readonly UsersService _usersService;
 
     public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub,
-        MemberService memberService, IFileService fileService)
+        MemberService memberService, IFileService fileService, ConversationService conversationService)
     {
         _dbContext = dbContext;
         _usersService = usersService;
         _channelHub = channelHub;
         _memberService = memberService;
         _fileService = fileService;
+        _conversationService = conversationService;
     }
 
     [HttpDelete("{id}")]
@@ -95,32 +98,21 @@ public class Messages : Controller
     [HttpPost("/direct/{conversationId}")]
     public async Task<IActionResult> DirectMessage(int conversationId, [FromForm] DirectMessageRequest directMessage)
     {
-        // check for conversation id
-        var currentUserId = _usersService.GetAuthenicatedUserId();
+        try
+        {
+            await _conversationService.DirectMessage(conversationId, directMessage);
+            return Ok();
 
-        var conversation = await _dbContext.Conversations.FindAsync(conversationId);
-        if (conversation is null)
+        }
+        catch (ResourceNotFound)
         {
             return NotFound();
         }
-        if (conversation.Sender != currentUserId || conversation.Receiver != directMessage.Receiver)
+        catch (PermmissionException)
         {
             return Forbid();
         }
-        var file = await _fileService.UploadFileAsync(directMessage.File);
 
-        var chat = new Chat
-        {
-            ConversationId = conversation.Id,
-            Message = directMessage.Message,
-            AttachmentName = file,
-            UserId = currentUserId
-        };
-        _dbContext.Add(chat);
-        await _dbContext.SaveChangesAsync();
-        return Ok();
     }
 }
-
-
 
