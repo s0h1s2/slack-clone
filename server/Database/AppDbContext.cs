@@ -9,5 +9,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     public DbSet<WorkspaceMembers> WorkspaceMembers { get; init; }
     public DbSet<WorkspaceChannel> WorkspaceChannels { get; init; }
     public DbSet<Chat> Chats { get; init; }
+    public DbSet<Conversation> Conversations { get; init; }
 
 }
