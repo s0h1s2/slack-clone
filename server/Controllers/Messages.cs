@@ -14,6 +14,7 @@ namespace server.Controllers;
 public class Messages : Controller
 {
     private readonly IHubContext<ChannelHub, IChannelHub> _channelHub;
+    private readonly IHubContext<ConversationHub, IConversationHub> _conversationHub;
     private readonly AppDbContext _dbContext;
     private readonly IFileService _fileService;
     private readonly MemberService _memberService;
@@ -114,10 +115,12 @@ public class Messages : Controller
             Message = directMessage.Message,
             AttachmentName = file,
             UserId = currentUserId
-
         };
         _dbContext.Add(chat);
         await _dbContext.SaveChangesAsync();
         return Ok();
     }
 }
+
+
+
