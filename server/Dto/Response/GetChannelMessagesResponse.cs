@@ -1,4 +1,3 @@
-using System.Reflection.Metadata;
 using server.Database;
 using server.Services;
 
@@ -33,5 +32,4 @@ public record ChannelMessageResponse(
     }
 }
 
-public record GetChannelMessagesResponse(List<ChannelMessageResponse> Messages, int? LastMessageId);
-
+public record GetChannelMessagesResponse(IEnumerable<ChannelMessageResponse> Messages, int? LastMessageId);
