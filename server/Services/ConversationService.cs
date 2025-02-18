@@ -28,15 +28,21 @@ public class ConversationService
         return new GetChannelMessagesResponse(messages, 0);
     }
 
-    public async Task<Conversation> CreateConversation(int workspaceId, int receiverId)
+    public async Task<Conversation> CreateConversation(CreateConversationRequest request)
     {
-        // TODO: check
+        var isConversationExist=await _dbContext.Conversations
+            .Where((c) => c.Receiver == request.ReceiverId && c.WorkspaceId == request.WorkspaceId)
+            .FirstOrDefaultAsync();
+        if (isConversationExist!=null) 
+        {
+            throw new Exception();
+        }
         var userId = _usersService.GetAuthenicatedUserId();
         var conversation = new Conversation
         {
             Sender = userId,
-            Receiver = receiverId,
-            WorkspaceId = workspaceId,
+            Receiver = request.ReceiverId,
+            WorkspaceId = request.WorkspaceId,
         };
         _dbContext.Conversations.Add(conversation);
         await _dbContext.SaveChangesAsync();

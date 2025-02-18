@@ -16,6 +16,21 @@ public class Conversation : Controller
         _conversationService = conversationService;
     }
 
+    [HttpPost]
+    public async Task<IActionResult> CreateConversation([FromBody] CreateConversationRequest request)
+    {
+        try
+        {
+            await _conversationService.CreateConversation(request);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest();
+            
+        }
+        
+    }
     [HttpPost("/direct/{conversationId}")]
     public async Task<IActionResult> DirectMessage(int conversationId, [FromForm] DirectMessageRequest directMessage)
     {
@@ -34,3 +49,4 @@ public class Conversation : Controller
         }
     }
 }
+

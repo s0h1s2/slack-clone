@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using server.Database;
 using server.Dto.Request;
 using server.Dto.Response;
+using server.Exceptions;
 using server.Hubs;
 using server.Services;
 
@@ -15,15 +16,14 @@ public class Messages : Controller
 {
     private readonly IHubContext<ChannelHub, IChannelHub> _channelHub;
     private readonly IHubContext<ConversationHub, IConversationHub> _conversationHub;
-    private readonly ConversationService _conversationService;
     private readonly AppDbContext _dbContext;
     private readonly IFileService _fileService;
+    private readonly ConversationService _conversationService;
     private readonly MemberService _memberService;
     private readonly UsersService _usersService;
 
-    public Messages(ConversationService conversationService, AppDbContext dbContext, UsersService usersService,
-        IHubContext<ChannelHub, IChannelHub> channelHub,
-        MemberService memberService, IFileService fileService)
+    public Messages(AppDbContext dbContext, UsersService usersService, IHubContext<ChannelHub, IChannelHub> channelHub,
+        MemberService memberService, IFileService fileService, ConversationService conversationService)
     {
         _dbContext = dbContext;
         _usersService = usersService;
@@ -94,4 +94,24 @@ public class Messages : Controller
         return Ok(new GetChannelMessagesResponse(messagesResult,
             messagesResult.Count > 0 ? messagesResult.Last().Id : null));
     }
+
+    [HttpPost("/direct/{conversationId}")]
+    public async Task<IActionResult> DirectMessage(int conversationId, [FromForm] DirectMessageRequest directMessage)
+    {
+        try
+        {
+            await _conversationService.DirectMessage(conversationId, directMessage);
+            return Ok();
+        }
+        catch (ResourceNotFound)
+        {
+            return NotFound();
+        }
+        catch (PermmissionException)
+        {
+            return Forbid();
+        }
+
+    }
 }
+
