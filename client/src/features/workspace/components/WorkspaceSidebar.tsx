@@ -4,14 +4,13 @@ import SidebarItem from "./SidebarItem";
 import { useContext } from "react";
 import { CurrentWorkspaceContext } from "../hooks/context";
 import WorkspaceSection from "./WorkspaceSection";
-import UserItem from "./UserItem";
 import { useCreateChannelModal } from "@/features/channel/store/create-channel-modal";
 import { useAuth } from "@/features/auth/context";
 
 const WorkspaceSidebar = () => {
   const workspace = useContext(CurrentWorkspaceContext);
   const [_openChannelModal, setOpenChannelModal] = useCreateChannelModal();
-  const { user } = useAuth();
+  // const { user } = useAuth();
   return (
     <div className="flex flex-col bg-[#5E2C5F] h-full">
       <WorkspaceHeader />
@@ -38,7 +37,7 @@ const WorkspaceSidebar = () => {
           />
         ))}
       </WorkspaceSection>
-      <WorkspaceSection
+      {/* <WorkspaceSection
         hint="Chat with a user"
         label="Direct Messages"
         onNew={() => {}}
@@ -53,7 +52,7 @@ const WorkspaceSidebar = () => {
               userId={member.id}
             />
           ))}
-      </WorkspaceSection>
+      </WorkspaceSection> */}
     </div>
   );
 };
